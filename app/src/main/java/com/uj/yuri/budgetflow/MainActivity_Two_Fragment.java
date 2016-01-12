@@ -1,23 +1,23 @@
 package com.uj.yuri.budgetflow;
 
-import android.support.v4.app.Fragment;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+public class MainActivity_Two_Fragment extends Fragment {
+    private View myFragmentView;
 
-/**
- * A placeholder fragment containing a simple view.
- */
-public class MainActivityBudgetFlowFragment extends Fragment {
-
-    public MainActivityBudgetFlowFragment() {
+    public MainActivity_Two_Fragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main_activity_budget_flow, container, false);
+        myFragmentView = inflater.inflate(R.layout.fragment_two_main_activity, container, false);
+        return myFragmentView;
     }
+
 }
