@@ -1,11 +1,11 @@
 package com.uj.yuri.budgetflow.db_managment.db_helper_objects;
 
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Outcome_;
+import com.uj.yuri.budgetflow.view_managment_listview.Entries_list_;
 
 /**
  * Created by Yuri on 2016-01-03.
  */
-public class Outcome implements Outcome_ {
+public class Outcome implements Entries_list_ {
     protected String id;
     protected String nameOfOutcome;
     protected String amount;
@@ -14,6 +14,7 @@ public class Outcome implements Outcome_ {
     protected boolean active;
     protected String categoryId;
     protected int frequency;
+
 
 
     public Outcome(String id, String nameOfOutcome, String amount, String startTime, String endTime, boolean active, String categoryId, int frequency) {
@@ -73,5 +74,8 @@ public class Outcome implements Outcome_ {
         return frequency;
     }
 
-
+    @Override
+    public boolean whatAmI() {
+        return true;
+    }
 }

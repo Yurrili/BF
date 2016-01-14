@@ -13,6 +13,7 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -92,7 +93,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         onCreate(db);
     }
 
-    public void insertIncome(Income_ ob) {
+    public void insertIncome(Income ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
 
         String dateTimeStart = ob.getStartTime();
@@ -113,7 +114,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
     }
 
-    public void updateIncome(Income_ ob) {
+    public void updateIncome(Income ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
 
         String dateTimeStart = ob.getStartTime();
@@ -134,13 +135,13 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
     }
 
-    public void removeIncome(Income_ ob) {
+    public void removeIncome(Income ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete(Entries.Incomes.TABLE_NAME, Entries.Incomes.COLUMN_ID + "='" + ob.getId() + "'", null);
         dba.close();
     }
 
-    public void insertOutcome(Outcome_ ob) {
+    public void insertOutcome(Outcome ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
 
         String dateTimeStart = ob.getStartTime();
@@ -160,7 +161,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
     }
 
-    public void updateOutcome(Outcome_ ob) {
+    public void updateOutcome(Outcome ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
 
         String dateTimeStart = ob.getStartTime();
@@ -180,13 +181,13 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
     }
 
-    public void removeOutcome(Outcome_ ob) {
+    public void removeOutcome(Outcome ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete (Entries.Outcomes.TABLE_NAME, Entries.Outcomes.COLUMN_ID + "='" + ob.getId() + "'", null);
         dba.close();
     }
 
-    public void insertCategory(Category_ ob) {
+    public void insertCategory(Category ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -196,7 +197,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
     }
 
-    public void updateCategory(Category_ ob) {
+    public void updateCategory(Category ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -206,21 +207,20 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
     }
 
-    public void removeCategory(Category_ ob) {
+    public void removeCategory(Category ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete(Entries.Categories.TABLE_NAME, Entries.Categories.COLUMN_ID + "='" + ob.getId() + "'", null);
         dba.close();
     }
 
-    public ArrayList<Income_> selectAllIncomes(){
+    public ArrayList<Income> selectAllIncomes(){
         SQLiteDatabase dba = this.getReadableDatabase();
-        ArrayList<Income_> list = new ArrayList<>();
-        String selection = Entries.Incomes.COLUMN_ACTIVE + " = ?";
+        ArrayList<Income> list = new ArrayList<>();
+
 
         Cursor c = dba.query(Entries.Incomes.TABLE_NAME,
                 Entries.Incomes.selectAllList,
-                selection,
-                new String[]{"1"}, null, null, null, null);
+                null, null, null, null, null);
 
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -241,15 +241,14 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         return list;
     }
 
-    public ArrayList<Outcome_> selectAllOutcomes(){
+    public ArrayList<Outcome> selectAllOutcomes(){
         SQLiteDatabase dba = this.getReadableDatabase();
-        ArrayList<Outcome_> list = new ArrayList<>();
-        String selection = Entries.Outcomes.COLUMN_ACTIVE + " = ?";
+        ArrayList<Outcome> list = new ArrayList<>();
+
 
         Cursor c = dba.query(Entries.Outcomes.TABLE_NAME,
                 Entries.Outcomes.selectAllList,
-                selection,
-                new String[] { "1" }, null, null, null, null);
+                null, null, null, null, null);
 
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -270,18 +269,19 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
     }
 
     @Override
-    public HashMap<String, Category_> selectAllCategories() {
+    public HashMap<String, Category> selectAllCategories() {
         SQLiteDatabase dba = this.getReadableDatabase();
-            HashMap<String, Category_> hash_list = new HashMap<>();
+            HashMap<String, Category> hash_list = new HashMap<>();
 
         Cursor c = dba.query(Entries.Categories.TABLE_NAME,
                 new String [] { "Id", "Name" },
                 null, null, null, null, null);
 
-
+        int i = 0;
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                hash_list.put(c.getString(0), new Category(c.getString(0), c.getString(1)));
+                hash_list.put(c.getString(0), new Category(c.getString(0), c.getString(1), (i%7) + ""));
+                i++;
             }
         }
 

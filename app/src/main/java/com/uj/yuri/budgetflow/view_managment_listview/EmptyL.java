@@ -1,21 +1,9 @@
-package com.uj.yuri.budgetflow.view_managment;
-
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Category_;
+package com.uj.yuri.budgetflow.view_managment_listview;
 
 /**
  * Created by Yuri on 2016-01-13.
  */
-public class HeaderFirstL implements Entries_list_{
-
-    String StartTime;
-    public HeaderFirstL(){
-
-    }
-
-    public HeaderFirstL(Entries_list_ L){
-        StartTime = L.getStartTime();
-    }
-
+public class EmptyL implements Entries_list_{
     @Override
     public String getName() {
         return "";
@@ -28,7 +16,7 @@ public class HeaderFirstL implements Entries_list_{
 
     @Override
     public String getStartTime() {
-        return StartTime;
+        return "";
     }
 
     @Override
@@ -46,4 +34,10 @@ public class HeaderFirstL implements Entries_list_{
     public String getId() {
         return null;
     }
+
+    @Override
+    public boolean whatAmI() {
+        return false;
+    }
+
 }

@@ -1,24 +1,23 @@
 package com.uj.yuri.budgetflow;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Category_;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Income_;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Outcome_;
-import com.uj.yuri.budgetflow.view_managment.EmptyL;
-import com.uj.yuri.budgetflow.view_managment.Entries_list_;
-import com.uj.yuri.budgetflow.view_managment.HeaderFirstL;
-import com.uj.yuri.budgetflow.view_managment.MyAdapter;
+import com.uj.yuri.budgetflow.view_managment_listview.EmptyL;
+import com.uj.yuri.budgetflow.view_managment_listview.Entries_list_;
+import com.uj.yuri.budgetflow.view_managment_listview.HeaderFirstL;
+import com.uj.yuri.budgetflow.view_managment_listview.MyAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +33,7 @@ public class MainActivity_One_Fragment extends Fragment {
 
     DateBaseHelper_ db;
     MyAdapter adapter;
+    ImageButton FAB;
 
     private View myFragmentView;
 
@@ -48,8 +48,8 @@ public class MainActivity_One_Fragment extends Fragment {
         ListView list = (ListView) myFragmentView.findViewById(R.id.list_view);
 
         ArrayList<Entries_list_> gg_K = new ArrayList<>();
-        ArrayList<Income_> list_of_incomes  = db.selectAllIncomes();
-        ArrayList<Outcome_> list_of_outcomes  = db.selectAllOutcomes();
+        ArrayList<Income> list_of_incomes  = db.selectAllIncomes();
+        ArrayList<Outcome> list_of_outcomes  = db.selectAllOutcomes();
 
         gg_K.addAll(list_of_outcomes);
         gg_K.addAll(list_of_incomes);
@@ -66,6 +66,19 @@ public class MainActivity_One_Fragment extends Fragment {
         adapter = new MyAdapter(getContext(), R.layout.itemlists, gg_KD);
 
         list.setAdapter(adapter);
+        FAB = (ImageButton) myFragmentView.findViewById(R.id.imageButton);
+        FAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                //Toast.makeText(getActivity(), "Hello World", Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(getActivity(), NewIncomeOutcome.class);
+
+                getActivity().startActivity(myIntent);
+
+            }
+        });
 
         return myFragmentView;
     }
@@ -86,7 +99,7 @@ public class MainActivity_One_Fragment extends Fragment {
             @Override
             public int compare(Entries_list_ o1, Entries_list_ o2) {
                 try {
-                    return f.parse(o1.getStartTime()).compareTo(f.parse(o2.getStartTime()));
+                    return f.parse(o2.getStartTime()).compareTo(f.parse(o1.getStartTime()));
                 } catch (ParseException e) {
                     throw new IllegalArgumentException(e);
                 }
@@ -111,7 +124,6 @@ public class MainActivity_One_Fragment extends Fragment {
             }
             date = parseFormat.parse(array.get(i).getStartTime()).toString();
         }
-
 
         return list;
     }

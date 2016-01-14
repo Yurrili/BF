@@ -1,11 +1,11 @@
 package com.uj.yuri.budgetflow.db_managment.db_helper_objects;
 
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Income_;
+import com.uj.yuri.budgetflow.view_managment_listview.Entries_list_;
 
 /**
  * Created by Yuri on 2016-01-03.
  */
-public class Income implements Income_ {
+public class Income implements Entries_list_ {
     protected String id;
     protected String nameOfIncome;
     protected float amount;
@@ -73,6 +73,10 @@ public class Income implements Income_ {
         return frequency;
     }
 
+    @Override
+    public boolean whatAmI() {
+        return false;
+    }
 
 
     public int getDuration() {

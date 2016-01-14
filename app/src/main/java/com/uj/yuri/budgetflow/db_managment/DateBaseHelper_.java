@@ -1,8 +1,9 @@
 package com.uj.yuri.budgetflow.db_managment;
 
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Category_;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Income_;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Outcome_;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,19 +13,19 @@ import java.util.HashMap;
  */
 public interface DateBaseHelper_ {
 
-    void insertIncome(Income_ ob);
-    void updateIncome(Income_ ob);
-    void removeIncome(Income_ ob);
+    void insertIncome(Income ob);
+    void updateIncome(Income ob);
+    void removeIncome(Income ob);
 
-    void insertOutcome(Outcome_ ob);
-    void updateOutcome(Outcome_ ob);
-    void removeOutcome(Outcome_ ob);
+    void insertOutcome(Outcome ob);
+    void updateOutcome(Outcome ob);
+    void removeOutcome(Outcome ob);
 
-    void insertCategory(Category_ ob);
-    void updateCategory(Category_ ob);
-    void removeCategory(Category_ ob);
+    void insertCategory(Category ob);
+    void updateCategory(Category ob);
+    void removeCategory(Category ob);
 
-    ArrayList<Income_> selectAllIncomes();
-    ArrayList<Outcome_> selectAllOutcomes();
-    HashMap<String, Category_> selectAllCategories();
+    ArrayList<Income> selectAllIncomes();
+    ArrayList<Outcome> selectAllOutcomes();
+    HashMap<String, Category> selectAllCategories();
 }

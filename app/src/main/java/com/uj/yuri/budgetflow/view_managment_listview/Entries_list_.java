@@ -1,13 +1,12 @@
-package com.uj.yuri.budgetflow.view_managment;
+package com.uj.yuri.budgetflow.view_managment_listview;
 
-/**
- * Created by Yuri on 2016-01-13.
- */
+
 public interface Entries_list_ {
     String getName() ;
     String getAmount() ;
     String getStartTime() ;
     String getEndTime() ;
     int getFrequency();
+    boolean whatAmI();
     String getId();
 }

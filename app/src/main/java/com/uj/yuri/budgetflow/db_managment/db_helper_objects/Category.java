@@ -1,15 +1,14 @@
 package com.uj.yuri.budgetflow.db_managment.db_helper_objects;
 
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Category_;
+import com.uj.yuri.budgetflow.view_managment_listview.Entries_list_;
 
 /**
  * Created by Yuri on 2016-01-03.
  */
-public class Category implements Category_{
+public class Category implements Entries_list_{
     protected String id;
     protected String categoryName;
     protected String colorOfRound;
-    protected boolean active;
 
     public Category(String id, String categoryName) {
         this.id = id;
@@ -55,5 +54,14 @@ public class Category implements Category_{
     @Override
     public int getFrequency() {
         return 0;
+    }
+
+    @Override
+    public boolean whatAmI() {
+        return false;
+    }
+
+    public String getColor(){
+        return colorOfRound;
     }
 }

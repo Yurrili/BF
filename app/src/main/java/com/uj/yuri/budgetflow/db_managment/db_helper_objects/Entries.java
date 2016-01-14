@@ -35,8 +35,8 @@ public class Entries {
         public static final String COLUMN_FREQUENCY = "Frequency";
         public static final String COLUMN_ACTIVE = "Active";
 
-        public static final String[] selectAllList = new String [] { "Id","Name",
-                "Category_id","Start_time", "End_time", "Amount","Frequency" };
+        public static final String[] selectAllList = new String [] { "Id", "Name", "Amount",
+                 "Start_time", "End_time", "Category_id", "Frequency" };
 
     }
 
@@ -45,7 +45,6 @@ public class Entries {
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_CATEGORY_NAME = "Name";
 
-        public static final String[] selectAllList = new String [] { "Id", "Name" };
 
     }
 

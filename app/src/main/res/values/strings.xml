@@ -8,7 +8,7 @@
 
     <string name="date">13-06-2015</string>
     <string name="time_diffrence">60 h</string>
-    <string name="def_entry">costatcoscdfsdfsdfsdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</string>
+    <string name="def_entry">costatcoscdfsdfsdf</string>
     <string name="summary_time">8000</string>
     <string name="listview_empty">XYZ</string>
 
@@ -20,13 +20,15 @@
     <string name="w5">Saturday</string>
     <string name="w6">Sunday</string>
     <string-array name="weeksday">
-    <item>@string/w0</item>
-    <item>@string/w1</item>
-    <item>@string/w2</item>
-    <item>@string/w3</item>
-    <item>@string/w4</item>
-    <item>@string/w5</item>
-    <item>@string/w6</item>
-</string-array>
+        <item>@string/w0</item>
+        <item>@string/w1</item>
+        <item>@string/w2</item>
+        <item>@string/w3</item>
+        <item>@string/w4</item>
+        <item>@string/w5</item>
+        <item>@string/w6</item>
+    </string-array>
+    <string name="title_activity_new_income_outcome">New entry</string>
+
 
 </resources>

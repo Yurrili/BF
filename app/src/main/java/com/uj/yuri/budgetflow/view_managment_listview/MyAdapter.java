@@ -1,7 +1,6 @@
-package com.uj.yuri.budgetflow.view_managment;
+package com.uj.yuri.budgetflow.view_managment_listview;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,9 @@ import android.widget.TextView;
 
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.Category_;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
 
 import java.util.Calendar;
@@ -37,7 +36,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
     private ImageView vie_circle;
     private ImageView circle_im_cat;
     private ImageView note_img;
-    private HashMap<String, Category_> hashCat;
+    private HashMap<String, Category> hashCat;
 
 
     public MyAdapter(Context context, int resource, List<Entries_list_> items) {
@@ -48,7 +47,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -56,10 +55,13 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
         if (getItem(position) instanceof HeaderFirstL)
             return 0;
-        else
-            return 1;
+        else {
+            if (getItem(position) instanceof Income)
+                return 1;
+            else
+                return 2;
 
-
+        }
     }
 
     @Override
@@ -75,25 +77,12 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
                 IfNormal();
             }
 
-            if ( entry instanceof EmptyL ) {
-                IfEmpty();
-            }
-
-
             if ( entry instanceof HeaderFirstL) {
                 IfHeader();
             }
 
         }
         return v;
-    }
-
-    private void IfEmpty(){
-        if (v == null) {
-            v = vi.inflate(R.layout.itemlist_empty_list_header, null);
-
-            findViewsHeader();
-        }
     }
 
     private void IfNormal(){
@@ -110,9 +99,12 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
         // Checking if this entry is first of whole list
         if( v == null){
             v =  vi.inflate(R.layout.itemlist_first_header, null);
+            v.setClickable(false);
+            v.setEnabled(false);
         }
 
         findViewsHeader();
+        time_hours.setText(entry.getStartTime());
         setDay_of_week();
     }
 
@@ -135,46 +127,39 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
     private void setDataToElementOfList(){
         // Data set to simple item list
+
+
         if (amount != null)
             setAmount();
 
 
-        if (name_of != null && entry instanceof Outcome)
+        if (name_of != null && entry.whatAmI())
             name_of.setText(entry.getName());
 
 
 
-        if (category != null && entry instanceof Outcome) {
-
-            String id = entry.getId();
-            Category_ cat = hashCat.get(id);
-            String c = cat.getName();
-            category.setText(c);
+        if (category != null && entry.whatAmI()) {
+            setCategoryBall();
+            category.setText(hashCat.get(((Outcome) entry).getCategoryId()).getName());
         }
 
         if(time_hours != null)
             time_hours.setText(entry.getFrequency() + "");
 
-        if ( entry instanceof Income ) {
+        if ( entry instanceof Income && !(entry.whatAmI())) {
             amount.setTextColor(getContext().getResources().getColor(R.color.greeno));
             circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_note));
             category.setText(entry.getName());
             name_of.setVisibility(View.INVISIBLE);
             note_img.setVisibility(View.INVISIBLE);
         }
-
-
-
-
     }
 
-
-
     private void setAmount(){
-
-
-        amount.setText(entry.getAmount() + "  PLN");
-
+        if( entry.whatAmI())
+            amount.setText(" - " + entry.getAmount() + "  PLN");
+        else
+            amount.setText( entry.getAmount() + "  PLN");
     }
 
 
@@ -192,31 +177,59 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
         switch (day) {
             case "Sunday":
-                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle_full_grey));
+                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle1));
                 break;
             case "Monday":
-                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle_full_green));
+                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle2));
                 break;
             case "Tuesday":
-                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle_empty_inside_yellow));
+                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle3));
                 break;
             case "Wednesday":
-                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle_empty_inside_orange));
+                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle4));
                 break;
             case "Thursday":
-                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle_empty_inside_pink));
+                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle5));
                 break;
             case "Friday":
-                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle_full_violet));
+                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle6));
                 break;
             case "Saturday":
-                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle_full_blue));
+                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle7));
                 break;
             default:
-                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle_full_blue));
+                vie_circle.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle5));
                 break;
         }
     }
 
 
+    private void setCategoryBall(){
+        switch (hashCat.get(((Outcome) entry).getCategoryId()).getColor()) {
+            case "0":
+                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle1));
+                break;
+            case "1":
+                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle2));
+                break;
+            case "2":
+                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle3));
+                break;
+            case "3":
+                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle4));
+                break;
+            case "4":
+                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle5));
+                break;
+            case "5":
+                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle6));
+                break;
+            case "6":
+                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle7));
+                break;
+            default:
+                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle5));
+                break;
+        }
+    }
 }

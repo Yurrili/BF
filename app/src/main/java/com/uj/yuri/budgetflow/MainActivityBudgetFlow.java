@@ -41,24 +41,24 @@ public class MainActivityBudgetFlow extends AppCompatActivity{
 
 
         DateBaseHelper_ db = new DateBaseHelper(getApplicationContext());
-
+//
 //        db.insertCategory(new Category("Domowe"));
 //        db.insertCategory(new Category("Dodatkowe"));
 //        db.insertCategory(new Category("Przyjemnosci"));
+//        db.insertCategory(new Category("Rachunki"));
 //
-//        db.insertOutcome(new Outcome("Na dom", "125690", "12-07-2015", "14-07-2015", true, "1", 1));
-//        db.insertOutcome(new Outcome("Jedzenie", "1200", "12-07-2015", "14-07-2015", true, "2", 1));
-////        db.insertOutcome(new Outcome("Druugs", "1", "13-07-2015", "14-07-2015", true, "2", 1));
-////        db.insertOutcome(new Outcome("Kino", "2", "13-07-2015", "14-07-2015", true, "2", 1));
-////        db.insertOutcome(new Outcome("Autobusy", "1", "12-07-2015", "14-07-2015", true, "1", 1));
-////        db.insertOutcome(new Outcome("Silownia", "3","12-07-2015", "14-07-2015", true, "1", 1));
+//        db.insertOutcome(new Outcome("Prąd", "125690", "15-07-2015", "14-07-2015", true, "4", 1));
+//        db.insertOutcome(new Outcome("Jedzenie", "1200", "16-07-2015", "14-07-2015", true, "1", 1));
+//        db.insertOutcome(new Outcome("Druugs", "1600", "17-07-2015", "14-07-2015", true, "3", 1));
+//        db.insertOutcome(new Outcome("Kino", "2", "13-07-2015", "14-07-2015", true, "3", 1));
+//        db.insertOutcome(new Outcome("Autobusy", "10", "12-07-2015", "14-07-2015", true, "2", 1));
+//        db.insertOutcome(new Outcome("Silownia", "3000","12-07-2015", "14-07-2015", true, "2", 1));
 //
-//        db.insertIncome(new Income("Na dom", "1400", "11-07-2015", "14-07-2015", true, "1",1, 1));
-//        db.insertIncome(new Income("Jedzenie", "350", "16-07-2015", "14-07-2015", true, "1",1, 1));
-//        db.insertIncome(new Income("Druugs", "15", "12-07-2015", "14-07-2015", true, "2",3, 1));
-//        db.insertIncome(new Income("Kino", "70", "18-07-2015", "14-07-2015", true, "2",7, 1));
-//        db.insertIncome(new Income("Autobusy", "35", "18-07-2015", "14-07-2015", true, "1",6, 1));
-//        db.insertIncome(new Income("Silownia", "120","12-07-2015", "14-07-2015", true, "1",4, 1));
+//        db.insertIncome(new Income("Praca", "1400", "11-07-2015", "14-07-2015", true, "1",1, 1));
+//        db.insertIncome(new Income("Babcia", "350", "16-07-2015", "14-07-2015", true, "1",1, 1));
+//        db.insertIncome(new Income("Dziadek", "15", "12-07-2015", "14-07-2015", true, "2",3, 1));
+//        db.insertIncome(new Income("Praca2", "70", "18-07-2015", "14-07-2015", true, "2",7, 1));
+
 //
 //        db.selectAllCategories();
 //        db.selectAllOutcomes();
