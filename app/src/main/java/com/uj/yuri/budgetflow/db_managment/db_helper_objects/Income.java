@@ -28,11 +28,24 @@ public class Income implements Income_ {
         this.duration = duration;
     }
 
+
+    public Income(String nameOfIncome, String amount, String startTime, String endTime, boolean active, String desciption, int frequency, int duration) {
+        this.id = "";
+        this.nameOfIncome = nameOfIncome;
+        this.amount = Float.parseFloat(amount);
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.active = active;
+        this.description = desciption;
+        this.frequency = frequency;
+        this.duration = duration;
+    }
+
     public String getId() {
         return id;
     }
 
-    public String getNameOfIncome() {
+    public String getName() {
         return nameOfIncome;
     }
 
@@ -59,6 +72,8 @@ public class Income implements Income_ {
     public int getFrequency() {
         return frequency;
     }
+
+
 
     public int getDuration() {
         return duration;

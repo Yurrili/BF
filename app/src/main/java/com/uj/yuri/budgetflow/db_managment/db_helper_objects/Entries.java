@@ -44,7 +44,6 @@ public class Entries {
         public static final String TABLE_NAME = "Categories";
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_CATEGORY_NAME = "Name";
-        public static final String COLUMN_ACTIVE = "Active";
 
         public static final String[] selectAllList = new String [] { "Id", "Name" };
 

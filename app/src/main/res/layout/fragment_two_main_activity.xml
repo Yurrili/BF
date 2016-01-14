@@ -1,16 +1,26 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.uj.yuri.budgetflow.MainActivityBudgetFlow.MainActivity_Two_Fragment">
+    tools:context="com.uj.yuri.budgetflow.MainActivityBudgetFlow.MainActivity_Two_Fragment"
+    android:gravity="center">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GRRRRRR2"
+        android:text="Today's saldo: "
         android:textSize="40sp"
         android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+        />
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6 PLN"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textColor="@color/redo"
+        />
+
+</LinearLayout>
 

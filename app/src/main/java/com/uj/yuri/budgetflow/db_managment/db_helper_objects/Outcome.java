@@ -28,11 +28,24 @@ public class Outcome implements Outcome_ {
 
     }
 
+    public Outcome(String nameOfOutcome, String amount, String startTime, String endTime, boolean active, String categoryId, int frequency) {
+        this.id = "";
+        this.nameOfOutcome = nameOfOutcome;
+        this.amount = amount;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.active = active;
+        this.categoryId = categoryId;
+        this.frequency = frequency;
+
+    }
+
     public String getId() {
         return id;
     }
 
-    public String getNameOfOutcome() {
+    @Override
+    public String getName() {
         return nameOfOutcome;
     }
 
@@ -59,5 +72,6 @@ public class Outcome implements Outcome_ {
     public int getFrequency() {
         return frequency;
     }
+
 
 }

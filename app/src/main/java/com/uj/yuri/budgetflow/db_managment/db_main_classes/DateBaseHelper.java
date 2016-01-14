@@ -14,12 +14,13 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Yuri on 2015-12-28.
  */
 
-public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ {
+public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "BudgetFlow.db";
@@ -55,8 +56,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
     private static final String SQL_CREATE_ENTRIES_Categories =
             "CREATE TABLE " + Entries.Categories.TABLE_NAME + " (" +
                     Entries.Categories.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    Entries.Categories.COLUMN_CATEGORY_NAME + TEXT_TYPE + COMMA_SEP +
-                    Entries.Categories.COLUMN_ACTIVE + INTEGER_TYPE +
+                    Entries.Categories.COLUMN_CATEGORY_NAME + TEXT_TYPE +
                     " )";
 
     private static final String SQL_CREATE_ENTRIES_Notifications =
@@ -64,7 +64,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
                     Entries.Notifications.COLUMN_TIME + TEXT_TYPE +
                     " )";
 
-    public DataBaseHelper(Context context) {
+    public DateBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -100,7 +100,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
 
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Incomes.COLUMN_INCOME_NAME, ob.getNameOfIncome());
+        values.put(Entries.Incomes.COLUMN_INCOME_NAME, ob.getName());
         values.put(Entries.Incomes.COLUMN_DURATION, ob.getDuration());
         values.put(Entries.Incomes.COLUMN_DESCRIPTION, ob.getDescription());
         values.put(Entries.Incomes.COLUMN_DATETIME_START, dateTimeStart);
@@ -121,7 +121,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
 
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Incomes.COLUMN_INCOME_NAME, ob.getNameOfIncome());
+        values.put(Entries.Incomes.COLUMN_INCOME_NAME, ob.getName());
         values.put(Entries.Incomes.COLUMN_DURATION, ob.getDuration());
         values.put(Entries.Incomes.COLUMN_DESCRIPTION, ob.getDescription());
         values.put(Entries.Incomes.COLUMN_DATETIME_START, dateTimeStart);
@@ -148,7 +148,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
 
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Outcomes.COLUMN_OUTCOME_NAME, ob.getNameOfOutcome());
+        values.put(Entries.Outcomes.COLUMN_OUTCOME_NAME, ob.getName());
         values.put(Entries.Outcomes.COLUMN_CATEGORY_ID, ob.getCategoryId());
         values.put(Entries.Outcomes.COLUMN_DATETIME_START, dateTimeStart);
         values.put(Entries.Outcomes.COLUMN_DATETIME_FINISH, dateTimeFinish);
@@ -168,7 +168,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
 
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Outcomes.COLUMN_OUTCOME_NAME, ob.getNameOfOutcome());
+        values.put(Entries.Outcomes.COLUMN_OUTCOME_NAME, ob.getName());
         values.put(Entries.Outcomes.COLUMN_CATEGORY_ID, ob.getCategoryId());
         values.put(Entries.Outcomes.COLUMN_DATETIME_START, dateTimeStart);
         values.put(Entries.Outcomes.COLUMN_DATETIME_FINISH, dateTimeFinish);
@@ -191,9 +191,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
 
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Categories.COLUMN_ACTIVE, ob.isActive());
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getCategoryName());
-
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
         dba.insert(Entries.Categories.TABLE_NAME, null, values);
         dba.close();
     }
@@ -202,9 +200,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         SQLiteDatabase dba = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-
-        values.put(Entries.Categories.COLUMN_ACTIVE, ob.isActive());
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getCategoryName());
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
 
         dba.update(Entries.Categories.TABLE_NAME, values, Entries.Categories.COLUMN_ID + "='" + ob.getId() + "'", null);
         dba.close();
@@ -274,24 +270,23 @@ public class DataBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
     }
 
     @Override
-    public ArrayList<Category_> selectAllCategories() {
+    public HashMap<String, Category_> selectAllCategories() {
         SQLiteDatabase dba = this.getReadableDatabase();
-        ArrayList<Category_> list = new ArrayList<>();
-        String selection = Entries.Categories.COLUMN_ACTIVE + " = ?";
+            HashMap<String, Category_> hash_list = new HashMap<>();
 
         Cursor c = dba.query(Entries.Categories.TABLE_NAME,
-                Entries.Categories.selectAllList,
-                selection,
-                new String[] { "1" }, null, null, null, null);
+                new String [] { "Id", "Name" },
+                null, null, null, null, null);
+
 
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                list.add(new Category( c.getString(0), c.getString(1), true));
+                hash_list.put(c.getString(0), new Category(c.getString(0), c.getString(1)));
             }
         }
 
         c.close();
         dba.close();
-        return list;
+        return hash_list;
     }
 }

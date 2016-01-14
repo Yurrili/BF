@@ -6,7 +6,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DataBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.Income_;
 
 /**
@@ -16,7 +16,7 @@ public class DataBaseTest  extends ApplicationTestCase<Application> {
     DateBaseHelper_ db;
     public DataBaseTest() {
         super(Application.class);
-        this.db = new DataBaseHelper(getContext());
+        this.db = new DateBaseHelper(getContext());
     }
 
     @SmallTest

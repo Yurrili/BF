@@ -8,20 +8,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DataBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
+import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivityBudgetFlow extends ActionBarActivity {
+public class MainActivityBudgetFlow extends AppCompatActivity{
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -38,14 +40,30 @@ public class MainActivityBudgetFlow extends ActionBarActivity {
         setContentView(R.layout.activity_main_activity_budget_flow);
 
 
-//       DateBaseHelper_ db = new DataBaseHelper(getApplicationContext());
-//        db.insertIncome(new Income("1","BUM","65", "s", "f", true, "tf", 1,1));
-//        db.insertIncome(new Income("1","BUM1","65", "s", "f", true, "tf", 1,1));
-//        db.insertIncome(new Income("1","BU2M","65", "s", "f", true, "tf", 1,1));
-//        db.insertIncome(new Income("1","BUM3","65", "s", "f", true, "tf", 1,1));
-//        db.insertIncome(new Income("1","BU4M","65", "s", "f", true, "tf", 1,1));
-//        db.insertIncome(new Income("1","BU5M","65", "s", "f", true, "tf", 1,1));
+        DateBaseHelper_ db = new DateBaseHelper(getApplicationContext());
+
+//        db.insertCategory(new Category("Domowe"));
+//        db.insertCategory(new Category("Dodatkowe"));
+//        db.insertCategory(new Category("Przyjemnosci"));
+//
+//        db.insertOutcome(new Outcome("Na dom", "125690", "12-07-2015", "14-07-2015", true, "1", 1));
+//        db.insertOutcome(new Outcome("Jedzenie", "1200", "12-07-2015", "14-07-2015", true, "2", 1));
+////        db.insertOutcome(new Outcome("Druugs", "1", "13-07-2015", "14-07-2015", true, "2", 1));
+////        db.insertOutcome(new Outcome("Kino", "2", "13-07-2015", "14-07-2015", true, "2", 1));
+////        db.insertOutcome(new Outcome("Autobusy", "1", "12-07-2015", "14-07-2015", true, "1", 1));
+////        db.insertOutcome(new Outcome("Silownia", "3","12-07-2015", "14-07-2015", true, "1", 1));
+//
+//        db.insertIncome(new Income("Na dom", "1400", "11-07-2015", "14-07-2015", true, "1",1, 1));
+//        db.insertIncome(new Income("Jedzenie", "350", "16-07-2015", "14-07-2015", true, "1",1, 1));
+//        db.insertIncome(new Income("Druugs", "15", "12-07-2015", "14-07-2015", true, "2",3, 1));
+//        db.insertIncome(new Income("Kino", "70", "18-07-2015", "14-07-2015", true, "2",7, 1));
+//        db.insertIncome(new Income("Autobusy", "35", "18-07-2015", "14-07-2015", true, "1",6, 1));
+//        db.insertIncome(new Income("Silownia", "120","12-07-2015", "14-07-2015", true, "1",4, 1));
+//
+//        db.selectAllCategories();
+//        db.selectAllOutcomes();
 //        db.selectAllIncomes();
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,8 +108,8 @@ public class MainActivityBudgetFlow extends ActionBarActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MainActivity_One_Fragment(), "ONE");
-        adapter.addFrag(new MainActivity_Two_Fragment(), "TWO");
+        adapter.addFrag(new MainActivity_Two_Fragment(), "Main");
+        adapter.addFrag(new MainActivity_One_Fragment(), "Your spending");
         adapter.addFrag(new MainActivity_Three_Fragment(), "THREE");
         viewPager.setAdapter(adapter);
     }

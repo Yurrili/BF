@@ -8,23 +8,52 @@ import com.uj.yuri.budgetflow.db_managment.db_main_classes.Category_;
 public class Category implements Category_{
     protected String id;
     protected String categoryName;
+    protected String colorOfRound;
     protected boolean active;
 
-    public Category(String id, String categoryName, boolean active) {
+    public Category(String id, String categoryName) {
         this.id = id;
         this.categoryName = categoryName;
-        this.active = active;
+        this.colorOfRound = "y";
+
+    }
+
+    public Category(String id, String categoryName, String colorOfRound) {
+        this.id = id;
+        this.categoryName = categoryName;
+        this.colorOfRound = colorOfRound;
+    }
+
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getId() {
         return id;
     }
 
-    public boolean isActive() {
-        return active;
+
+    public String getName() {
+        return categoryName;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    @Override
+    public String getAmount() {
+        return null;
+    }
+
+    @Override
+    public String getStartTime() {
+        return null;
+    }
+
+    @Override
+    public String getEndTime() {
+        return null;
+    }
+
+    @Override
+    public int getFrequency() {
+        return 0;
     }
 }

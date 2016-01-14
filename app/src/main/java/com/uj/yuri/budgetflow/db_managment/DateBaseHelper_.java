@@ -5,6 +5,7 @@ import com.uj.yuri.budgetflow.db_managment.db_main_classes.Income_;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.Outcome_;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Yuri on 2016-01-03.
@@ -25,5 +26,5 @@ public interface DateBaseHelper_ {
 
     ArrayList<Income_> selectAllIncomes();
     ArrayList<Outcome_> selectAllOutcomes();
-    ArrayList<Category_> selectAllCategories();
+    HashMap<String, Category_> selectAllCategories();
 }
