@@ -74,7 +74,7 @@ public class NewIncomeOutcome extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new NewIncomeOutcome_OutcomeFragment(), "New Outcome");
+        adapter.addFrag(new NewIncomeOutcome_OutcomeFragment(), "New Expense");
         adapter.addFrag(new NewIncomeOutcome_IncomeFragment(), "New Income");
 
         viewPager.setAdapter(adapter);

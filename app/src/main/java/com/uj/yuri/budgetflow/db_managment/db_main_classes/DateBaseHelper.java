@@ -269,6 +269,28 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
     }
 
     @Override
+    public ArrayList<Category> selectAllCategorie() {
+        SQLiteDatabase dba = this.getReadableDatabase();
+        ArrayList<Category> list = new ArrayList<>();
+
+        Cursor c = dba.query(Entries.Categories.TABLE_NAME,
+                new String [] { "Id", "Name" },
+                null, null, null, null, null);
+
+        int i = 0;
+        if (c != null) {
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                list.add(new Category(c.getString(0), c.getString(1), (i%7) + ""));
+                i++;
+            }
+        }
+
+        c.close();
+        dba.close();
+        return list;
+    }
+
+    @Override
     public HashMap<String, Category> selectAllCategories() {
         SQLiteDatabase dba = this.getReadableDatabase();
             HashMap<String, Category> hash_list = new HashMap<>();

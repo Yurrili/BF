@@ -27,5 +27,6 @@ public interface DateBaseHelper_ {
 
     ArrayList<Income> selectAllIncomes();
     ArrayList<Outcome> selectAllOutcomes();
+    ArrayList<Category> selectAllCategorie();
     HashMap<String, Category> selectAllCategories();
 }

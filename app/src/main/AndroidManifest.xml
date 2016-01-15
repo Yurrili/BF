@@ -20,7 +20,9 @@
             android:name=".NewIncomeOutcome"
             android:label="@string/title_activity_new_income_outcome"
             android:theme="@style/MyMaterialTheme"
-            android:parentActivityName="com.uj.yuri.budgetflow.MainActivityBudgetFlow" ></activity>
+            android:parentActivityName="com.uj.yuri.budgetflow.MainActivityBudgetFlow" >
+
+        </activity>
     </application>
 
 </manifest>

@@ -25,6 +25,7 @@ import java.util.List;
 public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
     public DateBaseHelper_ helper;
+    private HashMap<String, Category> hashCat;
     private LayoutInflater vi;
     private Entries_list_ entry;
     private View v;
@@ -36,7 +37,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
     private ImageView vie_circle;
     private ImageView circle_im_cat;
     private ImageView note_img;
-    private HashMap<String, Category> hashCat;
+
 
 
     public MyAdapter(Context context, int resource, List<Entries_list_> items) {
