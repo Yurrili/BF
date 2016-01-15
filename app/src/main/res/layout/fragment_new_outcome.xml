@@ -149,6 +149,7 @@
                                     android:layout_height="wrap_content"
                                     android:singleLine="true"
                                     android:textSize="17sp"
+
                                     android:text="13-07-2016"
                                     android:hint="Date" />/>
                            </LinearLayout>
@@ -240,7 +241,7 @@
         android:paddingBottom="10dp"
         android:layout_gravity="center_horizontal"
         android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/bpWhite"
+        android:textColor="#ffff"
         android:text="SAVE" />
 
 </LinearLayout>

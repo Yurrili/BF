@@ -29,6 +29,7 @@
         <item>@string/w6</item>
     </string-array>
     <string name="title_activity_new_income_outcome">New entry</string>
+    <string name="calendar_date_picker_result_values">12-01-2016</string>
 
 
 </resources>
