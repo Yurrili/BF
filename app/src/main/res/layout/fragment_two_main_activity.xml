@@ -2,24 +2,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.uj.yuri.budgetflow.MainActivityBudgetFlow.MainActivity_Two_Fragment"
-    android:gravity="center">
+    android:background="#E8E8E8"
+    android:orientation="vertical"
+    >
 
     <TextView
+        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Today's saldo: "
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorPrimary"
+        android:text="Saldo: "
         android:textSize="40sp"
-        android:textStyle="bold"
+
         />
 
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        android:layout_marginTop="30dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_horizontal"
+        app:background_progressbar_color="#FFCDD2"
+        app:background_progressbar_width="5dp"
+        android:id="@+id/yourCircularProgressbar"
+
+        app:progressbar_color="#F44336"
+        app:progressbar_width="10dp" />
+
+
+
     <TextView
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="6 PLN"
         android:textSize="40sp"
         android:textStyle="bold"
         android:textColor="@color/redo"
+        />
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:capitalize="characters"
+        android:textColor="@color/colorPrimary"
+        android:text="left to spend today"
+        android:textSize="20sp"
+
         />
 
 </LinearLayout>

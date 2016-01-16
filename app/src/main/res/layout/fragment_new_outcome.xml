@@ -36,6 +36,7 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
+            android:id="@+id/input_amount_place"
             android:orientation="vertical">
 
 
@@ -56,59 +57,11 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start">
-                <GridLayout
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="60dp"
-                    android:columnCount="2"
-                    android:rowCount="1">
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:contentDescription="dolar"
-                        android:src="@drawable/ic_clock"/>
-
-
-                        <LinearLayout
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="12sp"
-                                android:text="Time"/>
-                            <EditText
-                                android:id="@+id/time_place"
-
-                                android:editable="false"
-
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:singleLine="true"
-                                android:textSize="17sp"
-                                android:text="13:00"
-                                android:hint="Time" />
-                        </LinearLayout>
-
-                </GridLayout>
-        </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="end">
+>
 
                 <GridLayout
                     android:layout_width="wrap_content"
@@ -116,8 +69,7 @@
                     android:layout_height="60dp"
                     android:columnCount="2"
                     android:rowCount="1"
-                        android:gravity="end"
-                        android:layout_gravity="right|end"
+
                     >
 
                         <ImageView

@@ -16,7 +16,7 @@ public class Income implements Entries_list_ {
     protected int frequency;
     protected int duration;
 
-    public Income(String id, String nameOfIncome, String amount, String startTime, String endTime, boolean active, String desciption, int frequency, int duration) {
+    public Income(String id, String nameOfIncome, String amount, String startTime, String endTime, boolean active,  String frequency, String desciption, int duration) {
         this.id = id;
         this.nameOfIncome = nameOfIncome;
         this.amount = Float.parseFloat(amount);
@@ -24,7 +24,7 @@ public class Income implements Entries_list_ {
         this.endTime = endTime;
         this.active = active;
         this.description = desciption;
-        this.frequency = frequency;
+        this.frequency = Integer.parseInt(frequency);
         this.duration = duration;
     }
 

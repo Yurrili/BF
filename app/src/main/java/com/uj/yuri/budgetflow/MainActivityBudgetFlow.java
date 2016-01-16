@@ -47,18 +47,19 @@ public class MainActivityBudgetFlow extends AppCompatActivity{
 //        db.insertCategory(new Category("Przyjemnosci"));
 //        db.insertCategory(new Category("Rachunki"));
 //
-//        db.insertOutcome(new Outcome("Prąd", "125690", "15-07-2015", "14-07-2015", true, "4", 1));
-//        db.insertOutcome(new Outcome("Jedzenie", "1200", "16-07-2015", "14-07-2015", true, "1", 1));
-//        db.insertOutcome(new Outcome("Druugs", "1600", "17-07-2015", "14-07-2015", true, "3", 1));
-//        db.insertOutcome(new Outcome("Kino", "2", "13-07-2015", "14-07-2015", true, "3", 1));
+//        db.insertOutcome(new Outcome("Prąd", "125690", "15-07-2015", "14-07-2015", true, "4", 2));
+//        db.insertOutcome(new Outcome("Jedzenie", "12", "16-07-2015", "14-07-2015", true, "1", 1));
+//        db.insertOutcome(new Outcome("Druugs", "1600", "17-07-2015", "14-07-2015", true, "3", 0));
+//        db.insertOutcome(new Outcome("Kino", "25", "13-07-2015", "14-07-2015", true, "3", 0));
 //        db.insertOutcome(new Outcome("Autobusy", "10", "12-07-2015", "14-07-2015", true, "2", 1));
 //        db.insertOutcome(new Outcome("Silownia", "3000","12-07-2015", "14-07-2015", true, "2", 1));
 //
-//        db.insertIncome(new Income("Praca", "1400", "11-07-2015", "14-07-2015", true, "1",1, 1));
-//        db.insertIncome(new Income("Babcia", "350", "16-07-2015", "14-07-2015", true, "1",1, 1));
-//        db.insertIncome(new Income("Dziadek", "15", "12-07-2015", "14-07-2015", true, "2",3, 1));
-//        db.insertIncome(new Income("Praca2", "70", "18-07-2015", "14-07-2015", true, "2",7, 1));
-
+//        db.insertIncome(new Income("Praca", "1400", "11-07-2015", "14-07-2015", true, "1",2, 2));
+//        db.insertIncome(new Income("Babcia", "350", "16-07-2015", "14-07-2015", true, "1",0, 0));
+//        db.insertIncome(new Income("Dziadek", "15", "12-07-2015", "14-07-2015", true, "0",0, 0));
+//        db.insertIncome(new Income("Praca2", "70", "18-07-2015", "14-07-2015", true, "2",2, 2));
+          db.insertIncome(new Income("kieszonkowe", "3", "", "", true, "2",1, 2));
+//
 //
 //        db.selectAllCategories();
 //        db.selectAllOutcomes();

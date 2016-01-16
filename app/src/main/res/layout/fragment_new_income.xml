@@ -60,8 +60,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="end">
+
+           >
 
             <GridLayout
                 android:layout_width="wrap_content"
@@ -69,8 +69,7 @@
                 android:layout_height="60dp"
                 android:columnCount="2"
                 android:rowCount="1"
-                android:gravity="end"
-                android:layout_gravity="right|end"
+
                 >
 
                 <ImageView
@@ -95,7 +94,7 @@
                         android:text="Date"/>
 
                     <EditText
-                        android:id="@+id/date_place"
+                        android:id="@+id/date_place1"
                         android:editable="false"
 
                         android:layout_width="fill_parent"
@@ -104,7 +103,7 @@
                         android:textSize="17sp"
 
                         android:text="13-07-2016"
-                        android:hint="Date" />/>
+                        android:hint="Date" />
                 </LinearLayout>
             </GridLayout>
         </LinearLayout>
@@ -148,6 +147,75 @@
                 android:hint="Note" />
         </android.support.design.widget.TextInputLayout>
     </GridLayout>
+
+
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:layout_marginTop="10dp"
+        android:rowCount="1"
+
+        >
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:contentDescription="tag"
+            android:src="@drawable/ic_tag_m"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textSize="12sp"
+            android:text="Frequency:"/>
+    </GridLayout>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/radiogr"
+     >
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daily"
+            android:id="@+id/radioButton1"
+            android:buttonTint="@color/redo"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Montly"
+            android:id="@+id/radioButton2"
+            android:buttonTint="@color/redo"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yearly"
+            android:id="@+id/radioButton3"
+            android:buttonTint="@color/redo"
+           />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Once"
+            android:id="@+id/radioButton4"
+            android:buttonTint="@color/redo"
+
+            android:checked="true" />
+    </RadioGroup>
     <Button
         android:layout_marginTop="10dp"
         android:id="@+id/add_button"
@@ -161,31 +229,4 @@
         android:backgroundTint="@color/colorPrimary"
         android:textColor="#ffff"
         android:text="SAVE" />
-
-
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Daily"
-            android:id="@+id/radioButton1"
-            android:layout_gravity="center_horizontal" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Montly"
-            android:id="@+id/radioButton2"
-            android:layout_gravity="center_horizontal" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yearly"
-            android:id="@+id/radioButton3"
-            android:layout_gravity="center_horizontal" />
-    </RadioGroup>
-
 </LinearLayout>

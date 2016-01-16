@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#125688</color>
+    <color name="colorPrimary1">#3275A5</color>
     <color name="colorPrimaryDark">#125688</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
@@ -8,6 +9,7 @@
     <color name="colorAccent">#125688</color>
     <color name="greeno">#61AE24</color>
     <color name="redo">#E54028</color>
+    <color name="redo1">#EF8F80</color>
     <color name="ColorPrimary">#FF5722</color>
     <color name="ColorPrimaryDark">#E64A19</color>
 </resources>

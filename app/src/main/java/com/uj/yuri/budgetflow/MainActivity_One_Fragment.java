@@ -92,6 +92,26 @@ public class MainActivity_One_Fragment extends Fragment {
         if(array.isEmpty()) {
             list.add(new EmptyL());
             return list;
+        }else{
+            ArrayList<Income> listOutDaily = new ArrayList<>();
+            ArrayList<Income> listOutMontly = new ArrayList<>();
+            ArrayList<Income> listOutYearly = new ArrayList<>();
+
+            for(int i=0; i < array.size(); i++) {
+                if(array.get(i).getFrequency() == 1){
+                    listOutDaily.add((Income)array.get(i));
+                    array.remove(i);
+                    i--;
+                } else if(array.get(i).getFrequency() == 2){
+                    listOutMontly.add((Income)array.get(i));
+                    array.remove(i);
+                    i--;
+                } else if(array.get(i).getFrequency() == 3){
+                    listOutYearly.add((Income)array.get(i));
+                    array.remove(i);
+                    i--;
+                }
+            }
         }
 
         Collections.sort(array, new Comparator<Entries_list_>() {

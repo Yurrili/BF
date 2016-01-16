@@ -183,7 +183,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
 
     public void removeOutcome(Outcome ob) {
         SQLiteDatabase dba = this.getWritableDatabase();
-        dba.delete (Entries.Outcomes.TABLE_NAME, Entries.Outcomes.COLUMN_ID + "='" + ob.getId() + "'", null);
+        dba.delete(Entries.Outcomes.TABLE_NAME, Entries.Outcomes.COLUMN_ID + "='" + ob.getId() + "'", null);
         dba.close();
     }
 
@@ -225,14 +225,35 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 list.add(new Income( c.getString(0),
-                                     c.getString(1),
-                                     c.getString(2),
-                                     c.getString(3),
-                                     c.getString(4),
-                                     true,
-                                     c.getString(5),
-                                     c.getInt(6),
-                                     c.getInt(7)));
+                        c.getString(1),
+                        c.getString(2),
+                        c.getString(3),
+                        c.getString(4),
+                        true,
+                        c.getString(5),
+                        c.getString(6),
+                        c.getInt(7)));
+            }
+        }
+
+        c.close();
+        dba.close();
+        return list;
+    }
+
+    public ArrayList<Double> selectTodaysOutcomes(String data){
+        SQLiteDatabase dba = this.getReadableDatabase();
+        ArrayList<Double> list = new ArrayList<>();
+
+        String selection = Entries.Outcomes.COLUMN_DATETIME_START + " = '"
+                + data + "'";
+        Cursor c = dba.query(Entries.Outcomes.TABLE_NAME,
+                new String[] {Entries.Outcomes.COLUMN_AMOUNT},
+                selection, null, null, null, null);
+
+        if (c != null) {
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                list.add(Double.parseDouble(c.getString(0)));
             }
         }
 

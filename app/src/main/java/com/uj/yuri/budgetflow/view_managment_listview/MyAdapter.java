@@ -48,7 +48,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
     @Override
     public int getViewTypeCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -59,8 +59,10 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
         else {
             if (getItem(position) instanceof Income)
                 return 1;
-            else
-                return 2;
+            else if ( getItem(position) instanceof Outcome)
+                    return 2;
+                else
+                    return 3;
 
         }
     }
@@ -134,8 +136,15 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
             setAmount();
 
 
-        if (name_of != null && entry.whatAmI())
-            name_of.setText(entry.getName());
+        if (name_of != null && entry.whatAmI()) {
+            if( entry.getName().equals("")){
+                note_img.setVisibility(View.INVISIBLE);
+                name_of.setText(entry.getName());
+            } else {
+                note_img.setVisibility(View.VISIBLE);
+                name_of.setText(entry.getName());
+            }
+        }
 
 
 
@@ -144,8 +153,19 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
             category.setText(hashCat.get(((Outcome) entry).getCategoryId()).getName());
         }
 
-        if(time_hours != null)
-            time_hours.setText(entry.getFrequency() + "");
+        if(time_hours != null && !entry.whatAmI()) {
+            if (entry.getFrequency() == 0) {
+                time_hours.setText("");
+            } else if (entry.getFrequency() == 1) {
+                time_hours.setText("daily");
+            } else if (entry.getFrequency() == 2) {
+                time_hours.setText("monthly");
+            } else {
+                time_hours.setText("yearly");
+            }
+        }else{
+            time_hours.setText("");
+        }
 
         if ( entry instanceof Income && !(entry.whatAmI())) {
             amount.setTextColor(getContext().getResources().getColor(R.color.greeno));
