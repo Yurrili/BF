@@ -35,7 +35,7 @@ import java.util.HashMap;
 /**
  * Created by Yuri on 2016-01-17.
  */
-public class DialogEditOutcomes extends DialogFragment implements Command {
+public class DialogEditOutcomes extends DialogFragment {
     public View myDialogView;
     public DateBaseHelper_ helper;
     private HashMap<String, Category> hashCat;
@@ -158,10 +158,7 @@ public class DialogEditOutcomes extends DialogFragment implements Command {
         }
     }
 
-    @Override
-    public void execute(android.app.FragmentManager cmd) {
-        this.show(cmd, "");
-    }
+
 
     private class MyTextWatcher implements TextWatcher {
 

@@ -156,7 +156,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
 
         if (category != null && entry.whatAmI()) {
-                Utility.setCategoryBall(getContext(), circle_im_cat, (Outcome) entry, hashCat);
+                Utility.setCategoryBall(getContext(),circle_im_cat, (Outcome)entry, hashCat);
 
                 category.setText(hashCat.get(((Outcome) entry).getCategoryId()).getName());
         }
@@ -231,6 +231,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
                 break;
         }
     }
+
 
 
 

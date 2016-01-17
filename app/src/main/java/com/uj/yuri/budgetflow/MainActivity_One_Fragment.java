@@ -1,23 +1,17 @@
 package com.uj.yuri.budgetflow;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
-
-
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.AdapterView;
 import android.widget.Button;
-
 import android.widget.ImageButton;
 import android.widget.ListView;
-
+import android.widget.Toast;
 
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
@@ -27,43 +21,29 @@ import com.uj.yuri.budgetflow.view_managment_listview.EmptyL;
 import com.uj.yuri.budgetflow.view_managment_listview.Entries_list_;
 import com.uj.yuri.budgetflow.view_managment_listview.HeaderFirstL;
 import com.uj.yuri.budgetflow.view_managment_listview.MyAdapter;
-
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivity_One_Fragment extends Fragment {
 
     DateBaseHelper_ db;
     MyAdapter adapter;
     ImageButton FAB;
-    public Command addIncomeDialFrag;
-    public Command addExpenseDialFrag;
-    public Invoker inv = new Invoker();
 
-    private View myFragmentView;
+    public View myFragmentView;
 
-    private void setDialogs() {
-        inv = new Invoker();
-        inv.setFg(getFragmentManager());
-       // addIncomeDialFrag = new AddIncomeDialFrag();
-        addExpenseDialFrag = new DialogEditOutcomes();
-    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_one_main_activity, container, false);
 
-        this.db = new DateBaseHelper(getActivity());
+        db = new DateBaseHelper(getActivity());
 
         ListView list = (ListView) myFragmentView.findViewById(R.id.list_view);
 
@@ -100,26 +80,23 @@ public class MainActivity_One_Fragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> av, View view, int i, long l) {
 
-
                 final Dialog dialog = new Dialog(getContext());
                 gg_KD.get(i);
                 if ( gg_KD.get(i) instanceof Income){
-                    inv.setCommand(addIncomeDialFrag);
-                    inv.show();
-                    dialog.setTitle("Edit you income:");
+                    Toast.makeText(getActivity(), "myPos " + i + "INCOME", Toast.LENGTH_LONG).show();
                     dialog.setContentView(R.layout.dialog_edit_income);
-
                 } else {
-                    dialog.setTitle("Edit you outcome:");
-
+                    Toast.makeText(getActivity(), "myPos " + i + "OUTCOME", Toast.LENGTH_LONG).show();
                     dialog.setContentView(R.layout.dialog_edit_outcome);
                 }
 
-
+                dialog.setTitle("Edit you data:");
 
                 Button dialogButton = (Button) dialog.findViewById(R.id.add_button);
                 // if button is clicked, close the custom dialog
                 dialogButton.setOnClickListener(new View.OnClickListener() {
+
+
                     @Override
                     public void onClick(View v) {
 
@@ -128,16 +105,6 @@ public class MainActivity_One_Fragment extends Fragment {
 
                 });
 
-                Button dialogButtonD = (Button) dialog.findViewById(R.id.delete_button);
-                // if button is clicked, close the custom dialog
-                dialogButtonD.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-
-
-                });
                 dialog.show();
 
             }
@@ -146,7 +113,7 @@ public class MainActivity_One_Fragment extends Fragment {
         return myFragmentView;
     }
 
-
+    
 
     private ArrayList<Entries_list_> createList(ArrayList<Entries_list_> array){
         // Create list to such fancy list view as you see
