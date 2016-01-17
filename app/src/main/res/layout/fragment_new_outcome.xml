@@ -182,13 +182,11 @@
             android:hint="Note" />
     </android.support.design.widget.TextInputLayout>
     </GridLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
         <Button
             android:layout_marginTop="10dp"
             android:id="@+id/add_button"
-            android:layout_width="150dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:textSize="20sp"
@@ -199,20 +197,5 @@
             android:textColor="#ffff"
             android:text="SAVE" />
 
-        <Button
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
-            android:id="@+id/delete_button"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textSize="20sp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/redo"
-            android:textColor="#ffff"
-            android:text="DELETE" />
-    </RelativeLayout>
 
 </LinearLayout>
