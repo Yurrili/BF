@@ -35,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
+                android:id="@+id/input_amount_place1"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -57,11 +58,64 @@
         android:orientation="horizontal">
 
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+               >
+
+                <GridLayout
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="60dp"
+                    android:columnCount="2"
+                    android:rowCount="1"
+
+                    >
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:contentDescription="dolar"
+                        android:src="@drawable/ic_cal"/>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/date_place_text1"
+
+                            android:textSize="12sp"
+                            android:text="Date"/>
+
+                        <EditText
+                            android:id="@+id/date_place1"
+                            android:editable="false"
+
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:textSize="17sp"
+
+                            android:text="13-07-2016"
+                            android:hint="Date" />
+                    </LinearLayout>
+                </GridLayout>
+            </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-           >
+            android:layout_alignParentEnd="true"
+            >
 
             <GridLayout
                 android:layout_width="wrap_content"
@@ -73,9 +127,11 @@
                 >
 
                 <ImageView
+                    android:id="@+id/date_place2_img"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginTop="7dp"
+                    android:visibility="invisible"
                     android:layout_marginEnd="10dp"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
@@ -88,28 +144,38 @@
                     android:orientation="vertical"
                     >
                     <TextView
+                        android:id="@+id/date_place2_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="Date"/>
+                        android:visibility="invisible"
+                        android:text="To"/>
 
                     <EditText
-                        android:id="@+id/date_place1"
+                        android:id="@+id/date_place2"
                         android:editable="false"
-
+                        android:visibility="invisible"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:textSize="17sp"
 
                         android:text="13-07-2016"
-                        android:hint="Date" />
+                        />
                 </LinearLayout>
             </GridLayout>
         </LinearLayout>
     </RelativeLayout>
 
-
+    <CheckBox
+        android:layout_marginStart="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="TO THE END OF THE WORLD"
+        android:textSize="9sp"
+        android:buttonTint="@color/redo"
+        android:id="@+id/infinity" />
 
     <GridLayout
         android:layout_width="match_parent"
@@ -147,6 +213,7 @@
                 android:hint="Note" />
         </android.support.design.widget.TextInputLayout>
     </GridLayout>
+
 
 
 
@@ -200,18 +267,12 @@
             android:id="@+id/radioButton2"
             android:buttonTint="@color/redo"
             />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yearly"
-            android:id="@+id/radioButton3"
-            android:buttonTint="@color/redo"
-           />
+
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Once"
-            android:id="@+id/radioButton4"
+            android:id="@+id/radioButton3"
             android:buttonTint="@color/redo"
 
             android:checked="true" />

@@ -29,7 +29,7 @@ public class Income implements Entries_list_ {
     }
 
 
-    public Income(String nameOfIncome, String amount, String startTime, String endTime, boolean active, String desciption, int frequency, int duration) {
+    public Income(String nameOfIncome, String amount, String startTime, String endTime, boolean active, int frequency, String desciption, int duration) {
         this.id = "";
         this.nameOfIncome = nameOfIncome;
         this.amount = Float.parseFloat(amount);

@@ -19,11 +19,19 @@ import com.uj.yuri.budgetflow.view_managment_listview.Entries_list_;
 import com.uj.yuri.budgetflow.view_managment_listview.HeaderFirstL;
 import com.uj.yuri.budgetflow.view_managment_listview.MyAdapter;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Duration;
+import org.joda.time.Instant;
+import org.joda.time.Interval;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 
 /**
@@ -92,29 +100,9 @@ public class MainActivity_One_Fragment extends Fragment {
         if(array.isEmpty()) {
             list.add(new EmptyL());
             return list;
-        }else{
-            ArrayList<Income> listOutDaily = new ArrayList<>();
-            ArrayList<Income> listOutMontly = new ArrayList<>();
-            ArrayList<Income> listOutYearly = new ArrayList<>();
-
-            for(int i=0; i < array.size(); i++) {
-                if(array.get(i).getFrequency() == 1){
-                    listOutDaily.add((Income)array.get(i));
-                    array.remove(i);
-                    i--;
-                } else if(array.get(i).getFrequency() == 2){
-                    listOutMontly.add((Income)array.get(i));
-                    array.remove(i);
-                    i--;
-                } else if(array.get(i).getFrequency() == 3){
-                    listOutYearly.add((Income)array.get(i));
-                    array.remove(i);
-                    i--;
-                }
-            }
         }
 
-        Collections.sort(array, new Comparator<Entries_list_>() {
+        Comparator<Entries_list_> gg = new Comparator<Entries_list_>() {
             SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
             @Override
             public int compare(Entries_list_ o1, Entries_list_ o2) {
@@ -124,10 +112,13 @@ public class MainActivity_One_Fragment extends Fragment {
                     throw new IllegalArgumentException(e);
                 }
             }
-        });
+        };
 
-        SimpleDateFormat parseFormat = new SimpleDateFormat("dd-MM-yyyy");
-        String date = parseFormat.parse(array.get(0).getStartTime()).toString();
+            SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+
+        Collections.sort(array, gg );
+
+        String date = f.parse(array.get(0).getStartTime()).toString();
         list.add(new HeaderFirstL(array.get(0)));
         list.add(array.get(0));
         //list.add(new first_empty_pause_TimeEntry(array.get(0)));
@@ -135,14 +126,14 @@ public class MainActivity_One_Fragment extends Fragment {
         // Header - item with header and day of the week and the dot which one end last item above
         // TimeEntry - item list simple custom layout
         for( int i = 1; i < array.size(); i++){
-            if(!(parseFormat.parse(array.get(i).getStartTime()).toString()).equals(date)){
+            if(!(f.parse(array.get(i).getStartTime()).toString()).equals(date)){
                 list.add(new HeaderFirstL(array.get(i)));
                 list.add(array.get(i));
                // list.add(new first_empty_pause_TimeEntry(array.get(i)));
             } else {
                 list.add(array.get(i));
             }
-            date = parseFormat.parse(array.get(i).getStartTime()).toString();
+            date = f.parse(array.get(i).getStartTime()).toString();
         }
 
         return list;

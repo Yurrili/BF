@@ -1,5 +1,7 @@
 package com.uj.yuri.budgetflow;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -19,56 +21,37 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
 public class MainActivityBudgetFlow extends AppCompatActivity{
-
+    private static final String PREFERENCES_NAME = "myPreferences";
     private Toolbar toolbar;
     private TabLayout tabLayout;
+    DateBaseHelper_ db;
     private ViewPager viewPager;
     private int[] tabIcons = {
             R.drawable.ic_calendar,
             R.drawable.ic_champ,
             R.drawable.ic_gift
     };
+    private SharedPreferences preferences;
+    static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activity_budget_flow);
-
-
-        DateBaseHelper_ db = new DateBaseHelper(getApplicationContext());
-//
-//        db.insertCategory(new Category("Domowe"));
-//        db.insertCategory(new Category("Dodatkowe"));
-//        db.insertCategory(new Category("Przyjemnosci"));
-//        db.insertCategory(new Category("Rachunki"));
-//
-//        db.insertOutcome(new Outcome("Prąd", "125690", "15-07-2015", "14-07-2015", true, "4", 2));
-//        db.insertOutcome(new Outcome("Jedzenie", "12", "16-07-2015", "14-07-2015", true, "1", 1));
-//        db.insertOutcome(new Outcome("Druugs", "1600", "17-07-2015", "14-07-2015", true, "3", 0));
-//        db.insertOutcome(new Outcome("Kino", "25", "13-07-2015", "14-07-2015", true, "3", 0));
-//        db.insertOutcome(new Outcome("Autobusy", "10", "12-07-2015", "14-07-2015", true, "2", 1));
-//        db.insertOutcome(new Outcome("Silownia", "3000","12-07-2015", "14-07-2015", true, "2", 1));
-//
-//        db.insertIncome(new Income("Praca", "1400", "11-07-2015", "14-07-2015", true, "1",2, 2));
-//        db.insertIncome(new Income("Babcia", "350", "16-07-2015", "14-07-2015", true, "1",0, 0));
-//        db.insertIncome(new Income("Dziadek", "15", "12-07-2015", "14-07-2015", true, "0",0, 0));
-//        db.insertIncome(new Income("Praca2", "70", "18-07-2015", "14-07-2015", true, "2",2, 2));
-          db.insertIncome(new Income("kieszonkowe", "3", "", "", true, "2",1, 2));
-//
-//
-//        db.selectAllCategories();
-//        db.selectAllOutcomes();
-//        db.selectAllIncomes();
+        preferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        db = new DateBaseHelper(getApplicationContext());
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -76,8 +59,83 @@ public class MainActivityBudgetFlow extends AppCompatActivity{
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
+        addingRegularsIncomesEveryDay();
     }
 
+    public void addingRegularsIncomesEveryDay(){
+        String textFromPreferences = preferences.getString("newDayData", "");
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        if(textFromPreferences.isEmpty() || textFromPreferences.equals("")) {
+            SharedPreferences.Editor preferencesEditor = preferences.edit();
+
+            preferencesEditor.putString("newDayData", day + "-" + month + "-" + year);
+            preferencesEditor.apply();
+
+        } else if (!textFromPreferences.equals(day + "-" + month + "-" + year)){
+            SharedPreferences.Editor preferencesEditor = preferences.edit();
+            preferencesEditor.putString("newDayData", day + "-" + month + "-" + year);
+            preferencesEditor.apply();
+
+            //dodaje wszystkie incomesy
+            ArrayList<Income> list_in_d = db.selectDailyIncomes();
+            ArrayList<Income> list_in_m = db.selectMontlyIncomes();
+
+            for( int i =0; i < list_in_d.size(); i++){
+                Income prepared_one = list_in_d.get(i);
+
+                    db.insertIncome(new Income(prepared_one.getId(),
+                            prepared_one.getName(),
+                            prepared_one.getAmount(),
+                            getToday(),
+                            prepared_one.getEndTime(),
+                            true,
+                            "4",
+                            prepared_one.getDescription(),
+                            prepared_one.getDuration()));
+            }
+
+            for( int i =0; i < list_in_m.size(); i++){
+                Income prepared_one = list_in_m.get(i);
+
+                db.insertIncome(new Income(prepared_one.getId(),
+                        prepared_one.getName(),
+                        prepared_one.getAmount(),
+                        getToday(),
+                        prepared_one.getEndTime(),
+                        true,
+                        "4",
+                        prepared_one.getDescription(),
+                        prepared_one.getDuration()));
+            }
+        }
+
+    }
+
+    private String getToday() {
+        final Calendar c = Calendar.getInstance();
+
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        String d, m;
+        if( day < 10){
+            d = "0" + day;
+        } else {
+            d = day + "";
+        }
+
+        if( month < 10){
+            m = "0" + month;
+        } else {
+            m = month +"";
+        }
+
+        return d+"-"+m+"-"+year;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

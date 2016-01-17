@@ -80,8 +80,14 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
                 IfNormal();
             }
 
-            if ( entry instanceof HeaderFirstL) {
+            if ( !(entry instanceof EmptyL) && entry instanceof HeaderFirstL) {
                 IfHeader();
+            }
+
+            if (entry instanceof EmptyL) {
+                v =  vi.inflate(R.layout.itemlist_first_header, null);
+                day_of_week = (TextView) v.findViewById(R.id.text_day_of_week);
+                day_of_week.setText("Empty");
             }
 
         }
@@ -156,12 +162,12 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
         if(time_hours != null && !entry.whatAmI()) {
             if (entry.getFrequency() == 0) {
                 time_hours.setText("");
-            } else if (entry.getFrequency() == 1) {
+            } else if (entry.getFrequency() == 1 || entry.getFrequency() == 4) {
                 time_hours.setText("daily");
-            } else if (entry.getFrequency() == 2) {
+            } else if (entry.getFrequency() == 2 || entry.getFrequency() == 5) {
                 time_hours.setText("monthly");
             } else {
-                time_hours.setText("yearly");
+                time_hours.setText("");
             }
         }else{
             time_hours.setText("");

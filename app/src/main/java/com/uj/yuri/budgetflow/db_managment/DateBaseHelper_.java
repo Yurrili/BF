@@ -5,6 +5,7 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,8 +28,10 @@ public interface DateBaseHelper_ {
 
     ArrayList<Income> selectAllIncomes();
     ArrayList<Outcome> selectAllOutcomes();
-    ArrayList<Category> selectAllCategorie();
+    ArrayList<Income> selectMontlyIncomes();
+    ArrayList<Income> selectDailyIncomes();
+    ArrayList<Double> selectAllIncomesToday();
+    ArrayList<Double> selectAllOutcomesToday();
 
-    ArrayList<Double> selectTodaysOutcomes(String data);
     HashMap<String, Category> selectAllCategories();
 }

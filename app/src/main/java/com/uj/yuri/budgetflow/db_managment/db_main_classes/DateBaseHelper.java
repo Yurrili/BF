@@ -14,7 +14,11 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -69,6 +73,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -80,6 +85,51 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         Log.d("DB", "created Notifications");
         db.execSQL(SQL_CREATE_ENTRIES_Outcomes);
         Log.d("DB", "created Outcomes");
+
+        ContentValues values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Food");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Fun Money");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Personal");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Household Items/Supplies");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Transportation");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Clothing");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Rent");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Household Repairs");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Utilities/Bills");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Medical");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Insurance");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Education");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Savings");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Gifts");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Others");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+
+
     }
 
     @Override
@@ -241,6 +291,128 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         return list;
     }
 
+    public ArrayList<Income> selectDailyIncomes() {
+        SQLiteDatabase dba = this.getReadableDatabase();
+        ArrayList<Income> list = new ArrayList<>();
+
+
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(getToday());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String selection = Entries.Incomes.COLUMN_FREQUENCY + " = '1'";
+
+        Cursor cc = dba.query(Entries.Incomes.TABLE_NAME,
+                Entries.Incomes.selectAllList,
+                selection, null, null, null, null);
+
+        if (cc != null) {
+            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+                Income a = new Income(  cc.getString(0),
+                        cc.getString(1),
+                        cc.getString(2),
+                        cc.getString(3),
+                        cc.getString(4),
+                        true,
+                        cc.getString(5),
+                        cc.getString(6),
+                        cc.getInt(7));
+                if ( a.getStartTime().equals(a.getEndTime())){
+                    list.add(a);
+                } else try {
+                    if (!sdf.parse(a.getEndTime()).before(date1)){
+                        list.add(a);
+                        //czy data jest konca jest pozniej niz dzisij
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+        cc.close();
+        dba.close();
+        return list;
+    }
+
+    private String getToday() {
+        final Calendar c = Calendar.getInstance();
+
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        String d, m;
+        if( day < 10){
+            d = "0" + day;
+        } else {
+            d = day + "";
+        }
+
+        if( month < 10){
+            m = "0" + month;
+        } else {
+            m = month +"";
+        }
+
+        return d+"-"+m+"-"+year;
+    }
+    public ArrayList<Income> selectMontlyIncomes() {
+        SQLiteDatabase dba = this.getReadableDatabase();
+        ArrayList<Income> list = new ArrayList<>();
+
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(getToday());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String selection = Entries.Incomes.COLUMN_FREQUENCY + " = '2'";
+
+        Cursor cc = dba.query(Entries.Incomes.TABLE_NAME,
+                Entries.Incomes.selectAllList,
+                selection, null, null, null, null);
+
+        if (cc != null) {
+            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+                Income a = new Income(  cc.getString(0),
+                                        cc.getString(1),
+                                        cc.getString(2),
+                                        cc.getString(3),
+                                        cc.getString(4),
+                                        true,
+                                        cc.getString(5),
+                                        cc.getString(6),
+                                        cc.getInt(7));
+                if ( a.getStartTime().equals(a.getEndTime())){
+                    String[] gg = a.getStartTime().split("-");
+                    String[] gg1 = getToday().split("-");
+                    if( gg[0].equals(gg1[0]))
+                        list.add(a);
+                } else try {
+                    if (!sdf.parse(a.getEndTime()).before(date1)){
+                        String[] gg = a.getStartTime().split("-");
+                        String[] gg1 = getToday().split("-");
+                        if( gg[0].equals(gg1[0]))
+                            list.add(a);
+                        //czy data jest konca jest pozniej niz dzisij
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+        cc.close();
+        dba.close();
+        return list;
+    }
+
     public ArrayList<Double> selectTodaysOutcomes(String data){
         SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
@@ -261,6 +433,8 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
         return list;
     }
+
+
 
     public ArrayList<Outcome> selectAllOutcomes(){
         SQLiteDatabase dba = this.getReadableDatabase();
@@ -289,27 +463,88 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         return list;
     }
 
+
     @Override
-    public ArrayList<Category> selectAllCategorie() {
+    public ArrayList<Double> selectAllOutcomesToday() {
         SQLiteDatabase dba = this.getReadableDatabase();
-        ArrayList<Category> list = new ArrayList<>();
+        ArrayList<Double> list = new ArrayList<>();
 
-        Cursor c = dba.query(Entries.Categories.TABLE_NAME,
-                new String [] { "Id", "Name" },
-                null, null, null, null, null);
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        String d, m;
+        if( day < 10){
+            d = "0" + day;
+        } else {
+            d = day + "";
+        }
 
-        int i = 0;
-        if (c != null) {
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                list.add(new Category(c.getString(0), c.getString(1), (i%7) + ""));
-                i++;
+        if( month < 10){
+            m = "0" + month;
+        } else {
+            m = month +"";
+        }
+
+        String selection = Entries.Outcomes.COLUMN_DATETIME_START + " = '"
+                + d + "-"+m+"-"+year + "'";
+
+        Cursor cc = dba.query(Entries.Outcomes.TABLE_NAME,
+                new String[]{Entries.Outcomes.COLUMN_AMOUNT},
+                selection, null, null, null, null);
+
+        if (cc != null) {
+            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+                list.add(Double.parseDouble(cc.getString(0)));
             }
         }
 
-        c.close();
+        cc.close();
         dba.close();
         return list;
     }
+
+    @Override
+    public ArrayList<Double> selectAllIncomesToday() {
+        SQLiteDatabase dba = this.getReadableDatabase();
+        ArrayList<Double> list = new ArrayList<>();
+
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        String d, m;
+        if( day < 10){
+            d = "0" + day;
+        } else {
+            d = day + "";
+        }
+
+        if( month < 10){
+            m = "0" + month;
+        } else {
+            m = month +"";
+        }
+
+        String selection = Entries.Incomes.COLUMN_DATETIME_START + " = '"
+                + d + "-"+m+"-"+year + "'";
+
+        Cursor cc = dba.query(Entries.Incomes.TABLE_NAME,
+                new String[]{Entries.Incomes.COLUMN_AMOUNT},
+                selection, null, null, null, null);
+
+        if (cc != null) {
+            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+                list.add(Double.parseDouble(cc.getString(0)));
+            }
+        }
+
+        cc.close();
+        dba.close();
+        return list;
+    }
+
+
 
     @Override
     public HashMap<String, Category> selectAllCategories() {
