@@ -1,33 +1,29 @@
 package com.uj.yuri.budgetflow;
 
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
+
+import android.app.AlertDialog;
+
+
+
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
+
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
-
-
+import android.app.DialogFragment;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
 import com.uj.yuri.budgetflow.view_managment_listview.Utility;
 
@@ -36,9 +32,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class NewIncomeOutcome_OutcomeFragment extends Fragment {
-    private View myFragmentView;
-
+/**
+ * Created by Yuri on 2016-01-17.
+ */
+public class DialogEditOutcomes extends DialogFragment implements Command {
+    public View myDialogView;
     public DateBaseHelper_ helper;
     private HashMap<String, Category> hashCat;
     private TextInputLayout inputLayoutAmount;
@@ -46,40 +44,76 @@ public class NewIncomeOutcome_OutcomeFragment extends Fragment {
     private Spinner spinner;
     public EditText amount;
     public EditText note;
-    private Button btn;
+    FragmentManager cmd;
 
+    public DialogEditOutcomes()
+    {}
 
-    public NewIncomeOutcome_OutcomeFragment() {
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        myFragmentView = inflater.inflate(R.layout.fragment_new_outcome, container, false);
-        helper = new DateBaseHelper(getActivity());
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        myDialogView = inflater.inflate(R.layout.dialog_edit_outcome, null);
 
         initLayout();
-        setListeners();
+
         setDateTime();
+        spinner = (Spinner) myDialogView.findViewById(R.id.spinner_cat);
         setSpinnerAdapter();
+        setAllListeners();
+        
+        builder.setView(myDialogView)
+                // Add action buttons
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
 
-        return myFragmentView;
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        Dialog dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        return dialog;
+
     }
 
-    private void initLayout(){
-
+    private void initLayout()
+    {
+        helper = new DateBaseHelper(getActivity());
         hashCat = helper.selectAllCategories();
-        date_place =  (EditText) myFragmentView.findViewById(R.id.date_place);
-        spinner = (Spinner) myFragmentView.findViewById(R.id.spinner_cat);
-        note =  (EditText) myFragmentView.findViewById(R.id.note_place);
-        amount = (EditText) myFragmentView.findViewById(R.id.amount_place);
-        btn = (Button) myFragmentView.findViewById(R.id.add_button);
-        inputLayoutAmount = (TextInputLayout) myFragmentView.findViewById(R.id.input_amount_place);
+        date_place =  (EditText) myDialogView.findViewById(R.id.date_place);
+
+        note =  (EditText) myDialogView.findViewById(R.id.note_place);
+        amount = (EditText) myDialogView.findViewById(R.id.amount_place);
+
+        inputLayoutAmount = (TextInputLayout) myDialogView.findViewById(R.id.input_amount_place);
+        amount.addTextChangedListener(new MyTextWatcher(amount));
     }
 
-    private void setListeners(){
-        amount.addTextChangedListener(new MyTextWatcher(amount));
+    public void setDateTime(){
 
+        date_place.setText(Utility.getToday());
+
+    }
+
+    void setSpinnerAdapter() {
+        ArrayList<Category> cat = new ArrayList<>(hashCat.values());
+        MySpinner adapter = new MySpinner(getActivity(),
+                android.R.layout.simple_spinner_item, cat);
+        spinner.setAdapter(adapter);
+    }
+
+    public void showDatePickerDialog(View v) {
+        android.support.v4.app.DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(cmd, "datePicker");
+    }
+
+    private void setAllListeners(){
         date_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,52 +135,9 @@ public class NewIncomeOutcome_OutcomeFragment extends Fragment {
                 }
             }
         });
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                submitForm();
-            }
-        });
-    }
-
-    public void setDateTime(){
-
-        date_place.setText(Utility.getToday());
-
-    }
-
-    void setSpinnerAdapter() {
-        ArrayList<Category> cat = new ArrayList<>(hashCat.values());
-        MySpinner adapter = new MySpinner(getActivity(),
-                android.R.layout.simple_spinner_item, cat);
-        spinner.setAdapter(adapter);
-    }
-
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
     }
 
 
-
-    /**
-     * Validating form
-     */
-    private void submitForm() {
-        if (!validateName()) {
-            return;
-        }
-        helper.insertOutcome(new Outcome(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getCategoryFromForm(), 2));
-
-
-        NavUtils.navigateUpFromSameTask(getActivity());
-    }
-
-    private String getCategoryFromForm() {
-        String text = ((Category)spinner.getSelectedItem()).getId();
-        return text;
-    }
 
     private boolean validateName() {
         if (amount.getText().toString().trim().isEmpty()) {
@@ -165,6 +156,11 @@ public class NewIncomeOutcome_OutcomeFragment extends Fragment {
         if (view.requestFocus()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
+    }
+
+    @Override
+    public void execute(android.app.FragmentManager cmd) {
+        this.show(cmd, "");
     }
 
     private class MyTextWatcher implements TextWatcher {
@@ -190,7 +186,7 @@ public class NewIncomeOutcome_OutcomeFragment extends Fragment {
         }
     }
 
-    public static class DatePickerFragment extends DialogFragment
+    public static class DatePickerFragment extends android.support.v4.app.DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
         @Override
@@ -225,6 +221,5 @@ public class NewIncomeOutcome_OutcomeFragment extends Fragment {
             date_place.setText(d + "-" + m +  "-" + year);
         }
     }
-
 
 }

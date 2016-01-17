@@ -36,16 +36,11 @@ public class NewIncomeOutcome extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         viewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-
-
-
     }
 
 

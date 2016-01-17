@@ -36,12 +36,12 @@ public class MainActivityBudgetFlow extends AppCompatActivity{
     DateBaseHelper_ db;
     private ViewPager viewPager;
     private int[] tabIcons = {
-            R.drawable.ic_calendar,
-            R.drawable.ic_champ,
-            R.drawable.ic_gift
+            R.drawable.ic_cup,
+            R.drawable.ic_bag,
+            R.drawable.ic_cat
     };
     private SharedPreferences preferences;
-    static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +169,7 @@ public class MainActivityBudgetFlow extends AppCompatActivity{
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new MainActivity_Two_Fragment(), "Main");
         adapter.addFrag(new MainActivity_One_Fragment(), "Your spending");
-        adapter.addFrag(new MainActivity_Three_Fragment(), "THREE");
+        adapter.addFrag(new MainActivity_Three_Fragment(), "Categories");
         viewPager.setAdapter(adapter);
     }
 

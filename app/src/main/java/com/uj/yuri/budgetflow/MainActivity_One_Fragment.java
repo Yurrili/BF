@@ -1,14 +1,23 @@
 package com.uj.yuri.budgetflow;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
+
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.widget.AdapterView;
+import android.widget.Button;
+
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
@@ -19,11 +28,6 @@ import com.uj.yuri.budgetflow.view_managment_listview.Entries_list_;
 import com.uj.yuri.budgetflow.view_managment_listview.HeaderFirstL;
 import com.uj.yuri.budgetflow.view_managment_listview.MyAdapter;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Duration;
-import org.joda.time.Instant;
-import org.joda.time.Interval;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,10 +46,18 @@ public class MainActivity_One_Fragment extends Fragment {
     DateBaseHelper_ db;
     MyAdapter adapter;
     ImageButton FAB;
+    public Command addIncomeDialFrag;
+    public Command addExpenseDialFrag;
+    public Invoker inv = new Invoker();
 
     private View myFragmentView;
 
-
+    private void setDialogs() {
+        inv = new Invoker();
+        inv.setFg(getFragmentManager());
+       // addIncomeDialFrag = new AddIncomeDialFrag();
+        addExpenseDialFrag = new DialogEditOutcomes();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,12 +75,9 @@ public class MainActivity_One_Fragment extends Fragment {
         gg_K.addAll(list_of_incomes);
 
 
-        ArrayList<Entries_list_> gg_KD = null;
-        try {
-            gg_KD = createList(gg_K);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        final ArrayList<Entries_list_> gg_KD = createList(gg_K);
+
 
 
         adapter = new MyAdapter(getContext(), R.layout.itemlists, gg_KD);
@@ -88,12 +97,58 @@ public class MainActivity_One_Fragment extends Fragment {
             }
         });
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> av, View view, int i, long l) {
+
+
+                final Dialog dialog = new Dialog(getContext());
+                gg_KD.get(i);
+                if ( gg_KD.get(i) instanceof Income){
+                    inv.setCommand(addIncomeDialFrag);
+                    inv.show();
+                    dialog.setTitle("Edit you income:");
+                    dialog.setContentView(R.layout.dialog_edit_income);
+
+                } else {
+                    dialog.setTitle("Edit you outcome:");
+
+                    dialog.setContentView(R.layout.dialog_edit_outcome);
+                }
+
+
+
+                Button dialogButton = (Button) dialog.findViewById(R.id.add_button);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+
+
+                });
+
+                Button dialogButtonD = (Button) dialog.findViewById(R.id.delete_button);
+                // if button is clicked, close the custom dialog
+                dialogButtonD.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+
+
+                });
+                dialog.show();
+
+            }
+        });
+
         return myFragmentView;
     }
 
 
 
-    private ArrayList<Entries_list_> createList(ArrayList<Entries_list_> array) throws ParseException {
+    private ArrayList<Entries_list_> createList(ArrayList<Entries_list_> array){
         // Create list to such fancy list view as you see
         ArrayList<Entries_list_> list = new ArrayList<>();
 
@@ -118,7 +173,12 @@ public class MainActivity_One_Fragment extends Fragment {
 
         Collections.sort(array, gg );
 
-        String date = f.parse(array.get(0).getStartTime()).toString();
+        String date = null;
+        try {
+            date = f.parse(array.get(0).getStartTime()).toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         list.add(new HeaderFirstL(array.get(0)));
         list.add(array.get(0));
         //list.add(new first_empty_pause_TimeEntry(array.get(0)));
@@ -126,14 +186,22 @@ public class MainActivity_One_Fragment extends Fragment {
         // Header - item with header and day of the week and the dot which one end last item above
         // TimeEntry - item list simple custom layout
         for( int i = 1; i < array.size(); i++){
-            if(!(f.parse(array.get(i).getStartTime()).toString()).equals(date)){
-                list.add(new HeaderFirstL(array.get(i)));
-                list.add(array.get(i));
-               // list.add(new first_empty_pause_TimeEntry(array.get(i)));
-            } else {
-                list.add(array.get(i));
+            try {
+                if(!(f.parse(array.get(i).getStartTime()).toString()).equals(date)){
+                    list.add(new HeaderFirstL(array.get(i)));
+                    list.add(array.get(i));
+                   // list.add(new first_empty_pause_TimeEntry(array.get(i)));
+                } else {
+                    list.add(array.get(i));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-            date = f.parse(array.get(i).getStartTime()).toString();
+            try {
+                date = f.parse(array.get(i).getStartTime()).toString();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         return list;

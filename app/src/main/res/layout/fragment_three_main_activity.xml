@@ -4,13 +4,12 @@
     android:layout_height="match_parent"
     tools:context="com.uj.yuri.budgetflow.MainActivityBudgetFlow.MainActivity_Three_Fragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GRRRRRR2"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:dividerHeight="0.5dp" />
 
 </RelativeLayout>
 

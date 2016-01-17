@@ -1,0 +1,185 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:layout_marginEnd="10dp"
+    android:layout_marginStart="10dp"
+    tools:context="com.uj.yuri.budgetflow.NewIncomeOutcome$PlaceholderFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:columnCount="2"
+            android:rowCount="1">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:contentDescription="dolar"
+                android:src="@drawable/ic_dollar"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:id="@+id/input_amount_place"
+                android:orientation="vertical">
+
+
+
+                <EditText
+                    android:id="@+id/amount_place"
+                    android:inputType="numberDecimal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textSize="17sp"
+                    android:hint="Amount" />
+            </android.support.design.widget.TextInputLayout>
+        </GridLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <GridLayout
+                android:layout_width="wrap_content"
+
+                android:layout_height="60dp"
+                android:columnCount="2"
+                android:rowCount="1"
+
+                >
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:contentDescription="dolar"
+                    android:src="@drawable/ic_cal"/>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="Date"/>
+
+                    <EditText
+                        android:id="@+id/date_place"
+                        android:editable="false"
+
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textSize="17sp"
+
+                        android:text="13-07-2016"
+                        android:hint="Date" />/>
+                </LinearLayout>
+            </GridLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:layout_marginTop="10dp"
+        android:rowCount="1"
+
+        >
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:contentDescription="tag"
+            android:src="@drawable/ic_tag_m"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textSize="12sp"
+            android:text="Category:"/>
+    </GridLayout>
+
+    <Spinner
+        android:layout_marginStart="20dp"
+        android:id="@+id/spinner_cat"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:columnCount="2"
+        android:rowCount="1">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:contentDescription="Note"
+            android:src="@drawable/ic_note_m"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+            <EditText
+                android:id="@+id/note_place"
+                android:inputType="textImeMultiLine"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textSize="17sp"
+                android:hint="Note" />
+        </android.support.design.widget.TextInputLayout>
+    </GridLayout>
+</LinearLayout>

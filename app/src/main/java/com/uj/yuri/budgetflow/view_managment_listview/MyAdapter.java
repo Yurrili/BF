@@ -1,5 +1,6 @@
 package com.uj.yuri.budgetflow.view_managment_listview;
 
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -155,8 +156,9 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
 
         if (category != null && entry.whatAmI()) {
-            setCategoryBall();
-            category.setText(hashCat.get(((Outcome) entry).getCategoryId()).getName());
+                Utility.setCategoryBall(getContext(), circle_im_cat, (Outcome) entry, hashCat);
+
+                category.setText(hashCat.get(((Outcome) entry).getCategoryId()).getName());
         }
 
         if(time_hours != null && !entry.whatAmI()) {
@@ -231,32 +233,5 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
     }
 
 
-    private void setCategoryBall(){
-        switch (hashCat.get(((Outcome) entry).getCategoryId()).getColor()) {
-            case "0":
-                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle1));
-                break;
-            case "1":
-                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle2));
-                break;
-            case "2":
-                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle3));
-                break;
-            case "3":
-                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle4));
-                break;
-            case "4":
-                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle5));
-                break;
-            case "5":
-                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle6));
-                break;
-            case "6":
-                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle7));
-                break;
-            default:
-                circle_im_cat.setBackground(getContext().getResources().getDrawable(R.drawable.ic_circle5));
-                break;
-        }
-    }
+
 }

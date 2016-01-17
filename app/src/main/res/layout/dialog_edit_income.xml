@@ -1,0 +1,314 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:layout_marginEnd="10dp"
+    android:layout_marginStart="10dp"
+    tools:context="com.uj.yuri.budgetflow.NewIncomeOutcome$PlaceholderFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:columnCount="2"
+            android:rowCount="1">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:contentDescription="dolar"
+                android:src="@drawable/ic_dollar"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:id="@+id/input_amount_place1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+
+                <EditText
+                    android:id="@+id/amount_place"
+                    android:inputType="numberDecimal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textSize="17sp"
+                    android:hint="Amount" />
+            </android.support.design.widget.TextInputLayout>
+        </GridLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            >
+
+            <GridLayout
+                android:layout_width="wrap_content"
+
+                android:layout_height="60dp"
+                android:columnCount="2"
+                android:rowCount="1"
+
+                >
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:contentDescription="dolar"
+                    android:src="@drawable/ic_cal"/>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/date_place_text1"
+
+                        android:textSize="12sp"
+                        android:text="Date"/>
+
+                    <EditText
+                        android:id="@+id/date_place1"
+                        android:editable="false"
+
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textSize="17sp"
+
+                        android:text="13-07-2016"
+                        android:hint="Date" />
+                </LinearLayout>
+            </GridLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            >
+
+            <GridLayout
+                android:layout_width="wrap_content"
+
+                android:layout_height="60dp"
+                android:columnCount="2"
+                android:rowCount="1"
+
+                >
+
+                <ImageView
+                    android:id="@+id/date_place2_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="7dp"
+                    android:visibility="invisible"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:contentDescription="dolar"
+                    android:src="@drawable/ic_cal"/>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/date_place2_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:visibility="invisible"
+                        android:text="To"/>
+
+                    <EditText
+                        android:id="@+id/date_place2"
+                        android:editable="false"
+                        android:visibility="invisible"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textSize="17sp"
+
+                        android:text="13-07-2016"
+                        />
+                </LinearLayout>
+            </GridLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <CheckBox
+        android:layout_marginStart="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="TO THE END OF THE WORLD"
+        android:textSize="9sp"
+        android:buttonTint="@color/redo"
+        android:id="@+id/infinity" />
+
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:columnCount="2"
+        android:rowCount="1">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:contentDescription="Note"
+            android:src="@drawable/ic_note_m"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+            <EditText
+                android:id="@+id/note_place"
+                android:inputType="textImeMultiLine"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textSize="17sp"
+                android:hint="Note" />
+        </android.support.design.widget.TextInputLayout>
+    </GridLayout>
+
+
+
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:layout_marginTop="10dp"
+        android:rowCount="1"
+
+        >
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:contentDescription="tag"
+            android:src="@drawable/ic_tag_m"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textSize="12sp"
+            android:text="Frequency:"/>
+    </GridLayout>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/radiogr"
+        >
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daily"
+            android:id="@+id/radioButton1"
+            android:buttonTint="@color/redo"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Montly"
+            android:id="@+id/radioButton2"
+            android:buttonTint="@color/redo"
+            />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Once"
+            android:id="@+id/radioButton3"
+            android:buttonTint="@color/redo"
+
+            android:checked="true" />
+    </RadioGroup>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/add_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+
+        android:textSize="20sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="#ffff"
+        android:text="SAVE" />
+
+    <Button
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:id="@+id/delete_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+
+        android:textSize="20sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/redo"
+        android:textColor="#ffff"
+        android:text="DELETE" />
+    </RelativeLayout>
+</LinearLayout>

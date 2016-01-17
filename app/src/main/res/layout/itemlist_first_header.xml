@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:focusable="false"
-
+    android:id="@+id/all"
     android:focusableInTouchMode="false"
     android:paddingLeft="6dp"
     android:clickable="false"

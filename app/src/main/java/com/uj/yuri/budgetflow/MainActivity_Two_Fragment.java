@@ -24,6 +24,7 @@ import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.view_managment_listview.Utility;
 
 import java.util.ArrayList;
 
@@ -44,8 +45,7 @@ public class MainActivity_Two_Fragment extends Fragment {
         myFragmentView = inflater.inflate(R.layout.fragment_two_main_activity, container, false);
         preferences = getActivity().getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
         circularProgressBar = (CircularProgressBar)myFragmentView.findViewById(R.id.yourCircularProgressbar);
-        circularProgressBar.setColor(ContextCompat.getColor(getContext(), R.color.redo));
-        circularProgressBar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.redo1));
+
         //circularProgressBar.setProgressBarWidth(getResources().getDimension(R.dimen.progressBarWidth));
         //circularProgressBar.setBackgroundProgressBarWidth(getResources().getDimension(R.dimen.backgroundProgressBarWidth));
         int animationDuration = 2500; // 2500ms = 2,5s
@@ -53,8 +53,10 @@ public class MainActivity_Two_Fragment extends Fragment {
         db = new DateBaseHelper(getActivity());
         Max_am = Double.parseDouble(preferences.getString("Max", "20"));
         Double saldo = Max_am - getSaldo();
-
-
+        TextView expensive = (TextView)myFragmentView.findViewById(R.id.month_outcomes);
+        TextView incomes = (TextView)myFragmentView.findViewById(R.id.month_incomes);
+        expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+" PLN");
+        incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+" PLN");
         sum_to_spend.setText(saldo + " PLN");
 
         sum_to_spend.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +72,7 @@ public class MainActivity_Two_Fragment extends Fragment {
                 TextView text = (TextView) dialog.findViewById(R.id.text_dial);
                 text.setText("Choose you limit:");
 
-                max.setHint("Most recent limit :" +preferences.getString("Max", "20"));
+                max.setHint("Most recent limit :" + preferences.getString("Max", "20"));
                 Button dialogButton = (Button) dialog.findViewById(R.id.add_button);
                 // if button is clicked, close the custom dialog
                 dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -142,8 +144,13 @@ public class MainActivity_Two_Fragment extends Fragment {
 
         if ( Max_am - sum_out  >=0){
             sum_to_spend.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
+            circularProgressBar.setColor(ContextCompat.getColor(getContext(), R.color.greeno));
+            circularProgressBar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.greeno1));
         }else {
             sum_to_spend.setTextColor(ContextCompat.getColor(getContext(), R.color.redo));
+            circularProgressBar.setColor(ContextCompat.getColor(getContext(), R.color.redo));
+            circularProgressBar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.redo1));
         }
         return sum_out;
     }

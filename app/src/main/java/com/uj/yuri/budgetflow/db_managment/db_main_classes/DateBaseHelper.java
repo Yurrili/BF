@@ -12,6 +12,7 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
+import com.uj.yuri.budgetflow.view_managment_listview.Utility;
 
 
 import java.text.ParseException;
@@ -298,7 +299,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
 
         Date date1 = null;
         try {
-            date1 = sdf.parse(getToday());
+            date1 = sdf.parse(Utility.getToday());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -339,34 +340,15 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         return list;
     }
 
-    private String getToday() {
-        final Calendar c = Calendar.getInstance();
 
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        String d, m;
-        if( day < 10){
-            d = "0" + day;
-        } else {
-            d = day + "";
-        }
 
-        if( month < 10){
-            m = "0" + month;
-        } else {
-            m = month +"";
-        }
-
-        return d+"-"+m+"-"+year;
-    }
     public ArrayList<Income> selectMontlyIncomes() {
         SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Income> list = new ArrayList<>();
 
         Date date1 = null;
         try {
-            date1 = sdf.parse(getToday());
+            date1 = sdf.parse(Utility.getToday());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -390,13 +372,13 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
                                         cc.getInt(7));
                 if ( a.getStartTime().equals(a.getEndTime())){
                     String[] gg = a.getStartTime().split("-");
-                    String[] gg1 = getToday().split("-");
+                    String[] gg1 = Utility.getToday().split("-");
                     if( gg[0].equals(gg1[0]))
                         list.add(a);
                 } else try {
                     if (!sdf.parse(a.getEndTime()).before(date1)){
                         String[] gg = a.getStartTime().split("-");
-                        String[] gg1 = getToday().split("-");
+                        String[] gg1 = Utility.getToday().split("-");
                         if( gg[0].equals(gg1[0]))
                             list.add(a);
                         //czy data jest konca jest pozniej niz dzisij

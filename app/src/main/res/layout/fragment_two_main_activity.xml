@@ -9,7 +9,7 @@
     >
 
     <TextView
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -20,9 +20,9 @@
         />
 
     <com.mikhaellopez.circularprogressbar.CircularProgressBar
-        android:layout_marginTop="30dp"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:layout_gravity="center_horizontal"
         app:background_progressbar_color="#FFCDD2"
         app:background_progressbar_width="5dp"
@@ -54,8 +54,87 @@
         android:textColor="@color/colorPrimary"
         android:text="left to spend today"
         android:textSize="20sp"
+        android:layout_marginBottom="15dp" />
 
-        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="?android:attr/listDivider"/>
+
+    <RelativeLayout
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:capitalize="characters"
+            android:textColor="@color/colorPrimary"
+            android:text="Incomes:"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            />
+            <TextView
+                android:id="@+id/month_incomes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textColor="@color/greeno"
+
+                android:textSize="12sp"
+                android:layout_marginBottom="15dp" />
+        </LinearLayout>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last 30 days:"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center_horizontal"
+            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:textSize="12sp"
+            />
+
+        <LinearLayout
+        android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:capitalize="characters"
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="right"
+            android:text="Expensive:"
+            android:textSize="12sp"
+
+            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/month_outcomes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/ColorPrimary"
+
+
+                android:layout_marginBottom="15dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>
 

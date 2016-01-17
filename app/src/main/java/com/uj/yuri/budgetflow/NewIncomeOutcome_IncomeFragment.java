@@ -1,8 +1,10 @@
 package com.uj.yuri.budgetflow;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -29,6 +31,7 @@ import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.view_managment_listview.Utility;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -75,7 +78,8 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
         date_place2_txt =  (TextView) myFragmentView.findViewById(R.id.date_place2_text);
         date_place2_img =  (ImageView) myFragmentView.findViewById(R.id.date_place2_img);
         inputLayoutAmount = (TextInputLayout) myFragmentView.findViewById(R.id.input_amount_place1);
-        amount.addTextChangedListener(new MyTextWatcher(amount));
+
+        amount.addTextChangedListener(new MyTextWatcher(myFragmentView));
 
         infinity =  (CheckBox) myFragmentView.findViewById(R.id.infinity);
         infinity.setOnClickListener(new View.OnClickListener() {
@@ -304,63 +308,15 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
 
         }
 
-
-
         Toast.makeText(getContext(), "Thank You!", Toast.LENGTH_SHORT).show();
-
-
         NavUtils.navigateUpFromSameTask(getActivity());
     }
+
     public void setDateTime(EditText date_place){
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        String d,md;
-
-
-
-        if( day < 10){
-            d = "0"+day;
-
-        }else {
-            d = day +"";
-        }
-        month = month +1;
-        if( month < 10){
-            md = "0"+ month;
-
-        }else {
-            md = month +"";
-        }
-
-        date_place.setText(d+"-"+md+"-"+year);
-
+        date_place.setText(Utility.getToday());
     }
 
-    private class MyTextWatcher implements TextWatcher {
 
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.amount_place:
-                    validateName();
-                    break;
-            }
-        }
-    }
 
     private boolean validateDate() {
 
@@ -381,7 +337,6 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
 
                 if (date1.before(date2)) {
                     //System.out.println("Date1 is before Date2");
-
                     return true;
                 }
 
@@ -403,9 +358,35 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
         return false;
     }
 
+    private class MyTextWatcher implements TextWatcher {
+
+        private View view;
+
+
+        public MyTextWatcher(View view) {
+            this.view = view;
+
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.amount_place:
+                    validateName();
+                    break;
+            }
+        }
+
+    }
+
     private boolean validateName() {
         if (amount.getText().toString().trim().isEmpty()) {
-            inputLayoutAmount.setError(getString(R.string.err_msg_name));
+            inputLayoutAmount.setError(getContext().getString(R.string.err_msg_name));
             requestFocus(amount);
             return false;
         } else {
@@ -415,12 +396,12 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
         return true;
     }
 
-
-    private void requestFocus(View view) {
+   private void requestFocus(View view) {
         if (view.requestFocus()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
