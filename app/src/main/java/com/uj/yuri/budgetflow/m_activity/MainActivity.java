@@ -1,36 +1,30 @@
-package com.uj.yuri.budgetflow;
+package com.uj.yuri.budgetflow.m_activity;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
-public class MainActivityBudgetFlow extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity{
     private static final String PREFERENCES_NAME = "myPreferences";
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -168,9 +162,9 @@ public class MainActivityBudgetFlow extends AppCompatActivity{
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MainActivity_Two_Fragment(), "Main");
-        adapter.addFrag(new MainActivity_One_Fragment(), "Your spending");
-        adapter.addFrag(new MainActivity_Three_Fragment(), "Categories");
+        adapter.addFrag(new FragmentMain(), "Main");
+        adapter.addFrag(new FragmentSpending(), "Your spending");
+        adapter.addFrag(new FragmentCategories(), "Categories");
         viewPager.setAdapter(adapter);
     }
 

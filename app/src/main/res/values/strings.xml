@@ -10,7 +10,13 @@
     <string name="time_diffrence">60 h</string>
     <string name="def_entry">costatcoscdfsdfsdf</string>
     <string name="summary_time">8000</string>
-    <string name="listview_empty">XYZ</string>
+    <string name="listview_empty">Empty</string>
+
+    <string name="inf_dial1">"Choose you limit:"</string>
+    <string name="inf_dial2">"Set daily limit"</string>
+    <string name="inf_dial3">"Most recent limit :"</string>
+
+    <string name="error_limit">"Enter correct limit"</string>
 
     <string name="w0">Monday</string>
     <string name="w1">Tuesday</string>

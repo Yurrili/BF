@@ -1,4 +1,4 @@
-package com.uj.yuri.budgetflow.view_managment_listview;
+package com.uj.yuri.budgetflow.m_activity.view_managment_listview;
 
 
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.uj.yuri.budgetflow.R;
+import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
@@ -156,7 +157,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
 
         if (category != null && entry.whatAmI()) {
-                Utility.setCategoryBall(getContext(),circle_im_cat, (Outcome)entry, hashCat);
+                Utility.setCategoryBall(getContext(), circle_im_cat, (Outcome) entry, hashCat);
 
                 category.setText(hashCat.get(((Outcome) entry).getCategoryId()).getName());
         }

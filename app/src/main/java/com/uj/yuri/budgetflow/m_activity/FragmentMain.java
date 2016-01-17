@@ -1,11 +1,9 @@
-package com.uj.yuri.budgetflow;
+package com.uj.yuri.budgetflow.m_activity;
 
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -16,27 +14,28 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+import com.uj.yuri.budgetflow.R;
+import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
-import com.uj.yuri.budgetflow.view_managment_listview.Utility;
 
 import java.util.ArrayList;
 
-public class MainActivity_Two_Fragment extends Fragment {
+public class FragmentMain extends Fragment {
     private View myFragmentView;
     private static final String PREFERENCES_NAME = "myPreferences";
     private SharedPreferences preferences;
     private DateBaseHelper_ db;
     private Double Max_am;
+    TextView expensive;
+    TextView incomes;
+    Double saldo;
     CircularProgressBar circularProgressBar;
     TextView sum_to_spend;
-    public MainActivity_Two_Fragment() {
+    public FragmentMain() {
     }
 
     @Override
@@ -44,37 +43,57 @@ public class MainActivity_Two_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_two_main_activity, container, false);
         preferences = getActivity().getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        circularProgressBar = (CircularProgressBar)myFragmentView.findViewById(R.id.yourCircularProgressbar);
-
-        //circularProgressBar.setProgressBarWidth(getResources().getDimension(R.dimen.progressBarWidth));
-        //circularProgressBar.setBackgroundProgressBarWidth(getResources().getDimension(R.dimen.backgroundProgressBarWidth));
-        int animationDuration = 2500; // 2500ms = 2,5s
-        sum_to_spend = (TextView)myFragmentView.findViewById(R.id.sum_to_spend);
         db = new DateBaseHelper(getActivity());
-        Max_am = Double.parseDouble(preferences.getString("Max", "20"));
-        Double saldo = Max_am - getSaldo();
-        TextView expensive = (TextView)myFragmentView.findViewById(R.id.month_outcomes);
-        TextView incomes = (TextView)myFragmentView.findViewById(R.id.month_incomes);
-        expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+" PLN");
-        incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+" PLN");
-        sum_to_spend.setText(saldo + " PLN");
+        setLay();
 
+        setValuses();
+        setOnClicks();
+
+
+        circularProgressBar.setProgressWithAnimation(getProgress(), 2500); // Default duration = 1500ms
+
+        return myFragmentView;
+    }
+
+    private void setLay(){
+        sum_to_spend = (TextView)myFragmentView.findViewById(R.id.sum_to_spend);
+        circularProgressBar = (CircularProgressBar)myFragmentView.findViewById(R.id.yourCircularProgressbar);
+        expensive= (TextView)myFragmentView.findViewById(R.id.month_outcomes);
+        incomes = (TextView)myFragmentView.findViewById(R.id.month_incomes);
+
+    }
+
+    private void setValuses(){
+        Max_am = Double.parseDouble(preferences.getString("Max", "20"));
+        saldo = Max_am - getSaldo();
+        expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+ Utility.moneyVal);
+        incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+ Utility.moneyVal);
+        sum_to_spend.setText(saldo + Utility.moneyVal);
+    }
+
+    private void setOnClicks(){
         sum_to_spend.setOnClickListener(new View.OnClickListener() {
+            EditText max ;
+            TextView text;
+            Button dialogButton ;
+            TextInputLayout inputLayoutMax ;
+
             @Override
             public void onClick(View v) {
 
-                // custom dialog
                 final Dialog dialog = new Dialog(getContext());
                 dialog.setContentView(R.layout.dialog);
-                dialog.setTitle("Set daily limit");
-                EditText max = (EditText) dialog.findViewById(R.id.max);
-                // set the custom dialog components - text, image and button
-                TextView text = (TextView) dialog.findViewById(R.id.text_dial);
-                text.setText("Choose you limit:");
+                dialog.setTitle(getString(R.string.inf_dial2));
 
-                max.setHint("Most recent limit :" + preferences.getString("Max", "20"));
-                Button dialogButton = (Button) dialog.findViewById(R.id.add_button);
-                // if button is clicked, close the custom dialog
+                max = (EditText) dialog.findViewById(R.id.max);
+                text = (TextView) dialog.findViewById(R.id.text_dial);
+                dialogButton = (Button) dialog.findViewById(R.id.add_button);
+                inputLayoutMax = (TextInputLayout)  dialog.findViewById(R.id.input_max_limit);
+
+                text.setText(getString(R.string.inf_dial1));
+                max.setHint(getString(R.string.inf_dial3) + preferences.getString("Max", "20"));
+
+
                 dialogButton.setOnClickListener(new View.OnClickListener() {
 
 
@@ -82,24 +101,21 @@ public class MainActivity_Two_Fragment extends Fragment {
                     public void onClick(View v) {
 
                         if (validateLimit()) {
-                            EditText max = (EditText) dialog.findViewById(R.id.max);
                             dialog.dismiss();
                             Max_am = Double.parseDouble(max.getText().toString());
                             SharedPreferences.Editor preferencesEditor = preferences.edit();
                             preferencesEditor.putString("Max", Max_am.toString());
                             preferencesEditor.apply();
-                            Double saldo = Max_am - getSaldo();
-                            TextView sum_to_spend = (TextView) myFragmentView.findViewById(R.id.sum_to_spend);
-                            sum_to_spend.setText(saldo + " PLN");
+                            saldo = Max_am - getSaldo();
+                            sum_to_spend.setText(saldo + Utility.moneyVal);
                             circularProgressBar.setProgressWithAnimation(getProgress(), 2500); // Default duration = 1500ms
                         }
                     }
 
                     private boolean validateLimit() {
-                        EditText max = (EditText) dialog.findViewById(R.id.max);
-                        TextInputLayout inputLayoutMax = (TextInputLayout)  dialog.findViewById(R.id.input_max_limit);
+
                         if (max.getText().toString().isEmpty()) {
-                            inputLayoutMax.setError("Enter correct limit");
+                            inputLayoutMax.setError(getString(R.string.error_limit));
                             requestFocus(max);
                             return false;
                         } else {
@@ -119,16 +135,10 @@ public class MainActivity_Two_Fragment extends Fragment {
                 dialog.show();
             }
         });
-
-        circularProgressBar.setProgressWithAnimation(getProgress(), animationDuration); // Default duration = 1500ms
-
-
-        return myFragmentView;
     }
 
     private double getSaldo(){
         ArrayList<Double> l_out = db.selectAllOutcomesToday();
-        //ArrayList<Double> l_in = db.selectAllIncomesToday();
 
         if( l_out.isEmpty()){
             return 0;
@@ -137,14 +147,8 @@ public class MainActivity_Two_Fragment extends Fragment {
         for(Double d : l_out)
             sum_out += d;
 
-//
-//        double sum_in = 0;
-//        for(Double d : l_in)
-//            sum_in += d;
-
         if ( Max_am - sum_out  >=0){
             sum_to_spend.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-
             circularProgressBar.setColor(ContextCompat.getColor(getContext(), R.color.greeno));
             circularProgressBar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.greeno1));
         }else {

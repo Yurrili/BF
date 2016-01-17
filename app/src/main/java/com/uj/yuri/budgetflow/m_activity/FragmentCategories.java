@@ -1,4 +1,4 @@
-package com.uj.yuri.budgetflow;
+package com.uj.yuri.budgetflow.m_activity;
 
 
 import android.os.Bundle;
@@ -8,26 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
+import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
-import com.uj.yuri.budgetflow.view_managment_listview.CustomExpandableListAdapter;
-import com.uj.yuri.budgetflow.view_managment_listview.ExpandableListDataPump;
+import com.uj.yuri.budgetflow.m_activity.expandable_list_view.CustomExpandableListAdapter;
+import com.uj.yuri.budgetflow.m_activity.expandable_list_view.ExpandableListDataPump;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity_Three_Fragment extends Fragment {
+public class FragmentCategories extends Fragment {
     private View myFragmentView;
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
     List<Map.Entry<Category, String>> expandableListTitle;
     HashMap<Map.Entry<Category, String>, List<Outcome>> expandableListDetail;
-    public MainActivity_Three_Fragment() {
+    public FragmentCategories() {
     }
 
     @Override

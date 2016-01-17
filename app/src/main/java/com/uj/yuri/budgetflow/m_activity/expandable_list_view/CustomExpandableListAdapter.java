@@ -1,7 +1,6 @@
-package com.uj.yuri.budgetflow.view_managment_listview;
+package com.uj.yuri.budgetflow.m_activity.expandable_list_view;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
+import com.uj.yuri.budgetflow.Utility;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -17,7 +17,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -25,7 +24,7 @@ import android.app.DialogFragment;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
-import com.uj.yuri.budgetflow.view_managment_listview.Utility;
+import com.uj.yuri.budgetflow.new_activity.MySpinner;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

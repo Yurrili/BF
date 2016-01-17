@@ -1,4 +1,4 @@
-package com.uj.yuri.budgetflow;
+package com.uj.yuri.budgetflow.new_activity;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 

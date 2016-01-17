@@ -12,7 +12,7 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.view_managment_listview.Utility;
+import com.uj.yuri.budgetflow.Utility;
 
 
 import java.text.ParseException;

@@ -1,6 +1,6 @@
 package com.uj.yuri.budgetflow.db_managment.db_helper_objects;
 
-import com.uj.yuri.budgetflow.view_managment_listview.Entries_list_;
+import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
 
 /**
  * Created by Yuri on 2016-01-03.

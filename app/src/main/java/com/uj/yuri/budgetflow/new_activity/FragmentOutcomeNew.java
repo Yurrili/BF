@@ -1,16 +1,14 @@
-package com.uj.yuri.budgetflow;
+package com.uj.yuri.budgetflow.new_activity;
 
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,23 +18,21 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 
+import com.uj.yuri.budgetflow.R;
+import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
-import com.uj.yuri.budgetflow.view_managment_listview.Utility;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class NewIncomeOutcome_OutcomeFragment extends Fragment {
+public class FragmentOutcomeNew extends Fragment {
     private View myFragmentView;
 
     public DateBaseHelper_ helper;
@@ -49,7 +45,7 @@ public class NewIncomeOutcome_OutcomeFragment extends Fragment {
     private Button btn;
 
 
-    public NewIncomeOutcome_OutcomeFragment() {
+    public FragmentOutcomeNew() {
     }
 
     @Override
@@ -129,16 +125,11 @@ public class NewIncomeOutcome_OutcomeFragment extends Fragment {
     }
 
 
-
-    /**
-     * Validating form
-     */
     private void submitForm() {
         if (!validateName()) {
             return;
         }
         helper.insertOutcome(new Outcome(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getCategoryFromForm(), 2));
-
 
         NavUtils.navigateUpFromSameTask(getActivity());
     }

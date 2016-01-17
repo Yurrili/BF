@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:layout_marginEnd="20dp"
     android:layout_marginStart="20dp"
-    tools:context="com.uj.yuri.budgetflow.NewIncomeOutcome$PlaceholderFragment">
+    tools:context=".new_activity.InOutActivity$PlaceholderFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme">
         <activity
-            android:name=".MainActivityBudgetFlow"
+            android:name=".m_activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,10 +17,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewIncomeOutcome"
+            android:name=".new_activity.InOutActivity"
             android:label="@string/title_activity_new_income_outcome"
             android:theme="@style/MyMaterialTheme"
-            android:parentActivityName="com.uj.yuri.budgetflow.MainActivityBudgetFlow" >
+            android:parentActivityName=".m_activity.MainActivity" >
 
         </activity>
     </application>

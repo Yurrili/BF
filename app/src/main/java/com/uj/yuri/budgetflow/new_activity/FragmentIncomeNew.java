@@ -1,11 +1,8 @@
-package com.uj.yuri.budgetflow;
+package com.uj.yuri.budgetflow.new_activity;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -27,11 +24,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.uj.yuri.budgetflow.R;
+import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
-import com.uj.yuri.budgetflow.view_managment_listview.Utility;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -43,7 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class NewIncomeOutcome_IncomeFragment extends Fragment {
+public class FragmentIncomeNew extends Fragment {
     private View myFragmentView;
     public static EditText date_place;
     public static EditText date_placeTo;
@@ -58,8 +55,9 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
     private TextInputLayout inputLayoutAmount;
     public DateBaseHelper_ helper;
     public CheckBox infinity;
+    public Button btn;
 
-    public NewIncomeOutcome_IncomeFragment() {
+    public FragmentIncomeNew() {
     }
 
     @Override
@@ -67,63 +65,17 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         this.helper = new DateBaseHelper(getActivity());
         myFragmentView = inflater.inflate(R.layout.fragment_new_income, container, false);
-        date_place =  (EditText) myFragmentView.findViewById(R.id.date_place1);
-        date_placeTo =  (EditText) myFragmentView.findViewById(R.id.date_place2);
-        amount = (EditText) myFragmentView.findViewById(R.id.amount_place);
-        gr_radio_times = (RadioGroup) myFragmentView.findViewById(R.id.radiogr);
-        radio_btn1 = (RadioButton) myFragmentView.findViewById(R.id.radioButton1);
-        radio_btn2 = (RadioButton) myFragmentView.findViewById(R.id.radioButton2);
-        radio_btn3 = (RadioButton) myFragmentView.findViewById(R.id.radioButton3);
-        date_place_txt =  (TextView) myFragmentView.findViewById(R.id.date_place_text1);
-        date_place2_txt =  (TextView) myFragmentView.findViewById(R.id.date_place2_text);
-        date_place2_img =  (ImageView) myFragmentView.findViewById(R.id.date_place2_img);
-        inputLayoutAmount = (TextInputLayout) myFragmentView.findViewById(R.id.input_amount_place1);
-
-        amount.addTextChangedListener(new MyTextWatcher(myFragmentView));
-
-        infinity =  (CheckBox) myFragmentView.findViewById(R.id.infinity);
-        infinity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (infinity.isChecked()){
-                    date_placeTo.setEnabled(false);
-                } else {
-                    date_placeTo.setEnabled(true);
-                }
-            }
-        });
+        setLays();
+        setListeners();
+        setRadioListeners();
 
         setDateTime(date_place);
-        date_place.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog(v);
-            }
-        });
-
         setDateTime(date_placeTo);
-        date_placeTo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialogTo(v);
-            }
-        });
 
-        amount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    if (!amount.getText().toString().equals("")) {
-                        double number = Double.parseDouble(amount.getText().toString());
-                        DecimalFormat format = new DecimalFormat("0.00");
-                        String formatted = format.format(number);
-                        amount.setText(formatted);
-                    }
+        return myFragmentView;
+    }
 
-                }
-            }
-        });
-
+    private void setRadioListeners() {
         radio_btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,21 +102,80 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 infinity.setVisibility(View.VISIBLE);
-                    date_placeTo.setVisibility(View.VISIBLE);
+                date_placeTo.setVisibility(View.VISIBLE);
                 date_place2_txt.setVisibility(View.VISIBLE);
                 date_place2_img.setVisibility(View.VISIBLE);
                 date_place_txt.setText("From");
             }
         });
+    }
 
-        Button btn = (Button) myFragmentView.findViewById(R.id.add_button);
+    private void setListeners(){
+        amount.addTextChangedListener(new MyTextWatcher(myFragmentView));
+
+        amount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                checkFocus(hasFocus);
+            }
+        });
+        infinity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkInfinity();
+            }
+        });
+        date_place.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(v);
+            }
+        });
+        date_placeTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialogTo(v);
+            }
+        });
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 submitForm();
             }
         });
-        return myFragmentView;
+    }
+
+    private void checkFocus(boolean hasFocus){
+        if (!hasFocus) {
+            if (!amount.getText().toString().equals("")) {
+                DecimalFormat format = new DecimalFormat("0.00");
+                amount.setText(format.format(Double.parseDouble(amount.getText().toString())));
+            }
+        }
+    }
+
+    private void checkInfinity(){
+        if (infinity.isChecked()) {
+            date_placeTo.setEnabled(false);
+        } else {
+            date_placeTo.setEnabled(true);
+        }
+    }
+
+    private void setLays(){
+        date_place =  (EditText) myFragmentView.findViewById(R.id.date_place1);
+        date_placeTo =  (EditText) myFragmentView.findViewById(R.id.date_place2);
+        amount = (EditText) myFragmentView.findViewById(R.id.amount_place);
+        gr_radio_times = (RadioGroup) myFragmentView.findViewById(R.id.radiogr);
+        radio_btn1 = (RadioButton) myFragmentView.findViewById(R.id.radioButton1);
+        radio_btn2 = (RadioButton) myFragmentView.findViewById(R.id.radioButton2);
+        radio_btn3 = (RadioButton) myFragmentView.findViewById(R.id.radioButton3);
+        date_place_txt =  (TextView) myFragmentView.findViewById(R.id.date_place_text1);
+        date_place2_txt =  (TextView) myFragmentView.findViewById(R.id.date_place2_text);
+        date_place2_img =  (ImageView) myFragmentView.findViewById(R.id.date_place2_img);
+        inputLayoutAmount = (TextInputLayout) myFragmentView.findViewById(R.id.input_amount_place1);
+        infinity =  (CheckBox) myFragmentView.findViewById(R.id.infinity);
+        btn = (Button) myFragmentView.findViewById(R.id.add_button);
     }
     private int getFreq(){
         if(radio_btn1.isChecked()){
@@ -322,46 +333,34 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
 
         if (!infinity.isChecked() && !radio_btn3.isChecked()) {
                 try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date date1 = sdf.parse(date_place.getText().toString());
-                Date date2 = sdf.parse(date_placeTo.getText().toString());
-
-                //sdf.format(date1);
-                //sdf.format(date2);
+                Date date1 = Utility.formatData.parse(date_place.getText().toString());
+                Date date2 = Utility.formatData.parse(date_placeTo.getText().toString());
 
                 if (date1.after(date2)) {
-                    //System.out.println("Date1 is after Date2");
-                    Toast.makeText(getContext(), "Dates are incorrect!", Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
                 if (date1.before(date2)) {
-                    //System.out.println("Date1 is before Date2");
                     return true;
                 }
 
                 if (date1.equals(date2)) {
-                    //System.out.println("Date1 is equal Date2");
-                    Toast.makeText(getContext(), "Dates are incorrect!", Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
             }catch(ParseException ex){
                 ex.printStackTrace();
-                    Toast.makeText(getContext(), "Dates are incorrect!", Toast.LENGTH_SHORT).show();
                     return false;
             }
         } else {
             return true;
         }
-        Toast.makeText(getContext(), "Dates are incorrect!", Toast.LENGTH_SHORT).show();
         return false;
     }
 
     private class MyTextWatcher implements TextWatcher {
 
         private View view;
-
 
         public MyTextWatcher(View view) {
             this.view = view;
@@ -392,35 +391,27 @@ public class NewIncomeOutcome_IncomeFragment extends Fragment {
         } else {
             inputLayoutAmount.setErrorEnabled(false);
         }
-
         return true;
     }
 
-   private void requestFocus(View view) {
+    private void requestFocus(View view) {
         if (view.requestFocus()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
             final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+            return new DatePickerDialog(getActivity(), this, c.get(Calendar.YEAR),
+                    c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH));
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            String d;
-            String m;
+            String d,m;
 
             if( day < 10){
                 d = "0"+day;

@@ -1,4 +1,4 @@
-package com.uj.yuri.budgetflow.view_managment_listview;
+package com.uj.yuri.budgetflow.m_activity.view_managment_listview;
 
 /**
  * Created by Yuri on 2016-01-13.

@@ -1,15 +1,12 @@
-package com.uj.yuri.budgetflow.view_managment_listview;
+package com.uj.yuri.budgetflow;
 
 import android.content.Context;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.uj.yuri.budgetflow.R;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
+import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -18,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -25,6 +23,9 @@ import java.util.HashMap;
  * Created by Yuri on 2016-01-15.
  */
 public class Utility {
+
+    public static SimpleDateFormat formatData = new SimpleDateFormat("dd-MM-yyyy");
+    public static final String moneyVal = " PLN";
 
     public static String getToday() {
         final Calendar c = Calendar.getInstance();
@@ -160,4 +161,16 @@ public class Utility {
 
         return sum_out;
     }
+
+    public static Comparator<Entries_list_> comparator_entries = new Comparator<Entries_list_>() {
+
+        @Override
+        public int compare(Entries_list_ o1, Entries_list_ o2) {
+            try {
+                return formatData.parse(o2.getStartTime()).compareTo(formatData.parse(o1.getStartTime()));
+            } catch (ParseException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
+    };
 }

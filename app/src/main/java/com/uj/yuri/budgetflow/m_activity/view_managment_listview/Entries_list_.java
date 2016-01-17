@@ -1,4 +1,4 @@
-package com.uj.yuri.budgetflow.view_managment_listview;
+package com.uj.yuri.budgetflow.m_activity.view_managment_listview;
 
 
 public interface Entries_list_ {

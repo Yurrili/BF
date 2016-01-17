@@ -1,4 +1,4 @@
-package com.uj.yuri.budgetflow;
+package com.uj.yuri.budgetflow.new_activity;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
@@ -10,18 +10,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.TextView;
+import com.uj.yuri.budgetflow.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewIncomeOutcome extends AppCompatActivity {
+public class InOutActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -53,11 +50,7 @@ public class NewIncomeOutcome extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
 
         if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
@@ -69,8 +62,8 @@ public class NewIncomeOutcome extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new NewIncomeOutcome_OutcomeFragment(), "New Expense");
-        adapter.addFrag(new NewIncomeOutcome_IncomeFragment(), "New Income");
+        adapter.addFrag(new FragmentOutcomeNew(), "New Expense");
+        adapter.addFrag(new FragmentIncomeNew(), "New Income");
 
         viewPager.setAdapter(adapter);
     }
