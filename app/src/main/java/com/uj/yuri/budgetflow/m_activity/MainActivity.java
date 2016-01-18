@@ -15,9 +15,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.uj.yuri.budgetflow.R;
+import com.uj.yuri.budgetflow.db_managment.BackUp.ExportDataBase;
+import com.uj.yuri.budgetflow.db_managment.BackUp.ImpExpUses;
+import com.uj.yuri.budgetflow.db_managment.BackUp.ImportDataBase;
+import com.uj.yuri.budgetflow.db_managment.BackUp.ImportExport;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,22 +138,22 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_activity_budget_flow, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        ImpExpUses impexpus = new ImpExpUses();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_UP) {
+            impexpus.setImpExpWayStr(new ImportDataBase());
+
+        } else if (id == R.id.action_DOWN){
+            impexpus.setImpExpWayStr(new ExportDataBase());
         }
+        impexpus.doIt();
 
         return super.onOptionsItemSelected(item);
     }

@@ -20,7 +20,7 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 
 import java.util.ArrayList;
 

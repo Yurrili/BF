@@ -24,8 +24,9 @@ import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -56,7 +57,22 @@ public class FragmentOutcomeNew extends Fragment {
 
         initLayout();
         setListeners();
-        setDateTime();
+        if ( !InOutActivity.edit_mode && InOutActivity.ele == null) {
+            setDateTime();
+        } else {
+            if (InOutActivity.ele != null) {
+                if (InOutActivity.ele instanceof Outcome){
+                    Outcome a = (Outcome) InOutActivity.ele;
+                    date_place.setText(a.getStartTime());
+                    amount.setText(a.getAmount());
+                    note.setText(a.getName());
+
+                    spinner.setSelection(Integer.parseInt(a.getCategoryId()) - 1);
+                }
+
+            }
+        }
+
         setSpinnerAdapter();
 
         return myFragmentView;

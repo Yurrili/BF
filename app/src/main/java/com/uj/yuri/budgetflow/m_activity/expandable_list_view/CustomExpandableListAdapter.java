@@ -56,13 +56,23 @@ import java.util.Map;
 
         }
         return null;
-//        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
-//                .get(expandedListPosition);
     }
 
     @Override
     public long getChildId(int listPosition, int expandedListPosition) {
         return expandedListPosition;
+    }
+
+    private void setLay(View v){
+        circle_im_cat = (ImageView) v.findViewById(R.id.circle_im_cat);
+        circle_im_cat.setBackground(v.getResources().getDrawable(R.drawable.ic_note));
+        amount = (TextView) v.findViewById(R.id.amount);
+        name_of = (TextView) v.findViewById(R.id.name_of);
+        name_of.setVisibility(View.INVISIBLE);
+        time_hours = (TextView) v.findViewById(R.id.time_hours);
+        note_img = (ImageView) v.findViewById(R.id.note_img);
+        note_img.setVisibility(View.INVISIBLE);
+        category = (TextView) v.findViewById(R.id.categorie);
     }
 
     @Override
@@ -74,28 +84,18 @@ import java.util.Map;
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = layoutInflater.inflate(R.layout.itemlists, null);
         }
-        circle_im_cat = (ImageView) v.findViewById(R.id.circle_im_cat);
-        circle_im_cat.setBackground(v.getResources().getDrawable(R.drawable.ic_note));
-        amount = (TextView) v.findViewById(R.id.amount);
-        name_of = (TextView) v.findViewById(R.id.name_of);
-        name_of.setVisibility(View.INVISIBLE);
-        time_hours = (TextView) v.findViewById(R.id.time_hours);
-        note_img = (ImageView) v.findViewById(R.id.note_img);
-        note_img.setVisibility(View.INVISIBLE);
+
+        setLay(v);
+
         if(!expandedListText.getName().equals("")) {
-            category = (TextView) v.findViewById(R.id.categorie);
             category.setText(expandedListText.getName());
             circle_im_cat.setVisibility(View.VISIBLE);
-
-
         } else {
-            category = (TextView) v.findViewById(R.id.categorie);
             category.setText("");
-            circle_im_cat = (ImageView) v.findViewById(R.id.circle_im_cat);
             circle_im_cat.setVisibility(View.INVISIBLE);
         }
         time_hours.setText(expandedListText.getStartTime());
-        amount.setText(expandedListText.getAmount() + " PLN");
+        amount.setText(expandedListText.getAmount() + Utility.moneyVal);
         return v;
     }
 
@@ -104,9 +104,7 @@ import java.util.Map;
         Iterator<Map.Entry<Map.Entry<Category, String>, List<Outcome>>> ift = expandableListDetail.entrySet().iterator();
         int i = 0;
         while (ift.hasNext()) {
-
             Map.Entry<Map.Entry<Category, String>, List<Outcome>> e = ift.next();
-
             List<Outcome> value = e.getValue();
             if ( i == listPosition){
                 return value.size();
@@ -137,26 +135,21 @@ import java.util.Map;
     public View getGroupView(int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         Map.Entry<Category, String> listTitle = (Map.Entry<Category, String>) getGroup(listPosition);
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_group, null);
         }
-        LinearLayout lin = (LinearLayout) convertView
-                .findViewById(R.id.all);
-        ImageView img = (ImageView) convertView
-                .findViewById(R.id.circle_of_day);
+
+        ImageView img = (ImageView) convertView.findViewById(R.id.circle_of_day);
+        TextView saldo = (TextView) convertView.findViewById(R.id.time_hours);
+        TextView listTitleTextView = (TextView) convertView.findViewById(R.id.text_day_of_week);
 
         Utility.getColorBall(listTitle.getKey().getColor(), img, this.context);
-
-        TextView listTitleTextView = (TextView) convertView
-                .findViewById(R.id.text_day_of_week);
-
         listTitleTextView.setText(listTitle.getKey().getName());
-        TextView saldo = (TextView) convertView
-                .findViewById(R.id.time_hours);
+        saldo.setText("Saldo: " + listTitle.getValue() + Utility.moneyVal);
 
-        saldo.setText("Saldo: " + listTitle.getValue() + " PLN");
         return convertView;
     }
 

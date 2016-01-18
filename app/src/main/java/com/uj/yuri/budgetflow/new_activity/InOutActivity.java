@@ -14,6 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.uj.yuri.budgetflow.R;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
+import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +25,36 @@ public class InOutActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
+    public static Entries_list_ ele;
+    public static boolean edit_mode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_income_outcome);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            DateBaseHelper_ db = new DateBaseHelper(getApplicationContext());
+            String in = extras.getString("income","");
+            String out = extras.getString("outcome","");
+            if (!in.equals("") || !out.equals("")) {
+                if (in.equals("") && !out.equals("")) {
+                    //Outcomes
+                    ele = db.selectOutcome(out);
+                    edit_mode = true;
+                } else {
+                    //Incomes
+                    ele = db.selectIncome(out);
+                    edit_mode = true;
+                }
+            }
 
+        }
+        else
+        {
+            ele = null;
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

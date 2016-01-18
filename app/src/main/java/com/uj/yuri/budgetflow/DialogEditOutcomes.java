@@ -23,7 +23,7 @@ import android.widget.Spinner;
 import android.app.DialogFragment;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.new_activity.MySpinner;
 
 import java.text.DecimalFormat;

@@ -12,7 +12,7 @@ import android.widget.ExpandableListView;
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.m_activity.expandable_list_view.CustomExpandableListAdapter;
 import com.uj.yuri.budgetflow.m_activity.expandable_list_view.ExpandableListDataPump;
 

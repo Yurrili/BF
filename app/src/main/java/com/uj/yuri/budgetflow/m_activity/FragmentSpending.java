@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,12 +14,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.new_activity.InOutActivity;
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.m_activity.view_managment_listview.EmptyL;
 import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
 import com.uj.yuri.budgetflow.m_activity.view_managment_listview.HeaderFirstL;
@@ -97,32 +100,61 @@ public class FragmentSpending extends Fragment {
 
         return list;
     }
+    int currentposition;
+    ArrayList<Entries_list_> gg_KD;
 
     private void creatListAdapt(){
-        final ArrayList<Entries_list_> gg_KD = createList();
+        gg_KD = createList();
 
         adapter = new MyAdapter(getContext(), R.layout.itemlists, gg_KD);
         list.setAdapter(adapter);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> av, View view, int i, long l) {
+        list.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 
-                final Dialog dialog = new Dialog(getContext());
-                gg_KD.get(i);
-                // Tutaj musze coś wymyśleć w kwestii dialogów
-                if ( gg_KD.get(i) instanceof Income){
-                    Toast.makeText(getActivity(), "myPos " + i + "INCOME", Toast.LENGTH_LONG).show();
-                    dialog.setContentView(R.layout.dialog_edit_income);
-                } else {
-                    Toast.makeText(getActivity(), "myPos " + i + "OUTCOME", Toast.LENGTH_LONG).show();
-                    dialog.setContentView(R.layout.dialog_edit_outcome);
-                }
-
-                dialog.setTitle("Edit you data:");
-
-                dialog.show();
-
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v,
+                                            ContextMenu.ContextMenuInfo menuInfo) {
+                // TODO Auto-generated method stub
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                currentposition = info.position;
+                menu.setHeaderTitle("Choose");
+                menu.add(0, v.getId(), 0, "Delete ");
+                menu.add(0, v.getId(), 0, "Edit ");
             }
+
         });
+
     }
+
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+                .getMenuInfo();
+        if (item.getTitle() == "Delete ") {
+
+            if (gg_KD.get(currentposition) instanceof Income){
+                db.removeIncome((Income)gg_KD.get(currentposition));
+            } else if (gg_KD.get(currentposition) instanceof Outcome) {
+                db.removeOutcome((Outcome)gg_KD.get(currentposition));
+            }
+            gg_KD.remove(currentposition);
+            adapter.notifyDataSetChanged();
+        } else {
+            if (gg_KD.get(currentposition) instanceof Income){
+                Intent myIntent = new Intent(getActivity(), InOutActivity.class);
+                myIntent.putExtra("income",gg_KD.get(currentposition).getId());
+                getActivity().startActivity(myIntent);
+                //db.removeIncome((Income)gg_KD.get(currentposition));
+            } else if (gg_KD.get(currentposition) instanceof Outcome) {
+               // db.removeOutcome((Outcome)gg_KD.get(currentposition));
+                Intent myIntent = new Intent(getActivity(), InOutActivity.class);
+                myIntent.putExtra("outcome",gg_KD.get(currentposition).getId());
+                getActivity().startActivity(myIntent);
+            }
+            //gg_KD.remove(currentposition);
+            adapter.notifyDataSetChanged();
+            return true;
+        }
+        return true;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.uj.yuri.budgetflow.db_managment.db_main_classes;
+package com.uj.yuri.budgetflow.db_managment;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -290,6 +290,66 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         c.close();
         dba.close();
         return list;
+    }
+
+    public Income selectIncome(String id){
+        SQLiteDatabase dba = this.getReadableDatabase();
+        ArrayList<Income> list = new ArrayList<>();
+
+
+        Cursor c = dba.query(Entries.Incomes.TABLE_NAME,
+                Entries.Incomes.selectAllList,
+                null, null, null, null, null);
+
+        if (c != null) {
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                if ( c.getString(0).equals(id)) {
+                    return new Income(c.getString(0),
+                            c.getString(1),
+                            c.getString(2),
+                            c.getString(3),
+                            c.getString(4),
+                            true,
+                            c.getString(5),
+                            c.getString(6),
+                            c.getInt(7));
+                }
+            }
+        }
+
+        c.close();
+        dba.close();
+        return null;
+    }
+
+    public Outcome selectOutcome(String id){
+        SQLiteDatabase dba = this.getReadableDatabase();
+        ArrayList<Outcome> list = new ArrayList<>();
+
+
+        Cursor c = dba.query(Entries.Outcomes.TABLE_NAME,
+                Entries.Outcomes.selectAllList,
+                null, null, null, null, null);
+
+        if (c != null) {
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                if ( c.getString(0).equals(id)) {
+                    return new Outcome( c.getString(0),
+                            c.getString(1),
+                            c.getString(2),
+                            c.getString(3),
+                            c.getString(4),
+                            true,
+                            c.getString(5),
+                            c.getInt(6));
+
+                }
+            }
+        }
+
+        c.close();
+        dba.close();
+        return null;
     }
 
     public ArrayList<Income> selectDailyIncomes() {

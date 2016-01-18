@@ -32,6 +32,8 @@ public interface DateBaseHelper_ {
     ArrayList<Income> selectDailyIncomes();
     ArrayList<Double> selectAllIncomesToday();
     ArrayList<Double> selectAllOutcomesToday();
+    Outcome selectOutcome(String id);
+    Income selectIncome(String id);
 
     HashMap<String, Category> selectAllCategories();
 }

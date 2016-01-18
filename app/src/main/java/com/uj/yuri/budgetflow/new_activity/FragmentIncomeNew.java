@@ -28,7 +28,7 @@ import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_main_classes.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -69,8 +69,18 @@ public class FragmentIncomeNew extends Fragment {
         setListeners();
         setRadioListeners();
 
-        setDateTime(date_place);
-        setDateTime(date_placeTo);
+        if ( !InOutActivity.edit_mode && InOutActivity.ele == null) {
+            setDateTime(date_place);
+            setDateTime(date_placeTo);
+        } else {
+               if (InOutActivity.ele != null) {
+                  if (InOutActivity.ele instanceof Income){
+                      Income a = (Income) InOutActivity.ele;
+                      date_place.setText(a.getStartTime());
+                  }
+
+            }
+        }
 
         return myFragmentView;
     }
