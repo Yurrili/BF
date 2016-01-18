@@ -1,16 +1,14 @@
-package com.uj.yuri.budgetflow.new_activity;
-
+package com.uj.yuri.budgetflow;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,19 +20,23 @@ import android.widget.TextView;
 
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.new_activity.DatePickers;
+import com.uj.yuri.budgetflow.new_activity.SettingIncomesToDB;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class FragmentIncomeNew extends Fragment {
-    private View myFragmentView;
-    public static EditText date_place;
-    public static EditText date_placeTo;
+/**
+ * Created by Yuri on 2016-01-18.
+ */
+public class EditIncomes extends AppCompatActivity {
+    public static EditText date_place1;
+    public static EditText date_placeTo1;
     public EditText amount;
     public TextView date_place2_txt;
     public TextView date_place_txt;
@@ -48,41 +50,68 @@ public class FragmentIncomeNew extends Fragment {
     public CheckBox infinity;
     public Button btn;
     private EditText note ;
-
-    public FragmentIncomeNew() {
-    }
+    private Income ele;
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        this.helper = new DateBaseHelper(getActivity());
-        myFragmentView = inflater.inflate(R.layout.fragment_new_income, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activ_edit_income);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        helper = new DateBaseHelper(getApplicationContext());
+
         setLays();
         setListeners();
         setRadioListeners();
 
 
-        setDateTime(date_place);
-        setDateTime(date_placeTo);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            DateBaseHelper_ db = new DateBaseHelper(getApplicationContext());
 
-        return myFragmentView;
+            String out = extras.getString("income","");
+            if (!out.equals("")) {
+                //Outcomes
+                ele = db.selectIncome(out);
+                date_place1.setText(ele.getStartTime());
+
+                date_placeTo1.setText(ele.getEndTime());
+                amount.setText(ele.getAmount());
+                note.setText(ele.getName());
+                if( ele.getFrequency() == 1 || ele.getFrequency() == 4){
+                    radio_btn1.setChecked(true);
+                } else if( ele.getFrequency() == 0 || ele.getFrequency() == 5){
+                    radio_btn3.setChecked(true);
+                } else {
+                    radio_btn2.setChecked(true);
+                }
+
+
+
+            }
+
+        }
     }
 
+
     private void setLays(){
-        date_place =  (EditText) myFragmentView.findViewById(R.id.date_place1);
-        date_placeTo =  (EditText) myFragmentView.findViewById(R.id.date_place2);
-        amount = (EditText) myFragmentView.findViewById(R.id.amount_place);
-        gr_radio_times = (RadioGroup) myFragmentView.findViewById(R.id.radiogr);
-        radio_btn1 = (RadioButton) myFragmentView.findViewById(R.id.radioButton1);
-        radio_btn2 = (RadioButton) myFragmentView.findViewById(R.id.radioButton2);
-        radio_btn3 = (RadioButton) myFragmentView.findViewById(R.id.radioButton3);
-        date_place_txt =  (TextView) myFragmentView.findViewById(R.id.date_place_text1);
-        date_place2_txt =  (TextView) myFragmentView.findViewById(R.id.date_place2_text);
-        date_place2_img =  (ImageView) myFragmentView.findViewById(R.id.date_place2_img);
-        inputLayoutAmount = (TextInputLayout) myFragmentView.findViewById(R.id.input_amount_place1);
-        infinity =  (CheckBox) myFragmentView.findViewById(R.id.infinity);
-        btn = (Button) myFragmentView.findViewById(R.id.add_button);
-        note = (EditText) myFragmentView.findViewById(R.id.note_place);
+        date_place1 =  (EditText) findViewById(R.id.date_place1);
+        date_placeTo1 =  (EditText) findViewById(R.id.date_place2);
+        amount = (EditText) findViewById(R.id.amount_place);
+        gr_radio_times = (RadioGroup) findViewById(R.id.radiogr);
+        radio_btn1 = (RadioButton) findViewById(R.id.radioButton1);
+        radio_btn2 = (RadioButton) findViewById(R.id.radioButton2);
+        radio_btn3 = (RadioButton) findViewById(R.id.radioButton3);
+        date_place_txt =  (TextView) findViewById(R.id.date_place_text1);
+        date_place2_txt =  (TextView) findViewById(R.id.date_place2_text);
+        date_place2_img =  (ImageView) findViewById(R.id.date_place2_img);
+        inputLayoutAmount = (TextInputLayout) findViewById(R.id.input_amount_place1);
+        infinity =  (CheckBox) findViewById(R.id.infinity);
+        btn = (Button) findViewById(R.id.add_button);
+        note = (EditText) findViewById(R.id.note_place);
     }
 
     private void setRadioListeners() {
@@ -92,7 +121,7 @@ public class FragmentIncomeNew extends Fragment {
                 date_place2_txt.setVisibility(View.VISIBLE);
                 date_place_txt.setText("From");
                 date_place2_img.setVisibility(View.VISIBLE);
-                date_placeTo.setVisibility(View.VISIBLE);
+                date_placeTo1.setVisibility(View.VISIBLE);
                 infinity.setVisibility(View.VISIBLE);
             }
         });
@@ -103,7 +132,7 @@ public class FragmentIncomeNew extends Fragment {
                 date_place_txt.setText("Date");
                 infinity.setVisibility(View.INVISIBLE);
                 infinity.setChecked(true);
-                date_placeTo.setVisibility(View.INVISIBLE);
+                date_placeTo1.setVisibility(View.INVISIBLE);
                 date_place2_txt.setVisibility(View.INVISIBLE);
                 date_place2_img.setVisibility(View.INVISIBLE);
             }
@@ -112,7 +141,7 @@ public class FragmentIncomeNew extends Fragment {
             @Override
             public void onClick(View v) {
                 infinity.setVisibility(View.VISIBLE);
-                date_placeTo.setVisibility(View.VISIBLE);
+                date_placeTo1.setVisibility(View.VISIBLE);
                 date_place2_txt.setVisibility(View.VISIBLE);
                 date_place2_img.setVisibility(View.VISIBLE);
                 date_place_txt.setText("From");
@@ -121,7 +150,7 @@ public class FragmentIncomeNew extends Fragment {
     }
 
     private void setListeners(){
-        amount.addTextChangedListener(new MyTextWatcher(myFragmentView));
+        amount.addTextChangedListener(new MyTextWatcher(amount));
 
         amount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -129,24 +158,28 @@ public class FragmentIncomeNew extends Fragment {
                 checkFocus(hasFocus);
             }
         });
+
         infinity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkInfinity();
             }
         });
-        date_place.setOnClickListener(new View.OnClickListener() {
+
+        date_place1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog(v);
             }
         });
-        date_placeTo.setOnClickListener(new View.OnClickListener() {
+
+        date_placeTo1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialogTo(v);
             }
         });
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,9 +199,9 @@ public class FragmentIncomeNew extends Fragment {
 
     private void checkInfinity(){
         if (infinity.isChecked()) {
-            date_placeTo.setEnabled(false);
+            date_placeTo1.setEnabled(false);
         } else {
-            date_placeTo.setEnabled(true);
+            date_placeTo1.setEnabled(true);
         }
     }
 
@@ -192,7 +225,7 @@ public class FragmentIncomeNew extends Fragment {
         }
 
         final Calendar dd = Calendar.getInstance();
-        String[] date_split = date_place.getText().toString().split("-");
+        String[] date_split = date_place1.getText().toString().split("-");
 
         Date past = new Date(Integer.parseInt(date_split[2]), Integer.parseInt(date_split[1])-1, Integer.parseInt(date_split[0]));
         Date today = new Date(dd.get(Calendar.YEAR), dd.get(Calendar.MONTH),dd.get(Calendar.DAY_OF_MONTH));
@@ -200,35 +233,31 @@ public class FragmentIncomeNew extends Fragment {
         SettingIncomesToDB inter = new SettingIncomesToDB(helper);
 
         if( radio_btn1.isChecked()){
-            inter.DailySet(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
+            inter.DailySetUp(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
         } else if (radio_btn2.isChecked()) {
-            inter.MontlySet(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
+           inter.MontlySetUp(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
         } else {
-            helper.insertIncome(new Income(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_placeTo.getText().toString(), true, getFreq(), "", 2));
+            helper.updateIncome(new Income(ele.getId(), note.getText().toString(), amount.getText().toString(), date_place1.getText().toString(), date_placeTo1.getText().toString(), true, getFreq() + "", "", 2));
         }
 
-        NavUtils.navigateUpFromSameTask(getActivity());
+        NavUtils.navigateUpFromSameTask(this);
     }
 
     private Income createPreparedOneNotInf(){
-        return new Income(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_placeTo.getText().toString(), true, getFreq(), "", 2);
+        return new Income(ele.getId(),note.getText().toString(), amount.getText().toString(), date_place1.getText().toString(), date_placeTo1.getText().toString(), true, getFreq()+"", "", 2);
     }
 
     private Income createPreparedOneInf(){
-        return new Income(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getFreq(), "", 2);
+        return new Income(ele.getId(),note.getText().toString(), amount.getText().toString(), date_place1.getText().toString(), date_place1.getText().toString(), true, getFreq()+"", "", 2);
     }
 
-
-    public void setDateTime(EditText date_place){
-        date_place.setText(Utility.getToday());
-    }
 
     private boolean validateDate() {
 
         if (!infinity.isChecked() && !radio_btn3.isChecked()) {
-                try {
-                Date date1 = Utility.formatData.parse(date_place.getText().toString());
-                Date date2 = Utility.formatData.parse(date_placeTo.getText().toString());
+            try {
+                Date date1 = Utility.formatData.parse(date_place1.getText().toString());
+                Date date2 = Utility.formatData.parse(date_placeTo1.getText().toString());
 
                 if (date1.after(date2)) {
                     return false;
@@ -244,7 +273,7 @@ public class FragmentIncomeNew extends Fragment {
 
             }catch(ParseException ex){
                 ex.printStackTrace();
-                    return false;
+                return false;
             }
         } else {
             return true;
@@ -279,7 +308,7 @@ public class FragmentIncomeNew extends Fragment {
 
     private boolean validateName() {
         if (amount.getText().toString().trim().isEmpty()) {
-            inputLayoutAmount.setError(getContext().getString(R.string.err_msg_name));
+            inputLayoutAmount.setError(getApplicationContext().getString(R.string.err_msg_name));
             requestFocus(amount);
             return false;
         } else {
@@ -290,18 +319,18 @@ public class FragmentIncomeNew extends Fragment {
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickers.DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
+        DialogFragment newFragment = new DatePickers.DatePickerFragmentE();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
     public void showDatePickerDialogTo(View v) {
-        DialogFragment newFragment = new DatePickers.DatePickerFragmentTo();
-        newFragment.show(getFragmentManager(), "datePicker");
+        DialogFragment newFragment = new DatePickers.DatePickerFragmentToE();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
 }

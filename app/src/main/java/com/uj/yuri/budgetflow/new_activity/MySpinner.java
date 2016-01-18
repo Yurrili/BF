@@ -50,6 +50,7 @@ public class MySpinner extends ArrayAdapter<Category> {
         textView = (TextView) convertView.findViewById(R.id.text_spinner);
         imgView = (ImageView) convertView.findViewById(R.id.circle_spinner);
         textView.setText(arrayList.get(position).getName());
+        textView.setTextColor(getContext().getResources().getColor(R.color.material_grey_600));
         Utility.getColorBall(arrayList.get(position).getColor(), imgView,getContext());
 
         return  convertView;

@@ -102,7 +102,7 @@
                     android:layout_gravity="center_vertical"
                     android:id="@+id/categorie"
                     android:layout_width="130dp"
-
+                    android:textColor="@color/material_grey_600"
                     android:layout_height="wrap_content"
                     android:textSize="15sp" />
 

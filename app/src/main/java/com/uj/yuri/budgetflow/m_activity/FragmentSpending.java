@@ -1,6 +1,7 @@
 package com.uj.yuri.budgetflow.m_activity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -12,8 +13,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.uj.yuri.budgetflow.EditExpense;
+import com.uj.yuri.budgetflow.EditIncomes;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.new_activity.InOutActivity;
 import com.uj.yuri.budgetflow.R;
@@ -32,10 +34,11 @@ import java.util.Collections;
 
 public class FragmentSpending extends Fragment {
 
-    private DateBaseHelper_ db;
-    private MyAdapter adapter;
+    private static DateBaseHelper_ db;
+    public static MyAdapter adapter;
+    public static Context ctx;
     private ImageButton FAB;
-    private ListView list;
+    private static ListView list;
     public View myFragmentView;
 
 
@@ -47,6 +50,7 @@ public class FragmentSpending extends Fragment {
         initLay();
         setOnLClicks();
         creatListAdapt();
+        ctx = getContext();
         return myFragmentView;
     }
 
@@ -65,7 +69,7 @@ public class FragmentSpending extends Fragment {
         });
     }
 
-    private ArrayList<Entries_list_> createList(){
+    private static ArrayList<Entries_list_> createList(){
         ArrayList<Entries_list_> array = new ArrayList<>();
         array.addAll(db.selectAllOutcomes());
         array.addAll(db.selectAllIncomes());
@@ -100,10 +104,10 @@ public class FragmentSpending extends Fragment {
 
         return list;
     }
-    int currentposition;
-    ArrayList<Entries_list_> gg_KD;
+    static int currentposition;
+    static ArrayList<Entries_list_> gg_KD;
 
-    private void creatListAdapt(){
+    public void creatListAdapt(){
         gg_KD = createList();
 
         adapter = new MyAdapter(getContext(), R.layout.itemlists, gg_KD);
@@ -133,28 +137,55 @@ public class FragmentSpending extends Fragment {
 
             if (gg_KD.get(currentposition) instanceof Income){
                 db.removeIncome((Income)gg_KD.get(currentposition));
+                gg_KD.remove(currentposition);
             } else if (gg_KD.get(currentposition) instanceof Outcome) {
                 db.removeOutcome((Outcome)gg_KD.get(currentposition));
+                gg_KD.remove(currentposition);
             }
-            gg_KD.remove(currentposition);
-            adapter.notifyDataSetChanged();
+
+            creatListAdapt();
+            MainActivity.ref();
         } else {
             if (gg_KD.get(currentposition) instanceof Income){
-                Intent myIntent = new Intent(getActivity(), InOutActivity.class);
+                Intent myIntent = new Intent(getActivity(), EditIncomes.class);
                 myIntent.putExtra("income",gg_KD.get(currentposition).getId());
                 getActivity().startActivity(myIntent);
-                //db.removeIncome((Income)gg_KD.get(currentposition));
+
             } else if (gg_KD.get(currentposition) instanceof Outcome) {
                // db.removeOutcome((Outcome)gg_KD.get(currentposition));
-                Intent myIntent = new Intent(getActivity(), InOutActivity.class);
+                Intent myIntent = new Intent(getActivity(), EditExpense.class);
                 myIntent.putExtra("outcome",gg_KD.get(currentposition).getId());
                 getActivity().startActivity(myIntent);
             }
             //gg_KD.remove(currentposition);
-            adapter.notifyDataSetChanged();
+            creatListAdapt();
+            MainActivity.ref();
             return true;
         }
         return true;
     }
+
+    public static void refrash(){
+        gg_KD = createList();
+        adapter = new MyAdapter(ctx, R.layout.itemlists, gg_KD);
+        list.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+        list.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v,
+                                            ContextMenu.ContextMenuInfo menuInfo) {
+
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                currentposition = info.position;
+                menu.setHeaderTitle("Choose");
+                menu.add(0, v.getId(), 0, "Delete ");
+                menu.add(0, v.getId(), 0, "Edit ");
+            }
+
+        });
+    }
+
 
 }

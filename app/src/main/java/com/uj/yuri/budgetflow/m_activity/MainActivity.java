@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.uj.yuri.budgetflow.R;
+import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ExportDataBase;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ImpExpUses;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ImportDataBase;
@@ -115,25 +116,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private String getToday() {
-        final Calendar c = Calendar.getInstance();
-
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        String d, m;
-        if( day < 10){
-            d = "0" + day;
-        } else {
-            d = day + "";
-        }
-
-        if( month < 10){
-            m = "0" + month;
-        } else {
-            m = month +"";
-        }
-
-        return d+"-"+m+"-"+year;
+        return Utility.getToday();
     }
 
     @Override
@@ -156,6 +139,12 @@ public class MainActivity extends AppCompatActivity{
         impexpus.doIt();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void ref(){
+        FragmentSpending.refrash();
+        FragmentCategories.refrash();
+        FragmentMain.refash();
     }
 
     private void setupTabIcons() {

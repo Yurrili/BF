@@ -356,46 +356,40 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Income> list = new ArrayList<>();
 
-
-        Date date1 = null;
         try {
-            date1 = sdf.parse(Utility.getToday());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            Date date1 = sdf.parse(Utility.getToday());
 
-        String selection = Entries.Incomes.COLUMN_FREQUENCY + " = '1'";
+        String selection = Entries.Incomes.COLUMN_FREQUENCY + " = '1' OR "
+                + Entries.Incomes.COLUMN_FREQUENCY + " = '0'";
 
         Cursor cc = dba.query(Entries.Incomes.TABLE_NAME,
                 Entries.Incomes.selectAllList,
                 selection, null, null, null, null);
 
-        if (cc != null) {
-            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
-                Income a = new Income(  cc.getString(0),
-                        cc.getString(1),
-                        cc.getString(2),
-                        cc.getString(3),
-                        cc.getString(4),
-                        true,
-                        cc.getString(5),
-                        cc.getString(6),
-                        cc.getInt(7));
-                if ( a.getStartTime().equals(a.getEndTime())){
-                    list.add(a);
-                } else try {
-                    if (!sdf.parse(a.getEndTime()).before(date1)){
-                        list.add(a);
-                        //czy data jest konca jest pozniej niz dzisij
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+            if (cc != null) {
+                for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+                    Income a = new Income(  cc.getString(0),
+                            cc.getString(1),
+                            cc.getString(2),
+                            cc.getString(3),
+                            cc.getString(4),
+                            true,
+                            cc.getString(5),
+                            cc.getString(6),
+                            cc.getInt(7));
 
+                    if ( a.getStartTime().equals(a.getEndTime())){
+                            list.add(a);
+                    } else if (!sdf.parse(a.getEndTime()).before(date1)){
+                            list.add(a);
+                    }
+                }
             }
+            cc.close();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        cc.close();
         dba.close();
         return list;
     }

@@ -1,78 +1,116 @@
-package com.uj.yuri.budgetflow.new_activity;
-
+package com.uj.yuri.budgetflow;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-
-import com.uj.yuri.budgetflow.R;
-import com.uj.yuri.budgetflow.Utility;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.new_activity.DatePickers;
+import com.uj.yuri.budgetflow.new_activity.MySpinner;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class FragmentOutcomeNew extends Fragment {
-    private View myFragmentView;
 
+public class EditExpense extends AppCompatActivity {
+    ArrayList<Category> cat;
     public DateBaseHelper_ helper;
-    private HashMap<String, Category> hashCat;
+    public HashMap<String, Category> hashCat;
     private TextInputLayout inputLayoutAmount;
     public static EditText date_place;
     private Spinner spinner;
     public EditText amount;
     public EditText note;
     private Button btn;
-
-
-    public FragmentOutcomeNew() {
-    }
+    private Outcome ele;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        myFragmentView = inflater.inflate(R.layout.fragment_new_outcome, container, false);
-        helper = new DateBaseHelper(getActivity());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activ_edit_outcome);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        helper = new DateBaseHelper(getApplicationContext());
 
         initLayout();
         setListeners();
 
-        setDateTime();
-
         setSpinnerAdapter();
 
-        return myFragmentView;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            DateBaseHelper_ db = new DateBaseHelper(getApplicationContext());
+
+            String out = extras.getString("outcome","");
+            if (!out.equals("")) {
+                //Outcomes
+                ele = db.selectOutcome(out);
+                date_place.setText(ele.getStartTime());
+                amount.setText(ele.getAmount());
+                note.setText(ele.getName());
+                //int id_cat = Integer.parseInt(ele.getCategoryId());
+                        for( int i = 0; i < cat.size(); i++){
+                            if( cat.get(i).getId().equals(ele.getCategoryId())){
+                                spinner.setSelection(i);
+                            }
+                        }
+
+
+
+            }
+
+        }
+    }
+
+    void setSpinnerAdapter() {
+        cat = new ArrayList<>(hashCat.values());
+        MySpinner adapter = new MySpinner(getApplicationContext(),
+                android.R.layout.simple_spinner_item, cat);
+        spinner.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initLayout(){
 
         hashCat = helper.selectAllCategories();
-        date_place =  (EditText) myFragmentView.findViewById(R.id.date_place);
-        spinner = (Spinner) myFragmentView.findViewById(R.id.spinner_cat);
-        note =  (EditText) myFragmentView.findViewById(R.id.note_place);
-        amount = (EditText) myFragmentView.findViewById(R.id.amount_place);
-        btn = (Button) myFragmentView.findViewById(R.id.add_button);
-        inputLayoutAmount = (TextInputLayout) myFragmentView.findViewById(R.id.input_amount_place);
+        date_place =  (EditText) findViewById(R.id.date_place);
+        spinner = (Spinner) findViewById(R.id.spinner_cat);
+        note =  (EditText) findViewById(R.id.note_place);
+        amount = (EditText) findViewById(R.id.amount_place);
+        btn = (Button) findViewById(R.id.add_button);
+        inputLayoutAmount = (TextInputLayout) findViewById(R.id.input_amount_place);
     }
 
     private void setListeners(){
@@ -108,22 +146,9 @@ public class FragmentOutcomeNew extends Fragment {
         });
     }
 
-    public void setDateTime(){
-
-        date_place.setText(Utility.getToday());
-
-    }
-
-    void setSpinnerAdapter() {
-        ArrayList<Category> cat = new ArrayList<>(hashCat.values());
-        MySpinner adapter = new MySpinner(getActivity(),
-                android.R.layout.simple_spinner_item, cat);
-        spinner.setAdapter(adapter);
-    }
-
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
 
@@ -131,9 +156,10 @@ public class FragmentOutcomeNew extends Fragment {
         if (!validateName()) {
             return;
         }
-        helper.insertOutcome(new Outcome(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getCategoryFromForm(), 2));
-
-        NavUtils.navigateUpFromSameTask(getActivity());
+        helper.updateOutcome(new Outcome(ele.getId(),note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getCategoryFromForm(), 2));
+        Bundle extras = getIntent().getExtras();
+        extras.remove("outcome");
+        NavUtils.navigateUpFromSameTask(this);
     }
 
     private String getCategoryFromForm() {
@@ -153,10 +179,9 @@ public class FragmentOutcomeNew extends Fragment {
         return true;
     }
 
-
     private void requestFocus(View view) {
         if (view.requestFocus()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
@@ -194,9 +219,7 @@ public class FragmentOutcomeNew extends Fragment {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            date_place.setText(DatePickers.setDAtePick(year,month,day));
+            date_place.setText(DatePickers.setDAtePick(year, month, day));
         }
     }
-
-
 }

@@ -23,6 +23,23 @@
             android:parentActivityName=".m_activity.MainActivity" >
 
         </activity>
-    </application>
 
+        <activity
+            android:name=".EditExpense"
+            android:label="@string/title_activity_edit_income_outcome"
+            android:theme="@style/MyMaterialTheme"
+            android:parentActivityName=".m_activity.MainActivity" >
+
+        </activity>
+
+        <activity
+            android:name=".EditIncomes"
+            android:label="@string/title_activity_edit_income_outcome"
+            android:theme="@style/MyMaterialTheme"
+            android:parentActivityName=".m_activity.MainActivity" >
+
+        </activity>
+    </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
 </manifest>

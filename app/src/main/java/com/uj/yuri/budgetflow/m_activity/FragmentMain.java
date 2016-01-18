@@ -3,12 +3,14 @@ package com.uj.yuri.budgetflow.m_activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,6 +21,9 @@ import android.widget.TextView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
+import com.uj.yuri.budgetflow.db_managment.BackUp.ExportDataBase;
+import com.uj.yuri.budgetflow.db_managment.BackUp.ImpExpUses;
+import com.uj.yuri.budgetflow.db_managment.BackUp.ImportDataBase;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 
@@ -28,13 +33,14 @@ public class FragmentMain extends Fragment {
     private View myFragmentView;
     private static final String PREFERENCES_NAME = "myPreferences";
     private SharedPreferences preferences;
-    private DateBaseHelper_ db;
-    private Double Max_am;
-    TextView expensive;
-    TextView incomes;
-    Double saldo;
-    CircularProgressBar circularProgressBar;
-    TextView sum_to_spend;
+    private static DateBaseHelper_ db;
+    static private Double Max_am;
+    static TextView expensive;
+    static TextView incomes;
+    static Double saldo;
+    static CircularProgressBar circularProgressBar;
+    static TextView sum_to_spend;
+    private static Context ctx;
     public FragmentMain() {
     }
 
@@ -44,6 +50,7 @@ public class FragmentMain extends Fragment {
         myFragmentView = inflater.inflate(R.layout.fragment_two_main_activity, container, false);
         preferences = getActivity().getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
         db = new DateBaseHelper(getActivity());
+        ctx = getContext();
         setLay();
 
         setValuses();
@@ -65,7 +72,7 @@ public class FragmentMain extends Fragment {
 
     private void setValuses(){
         Max_am = Double.parseDouble(preferences.getString("Max", "20"));
-        saldo = Max_am - getSaldo();
+        saldo =  Max_am - getSaldo() + getTodaysIncomes();
         expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+ Utility.moneyVal);
         incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+ Utility.moneyVal);
         sum_to_spend.setText(saldo + Utility.moneyVal);
@@ -73,10 +80,10 @@ public class FragmentMain extends Fragment {
 
     private void setOnClicks(){
         sum_to_spend.setOnClickListener(new View.OnClickListener() {
-            EditText max ;
+            EditText max;
             TextView text;
-            Button dialogButton ;
-            TextInputLayout inputLayoutMax ;
+            Button dialogButton;
+            TextInputLayout inputLayoutMax;
 
             @Override
             public void onClick(View v) {
@@ -88,7 +95,7 @@ public class FragmentMain extends Fragment {
                 max = (EditText) dialog.findViewById(R.id.max);
                 text = (TextView) dialog.findViewById(R.id.text_dial);
                 dialogButton = (Button) dialog.findViewById(R.id.add_button);
-                inputLayoutMax = (TextInputLayout)  dialog.findViewById(R.id.input_max_limit);
+                inputLayoutMax = (TextInputLayout) dialog.findViewById(R.id.input_max_limit);
 
                 text.setText(getString(R.string.inf_dial1));
                 max.setHint(getString(R.string.inf_dial3) + preferences.getString("Max", "20"));
@@ -106,7 +113,7 @@ public class FragmentMain extends Fragment {
                             SharedPreferences.Editor preferencesEditor = preferences.edit();
                             preferencesEditor.putString("Max", Max_am.toString());
                             preferencesEditor.apply();
-                            saldo = Max_am - getSaldo();
+                            saldo = Max_am - getSaldo() + getTodaysIncomes();
                             sum_to_spend.setText(saldo + Utility.moneyVal);
                             circularProgressBar.setProgressWithAnimation(getProgress(), 2500); // Default duration = 1500ms
                         }
@@ -137,7 +144,7 @@ public class FragmentMain extends Fragment {
         });
     }
 
-    private double getSaldo(){
+    private static double getSaldo(){
         ArrayList<Double> l_out = db.selectAllOutcomesToday();
 
         if( l_out.isEmpty()){
@@ -147,24 +154,41 @@ public class FragmentMain extends Fragment {
         for(Double d : l_out)
             sum_out += d;
 
-        if ( Max_am - sum_out  >=0){
-            sum_to_spend.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-            circularProgressBar.setColor(ContextCompat.getColor(getContext(), R.color.greeno));
-            circularProgressBar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.greeno1));
+
+
+        if ( Max_am - sum_out + getTodaysIncomes() >=0){
+            sum_to_spend.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
+            circularProgressBar.setColor(ContextCompat.getColor(ctx, R.color.greeno));
+            circularProgressBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.greeno1));
         }else {
-            sum_to_spend.setTextColor(ContextCompat.getColor(getContext(), R.color.redo));
-            circularProgressBar.setColor(ContextCompat.getColor(getContext(), R.color.redo));
-            circularProgressBar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.redo1));
+            sum_to_spend.setTextColor(ContextCompat.getColor(ctx, R.color.redo));
+            circularProgressBar.setColor(ContextCompat.getColor(ctx, R.color.redo));
+            circularProgressBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.redo1));
         }
-        return sum_out;
+        return sum_out ;
+    }
+
+    private static double getTodaysIncomes(){
+        ArrayList<Double> l_in = db.selectAllIncomesToday();
+        double sum_in = 0;
+        for(Double d : l_in) {
+            sum_in += d;
+        }
+        return sum_in;
     }
 
     private float getProgress(){
         if (getSaldo() == 0){
             return 0;
         }else
-            return (float) (getSaldo()/Max_am)*100;
+            return (float) (( getSaldo() + getTodaysIncomes() )/Max_am)*100;
     }
 
+    public static void refash(){
+        saldo = Max_am - getSaldo() + getTodaysIncomes();
+        expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+ Utility.moneyVal);
+        incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+ Utility.moneyVal);
+        sum_to_spend.setText(saldo + Utility.moneyVal);
+    }
 
 }
