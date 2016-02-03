@@ -33,6 +33,11 @@ public class Utility {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH) + 1;
         int day = c.get(Calendar.DAY_OF_MONTH);
+
+        return parseToDateString(day, month, year);
+    }
+
+    public static String parseToDateString(int day ,int month, int year){
         String d, m;
         if (day < 10) {
             d = "0" + day;
@@ -49,11 +54,47 @@ public class Utility {
         return d + "-" + m + "-" + year;
     }
 
+    public static String getDayBeforeToday(){
+        try {
+
+            Date date = formatData.parse(getToday());
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DATE, -1);
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH) + 1;
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            return parseToDateString(day,month,year);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            return getToday();
+        }
+    }
+
+    public static String getDayBeforeDayBeforeToday(){
+        try {
+
+            Date date = formatData.parse(getToday());
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DATE, -2);
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH) + 1;
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            return parseToDateString(day,month,year);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            return getToday();
+        }
+    }
+
     public static boolean chechIfDates(String date_1_f, String date_2_f) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date date1 = sdf.parse(date_1_f);
-            Date date2 = sdf.parse(date_2_f);
+
+            Date date1 = formatData.parse(date_1_f);
+            Date date2 = formatData.parse(date_2_f);
 
             if (date1.after(date2)) {
                 return false;

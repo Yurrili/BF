@@ -48,9 +48,10 @@ public class Entries {
 
     }
 
-    public static abstract class Notifications implements BaseColumns {
-        public static final String TABLE_NAME = "Notifications";
-        public static final String COLUMN_TIME = "time";
+    public static abstract class Hist_Saldo implements BaseColumns {
+        public static final String TABLE_NAME = "Saldos";
+        public static final String COLUMN_TIME = "Time";
+        public static final String COLUMN_AMOUNT = "Amount";
 
     }
 

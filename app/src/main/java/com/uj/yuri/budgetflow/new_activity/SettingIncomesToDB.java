@@ -115,6 +115,7 @@ public class SettingIncomesToDB {
         }
     }
 
+
     public void MontlySetUp(String[] date_split, Calendar dd, Date past, Date today, CheckBox infinity
             ,Income createPreparedOneNotInf, Income createPreparedOneInf){
         Months months = Months.monthsBetween(new DateTime(past), new DateTime(today));
@@ -133,7 +134,6 @@ public class SettingIncomesToDB {
             }
 
         } else {
-
             Income prepared_one = createPreparedOneNotInf;
             helper.updateIncome(prepared_one);
             if (Utility.chechIfDates(Utility.formatData.format(past), Utility.formatData.format(today))&& d > 0) {
@@ -147,7 +147,7 @@ public class SettingIncomesToDB {
     }
 
 
-    public void insertInfinityIncomes(Income prepared_one, Calendar dd, String cat){
+    private void insertInfinityIncomes(Income prepared_one, Calendar dd, String cat){
         helper.insertIncome(new Income(prepared_one.getId(),
                 prepared_one.getName(),
                 prepared_one.getAmount(),
@@ -157,37 +157,10 @@ public class SettingIncomesToDB {
                 prepared_one.getDescription(),
                 cat,
                 prepared_one.getDuration()));
-
     }
 
-    public void insertNotInfinityIncomes(Income prepared_one, Calendar dd, String cat){
+    private void insertNotInfinityIncomes(Income prepared_one, Calendar dd, String cat){
         helper.insertIncome(new Income(prepared_one.getId(),
-                prepared_one.getName(),
-                prepared_one.getAmount(),
-                Utility.formatData.format(dd.getTime()),
-                prepared_one.getEndTime(),
-                true,
-                cat,
-                prepared_one.getDescription(),
-                prepared_one.getDuration()));
-
-    }
-
-    public void insertInfinityIncomesUP(Income prepared_one, Calendar dd, String cat){
-        helper.updateIncome(new Income(prepared_one.getId(),
-                prepared_one.getName(),
-                prepared_one.getAmount(),
-                Utility.formatData.format(dd.getTime()),
-                Utility.formatData.format(dd.getTime()),
-                true,
-                prepared_one.getDescription(),
-                cat,
-                prepared_one.getDuration()));
-
-    }
-
-    public void insertNotInfinityIncomesUP(Income prepared_one, Calendar dd, String cat){
-        helper.updateIncome(new Income(prepared_one.getId(),
                 prepared_one.getName(),
                 prepared_one.getAmount(),
                 Utility.formatData.format(dd.getTime()),

@@ -42,7 +42,7 @@
             android:layout_height="wrap_content">
             <GridLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
 
                 android:columnCount="2"
                 android:rowCount="1">
@@ -73,14 +73,14 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:textSize="17sp"
+
                         android:hint="Amount" />
                 </android.support.design.widget.TextInputLayout>
             </GridLayout>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
 
@@ -93,7 +93,7 @@
                 <GridLayout
                     android:layout_width="wrap_content"
 
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:columnCount="2"
                     android:rowCount="1"
 
@@ -129,7 +129,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:singleLine="true"
-                            android:textSize="17sp"
 
                             android:text="13-07-2016"
                             android:hint="Date" />
@@ -146,7 +145,7 @@
                 <GridLayout
                     android:layout_width="wrap_content"
 
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:columnCount="2"
                     android:rowCount="1"
 
@@ -184,7 +183,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:singleLine="true"
-                            android:textSize="17sp"
+
 
                             android:text="13-07-2016"
                             />
@@ -205,7 +204,7 @@
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
 
             android:columnCount="2"
             android:rowCount="1">
@@ -235,7 +234,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:textSize="17sp"
+
                     android:hint="Note" />
             </android.support.design.widget.TextInputLayout>
         </GridLayout>

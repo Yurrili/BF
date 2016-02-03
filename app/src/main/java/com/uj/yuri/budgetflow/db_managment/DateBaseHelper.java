@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.Pair;
 
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
@@ -65,9 +66,10 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
                     Entries.Categories.COLUMN_CATEGORY_NAME + TEXT_TYPE +
                     " )";
 
-    private static final String SQL_CREATE_ENTRIES_Notifications =
-            "CREATE TABLE " + Entries.Notifications.TABLE_NAME + " (" +
-                    Entries.Notifications.COLUMN_TIME + TEXT_TYPE +
+    private static final String SQL_CREATE_ENTRIES_Hist_Saldo =
+            "CREATE TABLE " + Entries.Hist_Saldo.TABLE_NAME + " (" +
+                    Entries.Hist_Saldo.COLUMN_TIME + TEXT_TYPE + COMMA_SEP +
+                    Entries.Hist_Saldo.COLUMN_AMOUNT + TEXT_TYPE +
                     " )";
 
     public DateBaseHelper(Context context) {
@@ -82,7 +84,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         Log.d("DB", "created Categories");
         db.execSQL(SQL_CREATE_ENTRIES_Incomes);
         Log.d("DB", "created Incomes");
-        db.execSQL(SQL_CREATE_ENTRIES_Notifications);
+        db.execSQL(SQL_CREATE_ENTRIES_Hist_Saldo);
         Log.d("DB", "created Notifications");
         db.execSQL(SQL_CREATE_ENTRIES_Outcomes);
         Log.d("DB", "created Outcomes");
@@ -130,6 +132,10 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Others");
         db.insert(Entries.Categories.TABLE_NAME, null, values);
 
+        values = new ContentValues();
+        values.put(Entries.Hist_Saldo.COLUMN_TIME, "Food");
+        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, Utility.getDayBeforeToday());
+        db.insert(Entries.Hist_Saldo.TABLE_NAME, null, values);
 
     }
 
@@ -138,7 +144,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         db.execSQL("DROP TABLE IF EXISTS " + Entries.Categories.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + Entries.Incomes.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + Entries.Outcomes.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + Entries.Notifications.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Entries.Hist_Saldo.TABLE_NAME);
         Log.d("DB", "DATABASES DROPPED");
 
         onCreate(db);
@@ -162,6 +168,16 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         values.put(Entries.Incomes.COLUMN_AMOUNT, ob.getAmount());
 
         dba.insert(Entries.Incomes.TABLE_NAME, null, values);
+        dba.close();
+    }
+
+    public void insertSaldoHist(String amount) {
+        SQLiteDatabase dba = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Entries.Hist_Saldo.COLUMN_TIME, Utility.getDayBeforeToday());
+        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, amount);
+
+        dba.insert(Entries.Hist_Saldo.TABLE_NAME, null, values);
         dba.close();
     }
 
@@ -238,31 +254,31 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
     }
 
-    public void insertCategory(Category ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
-        dba.insert(Entries.Categories.TABLE_NAME, null, values);
-        dba.close();
-    }
-
-    public void updateCategory(Category ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
-
-        dba.update(Entries.Categories.TABLE_NAME, values, Entries.Categories.COLUMN_ID + "='" + ob.getId() + "'", null);
-        dba.close();
-    }
-
-    public void removeCategory(Category ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
-        dba.delete(Entries.Categories.TABLE_NAME, Entries.Categories.COLUMN_ID + "='" + ob.getId() + "'", null);
-        dba.close();
-    }
+//    public void insertCategory(Category ob) {
+//        SQLiteDatabase dba = this.getWritableDatabase();
+//
+//        ContentValues values = new ContentValues();
+//
+//        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
+//        dba.insert(Entries.Categories.TABLE_NAME, null, values);
+//        dba.close();
+//    }
+//
+//    public void updateCategory(Category ob) {
+//        SQLiteDatabase dba = this.getWritableDatabase();
+//
+//        ContentValues values = new ContentValues();
+//        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
+//
+//        dba.update(Entries.Categories.TABLE_NAME, values, Entries.Categories.COLUMN_ID + "='" + ob.getId() + "'", null);
+//        dba.close();
+//    }
+//
+//    public void removeCategory(Category ob) {
+//        SQLiteDatabase dba = this.getWritableDatabase();
+//        dba.delete(Entries.Categories.TABLE_NAME, Entries.Categories.COLUMN_ID + "='" + ob.getId() + "'", null);
+//        dba.close();
+//    }
 
     public ArrayList<Income> selectAllIncomes(){
         SQLiteDatabase dba = this.getReadableDatabase();
@@ -292,11 +308,50 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         return list;
     }
 
+
+    public Pair<String,Double> selectHistSaldo(){
+        SQLiteDatabase dba = this.getReadableDatabase();
+        Pair<String, Double> gg = new Pair<>(Utility.getDayBeforeToday(),0.0);
+        String selection = Entries.Hist_Saldo.COLUMN_TIME + " = '"+ Utility.getDayBeforeToday() + "'";
+
+        Cursor c = dba.query(Entries.Hist_Saldo.TABLE_NAME,
+               new String[] {Entries.Hist_Saldo.COLUMN_TIME, Entries.Hist_Saldo.COLUMN_AMOUNT},
+               selection, null, null, null, null);
+
+        if (c != null) {
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+
+                 gg = new Pair<>(c.getString(0),Double.parseDouble(c.getString(1)));
+            }
+        }
+
+        c.close();
+        dba.close();
+        return gg;
+    }
+
+    public ArrayList<Pair<String,Double>> selectLastSaldo(){
+        SQLiteDatabase dba = this.getReadableDatabase();
+        ArrayList<Pair<String,Double>> list = new ArrayList<>();
+
+
+        Cursor c = dba.query(Entries.Hist_Saldo.TABLE_NAME,
+                new String[] { Entries.Hist_Saldo.COLUMN_TIME, Entries.Hist_Saldo.COLUMN_AMOUNT },
+                null, null, null, null, null);
+
+        if (c != null) {
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                list.add(new Pair<>(c.getString(0), Double.parseDouble(c.getString(1))));
+            }
+        }
+
+        c.close();
+        dba.close();
+        return list;
+    }
+
     public Income selectIncome(String id){
         SQLiteDatabase dba = this.getReadableDatabase();
-        ArrayList<Income> list = new ArrayList<>();
-
-
         Cursor c = dba.query(Entries.Incomes.TABLE_NAME,
                 Entries.Incomes.selectAllList,
                 null, null, null, null, null);
@@ -505,32 +560,19 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
 
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        String d, m;
-        if( day < 10){
-            d = "0" + day;
-        } else {
-            d = day + "";
-        }
-
-        if( month < 10){
-            m = "0" + month;
-        } else {
-            m = month +"";
-        }
-
         String selection = Entries.Outcomes.COLUMN_DATETIME_START + " = '"
-                + d + "-"+m+"-"+year + "'";
+                + Utility.getToday() + "'";
 
         Cursor cc = dba.query(Entries.Outcomes.TABLE_NAME,
-                new String[]{Entries.Outcomes.COLUMN_AMOUNT},
+                new String[]{Entries.Outcomes.COLUMN_AMOUNT, Entries.Outcomes.COLUMN_CATEGORY_ID},
                 selection, null, null, null, null);
 
         if (cc != null) {
             for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+                if (    cc.getString(1).equals("0")  ||
+                        cc.getString(1).equals("1")  ||
+                        cc.getString(1).equals("2")  ||
+                        cc.getString(1).equals("14")    )
                 list.add(Double.parseDouble(cc.getString(0)));
             }
         }
@@ -545,33 +587,18 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
 
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        String d, m;
-        if( day < 10){
-            d = "0" + day;
-        } else {
-            d = day + "";
-        }
-
-        if( month < 10){
-            m = "0" + month;
-        } else {
-            m = month +"";
-        }
 
         String selection = Entries.Incomes.COLUMN_DATETIME_START + " = '"
-                + d + "-"+m+"-"+year + "'";
+                + Utility.getToday() + "'";
 
         Cursor cc = dba.query(Entries.Incomes.TABLE_NAME,
-                new String[]{Entries.Incomes.COLUMN_AMOUNT},
+                new String[]{Entries.Incomes.COLUMN_AMOUNT, Entries.Incomes.COLUMN_FREQUENCY},
                 selection, null, null, null, null);
 
         if (cc != null) {
             for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
-                list.add(Double.parseDouble(cc.getString(0)));
+                if(cc.getString(1).equals("0"))
+                    list.add(Double.parseDouble(cc.getString(0)));
             }
         }
 
@@ -603,4 +630,7 @@ public class DateBaseHelper extends SQLiteOpenHelper implements DateBaseHelper_ 
         dba.close();
         return hash_list;
     }
+
+
+
 }

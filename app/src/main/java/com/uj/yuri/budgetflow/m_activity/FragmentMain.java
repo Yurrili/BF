@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,8 @@ public class FragmentMain extends Fragment {
     static TextView expensive;
     static TextView incomes;
     static Double saldo;
+    static Double saldo_db_before;
+
     static CircularProgressBar circularProgressBar;
     static TextView sum_to_spend;
     private static Context ctx;
@@ -52,14 +55,27 @@ public class FragmentMain extends Fragment {
         db = new DateBaseHelper(getActivity());
         ctx = getContext();
         setLay();
-
+        saldo_db_before = 0.0;
+        CheckIfDates();
         setValuses();
+
         setOnClicks();
+
 
 
         circularProgressBar.setProgressWithAnimation(getProgress(), 2500); // Default duration = 1500ms
 
         return myFragmentView;
+    }
+
+    private void CheckIfDates(){
+        String date = Utility.getDayBeforeDayBeforeToday();
+        Pair<String, Double> date_saldo = db.selectHistSaldo();
+        if ( date.equals(date_saldo.first)){
+            db.insertSaldoHist(saldo.toString());
+        }
+
+        saldo_db_before = db.selectHistSaldo().second;
     }
 
     private void setLay(){
@@ -72,7 +88,8 @@ public class FragmentMain extends Fragment {
 
     private void setValuses(){
         Max_am = Double.parseDouble(preferences.getString("Max", "20"));
-        saldo =  Max_am - getSaldo() + getTodaysIncomes();
+
+        saldo =  Max_am - getSaldo() + getTodaysIncomes() + saldo_db_before;
         expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+ Utility.moneyVal);
         incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+ Utility.moneyVal);
         sum_to_spend.setText(saldo + Utility.moneyVal);
@@ -112,8 +129,9 @@ public class FragmentMain extends Fragment {
                             Max_am = Double.parseDouble(max.getText().toString());
                             SharedPreferences.Editor preferencesEditor = preferences.edit();
                             preferencesEditor.putString("Max", Max_am.toString());
+
                             preferencesEditor.apply();
-                            saldo = Max_am - getSaldo() + getTodaysIncomes();
+                            saldo = Max_am - getSaldo() + getTodaysIncomes() + saldo_db_before;
                             sum_to_spend.setText(saldo + Utility.moneyVal);
                             circularProgressBar.setProgressWithAnimation(getProgress(), 2500); // Default duration = 1500ms
                         }
@@ -155,12 +173,11 @@ public class FragmentMain extends Fragment {
             sum_out += d;
 
 
-
-        if ( Max_am - sum_out + getTodaysIncomes() >=0){
+        if ( Max_am - sum_out + getTodaysIncomes() + saldo_db_before > 0){
             sum_to_spend.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
             circularProgressBar.setColor(ContextCompat.getColor(ctx, R.color.greeno));
             circularProgressBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.greeno1));
-        }else {
+        } else {
             sum_to_spend.setTextColor(ContextCompat.getColor(ctx, R.color.redo));
             circularProgressBar.setColor(ContextCompat.getColor(ctx, R.color.redo));
             circularProgressBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.redo1));
@@ -185,7 +202,7 @@ public class FragmentMain extends Fragment {
     }
 
     public static void refash(){
-        saldo = Max_am - getSaldo() + getTodaysIncomes();
+        saldo = Max_am - getSaldo() + getTodaysIncomes() + saldo_db_before;
         expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+ Utility.moneyVal);
         incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+ Utility.moneyVal);
         sum_to_spend.setText(saldo + Utility.moneyVal);

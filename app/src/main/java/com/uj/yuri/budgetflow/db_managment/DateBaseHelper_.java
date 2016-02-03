@@ -1,5 +1,7 @@
 package com.uj.yuri.budgetflow.db_managment;
 
+import android.util.Pair;
+
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
@@ -22,10 +24,10 @@ public interface DateBaseHelper_ {
     void updateOutcome(Outcome ob);
     void removeOutcome(Outcome ob);
 
-    void insertCategory(Category ob);
-    void updateCategory(Category ob);
-    void removeCategory(Category ob);
+    void insertSaldoHist(String ob);
 
+    Pair<String,Double> selectHistSaldo();
+    ArrayList<Pair<String,Double>> selectLastSaldo();
     ArrayList<Income> selectAllIncomes();
     ArrayList<Outcome> selectAllOutcomes();
     ArrayList<Income> selectMontlyIncomes();
@@ -34,6 +36,7 @@ public interface DateBaseHelper_ {
     ArrayList<Double> selectAllOutcomesToday();
     Outcome selectOutcome(String id);
     Income selectIncome(String id);
+
 
     HashMap<String, Category> selectAllCategories();
 }

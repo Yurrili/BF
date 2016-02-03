@@ -39,15 +39,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-             <EditText
+
+
+                <EditText
                     android:id="@+id/amount_place"
                     android:inputType="numberDecimal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
+
                     android:hint="Amount" />
             </android.support.design.widget.TextInputLayout>
-            
         </GridLayout>
     </LinearLayout>
     <RelativeLayout
@@ -56,54 +58,58 @@
         android:orientation="horizontal">
 
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            >
+
+            <GridLayout
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
-               >
+                android:columnCount="2"
+                android:rowCount="1"
 
-                <GridLayout
-                    android:layout_width="wrap_content"
+                >
 
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:contentDescription="dolar"
+                    android:src="@drawable/ic_cal"/>
+
+                <LinearLayout
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:columnCount="2"
-                    android:rowCount="1"
-
+                    android:orientation="vertical"
                     >
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:contentDescription="dolar"
-                        android:src="@drawable/ic_cal"/>
-
-                    <LinearLayout
-                        android:layout_width="100dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/date_place_text1"
+                        android:id="@+id/date_place_text1"
 
-                            android:textSize="12sp"
-                            android:text="Date"/>
+                        android:textSize="12sp"
+                        android:text="Date"/>
 
-                        <EditText
-                            android:id="@+id/date_place1"
-                            android:editable="false"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="13-07-2016"
-                            android:hint="Date" />
-                    </LinearLayout>
-                </GridLayout>
-            </LinearLayout>
+                    <EditText
+                        android:id="@+id/date_place1"
+                        android:editable="false"
+
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+
+
+                        android:text="13-07-2016"
+                        android:hint="Date" />
+                </LinearLayout>
+            </GridLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -114,7 +120,7 @@
             <GridLayout
                 android:layout_width="wrap_content"
 
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:columnCount="2"
                 android:rowCount="1"
 
@@ -151,6 +157,9 @@
                         android:visibility="invisible"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
+
+
                         android:text="13-07-2016"
                         />
                 </LinearLayout>
@@ -170,7 +179,7 @@
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
 
         android:columnCount="2"
         android:rowCount="1">
@@ -191,7 +200,8 @@
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            
+
+
 
             <EditText
                 android:id="@+id/note_place"
@@ -241,7 +251,7 @@
         android:layout_marginStart="25dp"
         android:layout_height="wrap_content"
         android:id="@+id/radiogr"
-     >
+        >
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
