@@ -1,6 +1,5 @@
 package com.uj.yuri.budgetflow.m_activity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -20,9 +19,9 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.new_activity.InOutActivity;
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 import com.uj.yuri.budgetflow.m_activity.view_managment_listview.EmptyL;
 import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
 import com.uj.yuri.budgetflow.m_activity.view_managment_listview.HeaderFirstL;
@@ -34,7 +33,7 @@ import java.util.Collections;
 
 public class FragmentSpending extends Fragment {
 
-    private static DateBaseHelper_ db;
+    private static DateBaseHelper db;
     public static MyAdapter adapter;
     public static Context ctx;
     private ImageButton FAB;
@@ -46,7 +45,7 @@ public class FragmentSpending extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_one_main_activity, container, false);
-        db = new DateBaseHelper(getActivity());
+        db = new DateBaseHelperImpl(getActivity());
         initLay();
         setOnLClicks();
         creatListAdapt();

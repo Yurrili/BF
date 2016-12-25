@@ -3,7 +3,7 @@ package com.uj.yuri.budgetflow.new_activity;
 import android.widget.CheckBox;
 
 import com.uj.yuri.budgetflow.Utility;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 
 import org.joda.time.DateTime;
@@ -18,9 +18,9 @@ import java.util.Date;
  */
 public class SettingIncomesToDB {
 
-    DateBaseHelper_ helper;
+    DateBaseHelper helper;
 
-    public SettingIncomesToDB(DateBaseHelper_ db){
+    public SettingIncomesToDB(DateBaseHelper db){
         this.helper = db;
     }
 

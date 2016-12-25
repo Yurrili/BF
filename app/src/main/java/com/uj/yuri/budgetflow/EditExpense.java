@@ -18,8 +18,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.new_activity.DatePickers;
@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 public class EditExpense extends AppCompatActivity {
     ArrayList<Category> cat;
-    public DateBaseHelper_ helper;
+    public DateBaseHelper helper;
     public HashMap<String, Category> hashCat;
     private TextInputLayout inputLayoutAmount;
     public static EditText date_place;
@@ -51,7 +51,7 @@ public class EditExpense extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        helper = new DateBaseHelper(getApplicationContext());
+        helper = new DateBaseHelperImpl(getApplicationContext());
 
         initLayout();
         setListeners();
@@ -61,7 +61,7 @@ public class EditExpense extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null)
         {
-            DateBaseHelper_ db = new DateBaseHelper(getApplicationContext());
+            DateBaseHelper db = new DateBaseHelperImpl(getApplicationContext());
 
             String out = extras.getString("outcome","");
             if (!out.equals("")) {

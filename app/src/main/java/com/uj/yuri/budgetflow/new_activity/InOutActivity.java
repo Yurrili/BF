@@ -14,9 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.uj.yuri.budgetflow.R;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
-import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
 
 import java.util.ArrayList;
 import java.util.List;

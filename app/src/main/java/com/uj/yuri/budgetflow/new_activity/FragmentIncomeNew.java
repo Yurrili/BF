@@ -22,9 +22,9 @@ import android.widget.TextView;
 
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -44,7 +44,7 @@ public class FragmentIncomeNew extends Fragment {
     public RadioButton radio_btn2;
     public RadioButton radio_btn3;
     private TextInputLayout inputLayoutAmount;
-    public DateBaseHelper_ helper;
+    public DateBaseHelper helper;
     public CheckBox infinity;
     public Button btn;
     private EditText note ;
@@ -55,7 +55,7 @@ public class FragmentIncomeNew extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.helper = new DateBaseHelper(getActivity());
+        this.helper = new DateBaseHelperImpl(getActivity());
         myFragmentView = inflater.inflate(R.layout.fragment_new_income, container, false);
         setLays();
         setListeners();

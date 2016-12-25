@@ -2,7 +2,7 @@ package com.uj.yuri.budgetflow.m_activity.expandable_list_view;
 
 
 
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class ExpandableListDataPump {
 
-    public static HashMap<Map.Entry<Category, String>, List<Outcome>> getData(DateBaseHelper_ db) {
+    public static HashMap<Map.Entry<Category, String>, List<Outcome>> getData(DateBaseHelper db) {
 
         HashMap<Map.Entry<Category, String>, List<Outcome>> expandableListDetail = new HashMap<>();
         HashMap<String, Category> cat_hash = db.selectAllCategories();

@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
-    public DateBaseHelper_ helper;
+    public DateBaseHelper helper;
     private HashMap<String, Category> hashCat;
     private LayoutInflater vi;
     private Entries_list_ entry;
@@ -44,7 +44,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
     public MyAdapter(Context context, int resource, List<Entries_list_> items) {
         super(context, resource, items);
-            helper = new DateBaseHelper(getContext());
+            helper = new DateBaseHelperImpl(getContext());
             hashCat = helper.selectAllCategories();
     }
 

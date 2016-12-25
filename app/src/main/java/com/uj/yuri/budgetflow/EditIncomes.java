@@ -18,10 +18,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.uj.yuri.budgetflow.R;
-import com.uj.yuri.budgetflow.Utility;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.new_activity.DatePickers;
 import com.uj.yuri.budgetflow.new_activity.SettingIncomesToDB;
@@ -46,7 +44,7 @@ public class EditIncomes extends AppCompatActivity {
     public RadioButton radio_btn2;
     public RadioButton radio_btn3;
     private TextInputLayout inputLayoutAmount;
-    public DateBaseHelper_ helper;
+    public DateBaseHelper helper;
     public CheckBox infinity;
     public Button btn;
     private EditText note ;
@@ -60,7 +58,7 @@ public class EditIncomes extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        helper = new DateBaseHelper(getApplicationContext());
+        helper = new DateBaseHelperImpl(getApplicationContext());
 
         setLays();
         setListeners();
@@ -70,7 +68,7 @@ public class EditIncomes extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null)
         {
-            DateBaseHelper_ db = new DateBaseHelper(getApplicationContext());
+            DateBaseHelper db = new DateBaseHelperImpl(getApplicationContext());
 
             String out = extras.getString("income","");
             if (!out.equals("")) {

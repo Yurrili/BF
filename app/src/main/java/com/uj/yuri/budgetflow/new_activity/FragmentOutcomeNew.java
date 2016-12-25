@@ -22,10 +22,10 @@ import android.widget.Spinner;
 
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import java.util.HashMap;
 public class FragmentOutcomeNew extends Fragment {
     private View myFragmentView;
 
-    public DateBaseHelper_ helper;
+    public DateBaseHelper helper;
     private HashMap<String, Category> hashCat;
     private TextInputLayout inputLayoutAmount;
     public static EditText date_place;
@@ -52,7 +52,7 @@ public class FragmentOutcomeNew extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_new_outcome, container, false);
-        helper = new DateBaseHelper(getActivity());
+        helper = new DateBaseHelperImpl(getActivity());
 
         initLayout();
         setListeners();

@@ -6,19 +6,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
 import com.uj.yuri.budgetflow.R;
-import com.uj.yuri.budgetflow.db_managment.BackUp.ExportDataBase;
-import com.uj.yuri.budgetflow.db_managment.BackUp.ImpExpUses;
-import com.uj.yuri.budgetflow.db_managment.BackUp.ImportDataBase;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 import com.uj.yuri.budgetflow.m_activity.expandable_list_view.CustomExpandableListAdapter;
 import com.uj.yuri.budgetflow.m_activity.expandable_list_view.ExpandableListDataPump;
 
@@ -46,7 +42,7 @@ public class FragmentCategories extends Fragment {
         ctx = getContext();
         expandableListView = (ExpandableListView) myFragmentView.findViewById(R.id.expandableListView);
 
-        expandableListDetail = ExpandableListDataPump.getData(new DateBaseHelper(getActivity()));
+        expandableListDetail = ExpandableListDataPump.getData(new DateBaseHelperImpl(getActivity()));
         expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(getContext(), expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
@@ -55,7 +51,7 @@ public class FragmentCategories extends Fragment {
     }
 
     public static void refrash(){
-        expandableListDetail = ExpandableListDataPump.getData(new DateBaseHelper(act));
+        expandableListDetail = ExpandableListDataPump.getData(new DateBaseHelperImpl(act));
         expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(ctx, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);

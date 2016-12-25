@@ -19,10 +19,9 @@ import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ExportDataBase;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ImpExpUses;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ImportDataBase;
-import com.uj.yuri.budgetflow.db_managment.BackUp.ImportExport;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity{
     private static final String PREFERENCES_NAME = "myPreferences";
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    DateBaseHelper_ db;
+    DateBaseHelper db;
     private ViewPager viewPager;
     private int[] tabIcons = {
             R.drawable.ic_cup,
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activity_budget_flow);
         preferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        db = new DateBaseHelper(getApplicationContext());
+        db = new DateBaseHelperImpl(getApplicationContext());
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

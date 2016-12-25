@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -22,11 +20,8 @@ import android.widget.TextView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
-import com.uj.yuri.budgetflow.db_managment.BackUp.ExportDataBase;
-import com.uj.yuri.budgetflow.db_managment.BackUp.ImpExpUses;
-import com.uj.yuri.budgetflow.db_managment.BackUp.ImportDataBase;
-import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Saldo;
 
 import java.util.ArrayList;
@@ -35,7 +30,7 @@ public class FragmentMain extends Fragment {
     private View myFragmentView;
     private static final String PREFERENCES_NAME = "myPreferences";
     private SharedPreferences preferences;
-    private static DateBaseHelper_ db;
+    private static DateBaseHelper db;
     static private Double Max_am;
     static TextView expensive;
     static TextView incomes;
@@ -53,7 +48,7 @@ public class FragmentMain extends Fragment {
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_two_main_activity, container, false);
         preferences = getActivity().getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        db = new DateBaseHelper(getActivity());
+        db = new DateBaseHelperImpl(getActivity());
         ctx = getContext();
         setLay();
         saldo_db_before = 0.0;
