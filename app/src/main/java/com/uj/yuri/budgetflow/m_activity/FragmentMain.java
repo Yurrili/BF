@@ -27,6 +27,7 @@ import com.uj.yuri.budgetflow.db_managment.BackUp.ImpExpUses;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ImportDataBase;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper_;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Saldo;
 
 import java.util.ArrayList;
 
@@ -70,12 +71,12 @@ public class FragmentMain extends Fragment {
 
     private void CheckIfDates(){
         String date = Utility.getDayBeforeDayBeforeToday();
-        Pair<String, Double> date_saldo = db.selectHistSaldo();
-        if ( date.equals(date_saldo.first)){
-            db.insertSaldoHist(saldo.toString());
+        Saldo date_saldo = db.selectSaldo(saldo.toString());
+        if ( date.equals(date_saldo.getData())){
+            db.insertSaldo(saldo.toString());
         }
 
-        saldo_db_before = db.selectHistSaldo().second;
+        saldo_db_before = db.selectLastSaldo().getAmount();
     }
 
     private void setLay(){

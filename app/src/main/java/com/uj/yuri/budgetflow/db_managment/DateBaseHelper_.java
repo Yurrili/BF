@@ -1,13 +1,11 @@
 package com.uj.yuri.budgetflow.db_managment;
 
-import android.util.Pair;
-
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
+import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Saldo;
 
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,19 +22,28 @@ public interface DateBaseHelper_ {
     void updateOutcome(Outcome ob);
     void removeOutcome(Outcome ob);
 
-    void insertSaldoHist(String ob);
+    void insertSaldo(String ob);
+    void updateSaldo(String ob);
+    void removeSaldo(String ob);
 
-    Pair<String,Double> selectHistSaldo();
-    ArrayList<Pair<String,Double>> selectLastSaldo();
-    ArrayList<Income> selectAllIncomes();
-    ArrayList<Outcome> selectAllOutcomes();
-    ArrayList<Income> selectMontlyIncomes();
-    ArrayList<Income> selectDailyIncomes();
-    ArrayList<Double> selectAllIncomesToday();
-    ArrayList<Double> selectAllOutcomesToday();
+    void insertCategory(Category ob);
+    void updateCategory(Category ob);
+    void removeCategory(Category ob);
+
+    Saldo selectSaldo(String id);
     Outcome selectOutcome(String id);
     Income selectIncome(String id);
+    Saldo selectLastSaldo();
 
-
+    ArrayList<Income> selectAllIncomes();
+    ArrayList<Double> selectAllIncomesToday();
+    ArrayList<Double> selectAllOutcomesToday();
+    ArrayList<Outcome> selectAllOutcomes();
     HashMap<String, Category> selectAllCategories();
+
+    ArrayList<Income> selectMontlyIncomes();
+    ArrayList<Income> selectDailyIncomes();
+
+    ArrayList<Double> selectTodaysOutcomes(String data);
+
 }
