@@ -12,7 +12,6 @@ import com.uj.yuri.budgetflow.db_managment.Gateway.IncomeGateway;
 import com.uj.yuri.budgetflow.db_managment.Gateway.OutcomeGateway;
 import com.uj.yuri.budgetflow.db_managment.Gateway.SaldoHistoryGateway;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.Utility;
