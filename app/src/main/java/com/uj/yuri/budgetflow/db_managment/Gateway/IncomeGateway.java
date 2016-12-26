@@ -16,68 +16,77 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
  * Created by Yuri on 23.12.2016.
  */
 
-public class IncomeGateway extends Gateway<Income> {
+public class IncomeGateway extends Gateway {
 
+    private Income ob;
 
     public IncomeGateway(Context context) {
         super(context);
     }
 
+    public IncomeGateway(Context context, Income income) {
+        super(context);
+        this.ob = income;
+    }
+
+    public Income getIncome(){
+        return this.ob;
+    }
+
     @Override
-    public void insert(Income ob) {
+    public void insert() {
         SQLiteDatabase dba = this.getWritableDatabase();
-        String dateTimeStart = ob.getStartTime();
-        String dateTimeFinish = ob.getEndTime();
+        String dateTimeStart = this.ob.getStartTime();
+        String dateTimeFinish = this.ob.getEndTime();
 
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Incomes.COLUMN_INCOME_NAME, ob.getName());
-        values.put(Entries.Incomes.COLUMN_DURATION, ob.getDuration());
-        values.put(Entries.Incomes.COLUMN_DESCRIPTION, ob.getDescription());
+        values.put(Entries.Incomes.COLUMN_INCOME_NAME, this.ob.getName());
+        values.put(Entries.Incomes.COLUMN_DURATION, this.ob.getDuration());
+        values.put(Entries.Incomes.COLUMN_DESCRIPTION, this.ob.getDescription());
         values.put(Entries.Incomes.COLUMN_DATETIME_START, dateTimeStart);
         values.put(Entries.Incomes.COLUMN_DATETIME_FINISH, dateTimeFinish);
-        values.put(Entries.Incomes.COLUMN_ACTIVE, ob.isActive());
-        values.put(Entries.Incomes.COLUMN_FREQUENCY, ob.getFrequency());
-        values.put(Entries.Incomes.COLUMN_AMOUNT, ob.getAmount());
+        values.put(Entries.Incomes.COLUMN_ACTIVE, this.ob.isActive());
+        values.put(Entries.Incomes.COLUMN_FREQUENCY, this.ob.getFrequency());
+        values.put(Entries.Incomes.COLUMN_AMOUNT, this.ob.getAmount());
 
         dba.insert(Entries.Incomes.TABLE_NAME, null, values);
         dba.close();
     }
 
     @Override
-    public void update(Income ob) {
+    public void update() {
         SQLiteDatabase dba = this.getWritableDatabase();
-        String dateTimeStart = ob.getStartTime();
-        String dateTimeFinish = ob.getEndTime();
+        String dateTimeStart = this.ob.getStartTime();
+        String dateTimeFinish = this.ob.getEndTime();
 
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Incomes.COLUMN_INCOME_NAME, ob.getName());
-        values.put(Entries.Incomes.COLUMN_DURATION, ob.getDuration());
-        values.put(Entries.Incomes.COLUMN_DESCRIPTION, ob.getDescription());
+        values.put(Entries.Incomes.COLUMN_INCOME_NAME, this.ob.getName());
+        values.put(Entries.Incomes.COLUMN_DURATION, this.ob.getDuration());
+        values.put(Entries.Incomes.COLUMN_DESCRIPTION, this.ob.getDescription());
         values.put(Entries.Incomes.COLUMN_DATETIME_START, dateTimeStart);
         values.put(Entries.Incomes.COLUMN_DATETIME_FINISH, dateTimeFinish);
-        values.put(Entries.Incomes.COLUMN_ACTIVE, ob.isActive());
-        values.put(Entries.Incomes.COLUMN_FREQUENCY, ob.getFrequency());
-        values.put(Entries.Incomes.COLUMN_AMOUNT, ob.getAmount());
+        values.put(Entries.Incomes.COLUMN_ACTIVE, this.ob.isActive());
+        values.put(Entries.Incomes.COLUMN_FREQUENCY, this.ob.getFrequency());
+        values.put(Entries.Incomes.COLUMN_AMOUNT, this.ob.getAmount());
 
         dba.update( Entries.Incomes.TABLE_NAME,
                     values,
                     Entries.Incomes._ID ,
-                    new String[]{ ob.getId() });
+                    new String[]{ this.ob.getId() });
         dba.close();
     }
 
     @Override
-    public void remove(Income ob) {
+    public void remove() {
         SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete( Entries.Incomes.TABLE_NAME,
                     Entries.Incomes._ID ,
-                    new String[]{ ob.getId() });
+                    new String[]{ this.ob.getId() });
         dba.close();
     }
 
-    @Override
     public Cursor findAll() {
         SQLiteDatabase dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Incomes.TABLE_NAME,

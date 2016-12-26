@@ -14,46 +14,56 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Saldo;
  * Created by Yuri on 23.12.2016.
  */
 
-public class SaldoHistoryGateway extends Gateway<Saldo> {
+public class SaldoHistoryGateway extends Gateway {
+
+    private Saldo ob;
 
     public SaldoHistoryGateway(Context context) {
         super(context);
     }
 
+    public SaldoHistoryGateway(Context context, Saldo saldo) {
+        super(context);
+        this.ob = saldo;
+    }
+
+    public Saldo getOb() {
+        return ob;
+    }
+
     @Override
-    public void insert(Saldo ob) {
+    public void insert() {
         SQLiteDatabase dba = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(Entries.Hist_Saldo.COLUMN_TIME,  ob.getData());
-        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, ob.getAmount());
+        values.put(Entries.Hist_Saldo.COLUMN_TIME,  this.ob.getData());
+        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, this.ob.getAmount());
 
         dba.insert(Entries.Hist_Saldo.TABLE_NAME, null, values);
         dba.close();
     }
 
     @Override
-    public void update(Saldo ob) {
+    public void update() {
         SQLiteDatabase dba = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, ob.getAmount());
-        values.put(Entries.Hist_Saldo.COLUMN_TIME, ob.getData());
+        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, this.ob.getAmount());
+        values.put(Entries.Hist_Saldo.COLUMN_TIME, this.ob.getData());
         dba.update( Entries.Hist_Saldo.TABLE_NAME,  values,
                                                     Entries.Hist_Saldo._ID,
-                                                    new String[]{ ob.getId() });
+                                                    new String[]{ this.ob.getId() });
         dba.close();
     }
 
     @Override
-    public void remove(Saldo ob) {
+    public void remove() {
         SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete( Entries.Hist_Saldo.TABLE_NAME,
                     Entries.Hist_Saldo._ID,
-                    new String[]{ ob.getId() });
+                    new String[]{ this.ob.getId() });
         dba.close();
     }
 
-    @Override
     public Cursor findAll() {
         SQLiteDatabase dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Hist_Saldo.TABLE_NAME,

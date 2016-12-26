@@ -31,37 +31,31 @@ import java.util.HashMap;
 
 public class DateBaseHelperImpl implements DateBaseHelper  {
 
-    private IncomeGateway incomeGateway ;
-    private OutcomeGateway outcomeGateway ;
-    private CategoryGateway categoryGateway ;
-    private SaldoHistoryGateway saldoGateway ;
-
     private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
+    private Context ctx;
+
     public DateBaseHelperImpl(Context context) {
-
-        incomeGateway = new IncomeGateway(context);
-        outcomeGateway = new OutcomeGateway(context);
-        categoryGateway = new CategoryGateway(context);
-        saldoGateway = new SaldoHistoryGateway(context);
-
+        this.ctx = context;
     }
 
     public void insertIncome(Income ob) {
-        incomeGateway.insert(ob);
+        IncomeGateway incomeGateway = new IncomeGateway(ctx, ob);
+        incomeGateway.insert();
     }
-
 
     public void updateIncome(Income ob) {
-        incomeGateway.update(ob);
+        IncomeGateway incomeGateway = new IncomeGateway(ctx, ob);
+        incomeGateway.update();
     }
 
-
     public void removeIncome(Income ob) {
-        incomeGateway.remove(ob);
+        IncomeGateway incomeGateway = new IncomeGateway(ctx, ob);
+        incomeGateway.remove();
     }
 
     public Income selectIncome(String id){
+        IncomeGateway incomeGateway = new IncomeGateway(ctx);
         Cursor c = incomeGateway.find(id);
 
         if (c != null) {
@@ -82,6 +76,7 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
     }
 
     public ArrayList<Double> selectAllIncomesToday() {
+        IncomeGateway incomeGateway = new IncomeGateway(ctx);
         //SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
 //
@@ -104,8 +99,8 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
         return list;
     }
 
-
     public ArrayList<Income> selectAllIncomes(){
+        IncomeGateway incomeGateway = new IncomeGateway(ctx);
         ArrayList<Income> list = new ArrayList<>();
         Cursor c = incomeGateway.findAll();
         if (c != null) {
@@ -124,10 +119,9 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
         return list;
     }
 
-
     public ArrayList<Income> selectDailyIncomes() {
         ArrayList<Income> list = new ArrayList<>();
-
+        IncomeGateway incomeGateway = new IncomeGateway(ctx);
         try {
             Date date1 = sdf.parse(Utility.getToday());
 
@@ -161,9 +155,9 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
         return list;
     }
 
-
     public ArrayList<Income> selectMontlyIncomes() {
         ArrayList<Income> list = new ArrayList<>();
+        IncomeGateway incomeGateway = new IncomeGateway(ctx);
 
         Date date1 = null;
         try {
@@ -213,23 +207,23 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
      * OUTCOME
      */
 
-
     public void insertOutcome(Outcome ob) {
-        outcomeGateway.insert(ob);
+        OutcomeGateway outcomeGateway = new OutcomeGateway(ctx, ob);
+        outcomeGateway.insert();
     }
-
 
     public void updateOutcome(Outcome ob) {
-        outcomeGateway.update(ob);
+        OutcomeGateway outcomeGateway = new OutcomeGateway(ctx, ob);
+        outcomeGateway.update();
     }
-
 
     public void removeOutcome(Outcome ob) {
-        outcomeGateway.remove(ob);
+        OutcomeGateway outcomeGateway = new OutcomeGateway(ctx, ob);
+        outcomeGateway.remove();
     }
 
-
     public Outcome selectOutcome(String id){
+        OutcomeGateway outcomeGateway = new OutcomeGateway(ctx);
         Cursor c = outcomeGateway.find(id);
 
         if (c != null) {
@@ -248,8 +242,8 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
         return null;
     }
 
-
     public ArrayList<Double> selectTodaysOutcomes(String data){
+        OutcomeGateway outcomeGateway = new OutcomeGateway(ctx);
 //        SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
 //
@@ -270,8 +264,8 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
         return list;
     }
 
-
     public ArrayList<Outcome> selectAllOutcomes(){
+        OutcomeGateway outcomeGateway = new OutcomeGateway(ctx);
         ArrayList<Outcome> list = new ArrayList<>();
         Cursor c = outcomeGateway.findAll();
 
@@ -291,8 +285,8 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
         return list;
     }
 
-
     public ArrayList<Double> selectAllOutcomesToday() {
+        OutcomeGateway outcomeGateway = new OutcomeGateway(ctx);
 //        SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
 
@@ -322,23 +316,23 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
      * SALDO
      */
 
-
     public void insertSaldo(String amount) {
-        saldoGateway.insert(new Saldo(Utility.getDayBeforeToday(), amount));
+        SaldoHistoryGateway saldoGateway = new SaldoHistoryGateway(ctx, new Saldo(Utility.getDayBeforeToday(), amount));
+        saldoGateway.insert();
     }
-
 
     public void updateSaldo(String amount) {
-        saldoGateway.update(new Saldo(Utility.getDayBeforeToday(), amount));
+        SaldoHistoryGateway saldoGateway = new SaldoHistoryGateway(ctx, new Saldo(Utility.getDayBeforeToday(), amount));
+        saldoGateway.update();
     }
-
 
     public void removeSaldo(String amount) {
-        saldoGateway.remove(new Saldo(Utility.getDayBeforeToday(), amount));
+        SaldoHistoryGateway saldoGateway = new SaldoHistoryGateway(ctx, new Saldo(Utility.getDayBeforeToday(), amount));
+        saldoGateway.remove();
     }
 
-
     public Saldo selectSaldo(String id) {
+        SaldoHistoryGateway saldoGateway = new SaldoHistoryGateway(ctx);
         Cursor c = saldoGateway.find(id);
         if (c != null) {
             c.moveToFirst();
@@ -349,9 +343,10 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
         return null;
     }
 
-
     public Saldo selectLastSaldo(){
         Saldo gg = new Saldo(Utility.getDayBeforeToday(), 0.0);
+        SaldoHistoryGateway saldoGateway = new SaldoHistoryGateway(ctx);
+
         Cursor c = saldoGateway.findLast();
 
         if (c != null) {
@@ -367,24 +362,24 @@ public class DateBaseHelperImpl implements DateBaseHelper  {
      * CATEGORY
      */
 
-
     public void insertCategory(Category ob) {
-        categoryGateway.insert(ob);
+        CategoryGateway categoryGateway = new CategoryGateway(ctx, ob);
+        categoryGateway.insert();
     }
-
 
     public void updateCategory(Category ob) {
-        categoryGateway.update(ob);
+        CategoryGateway categoryGateway = new CategoryGateway(ctx, ob);
+        categoryGateway.update();
     }
 
-
     public void removeCategory(Category ob) {
-        categoryGateway.remove(ob);
+        CategoryGateway categoryGateway = new CategoryGateway(ctx, ob);
+        categoryGateway.remove();
     }
 
     public HashMap<String, Category> selectAllCategories() {
         HashMap<String, Category> hash_list = new HashMap<>();
-
+        CategoryGateway categoryGateway = new CategoryGateway(ctx);
         Cursor c = categoryGateway.findAll();
 
         int i = 0;

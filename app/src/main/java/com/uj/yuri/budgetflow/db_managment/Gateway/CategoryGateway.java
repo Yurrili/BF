@@ -14,28 +14,39 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
  * Created by Yuri on 23.12.2016.
  */
 
-public class CategoryGateway extends Gateway<Category> {
+public class CategoryGateway extends Gateway {
+
+    private Category ob;
 
     public CategoryGateway(Context context) {
         super(context);
     }
 
+    public CategoryGateway(Context context, Category category) {
+        super(context);
+        this.ob = category;
+    }
+
+    public Category getCategory() {
+        return this.ob;
+    }
+
     @Override
-    public void insert(Category ob) {
+    public void insert() {
         SQLiteDatabase dba = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, this.ob.getName());
 
         dba.insert(Entries.Categories.TABLE_NAME, null, values);
         dba.close();
     }
 
     @Override
-    public void update(Category ob) {
+    public void update() {
         SQLiteDatabase dba = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, this.ob.getName());
 
         dba.update( Entries.Categories.TABLE_NAME,
                     values,
@@ -45,15 +56,14 @@ public class CategoryGateway extends Gateway<Category> {
     }
 
     @Override
-    public void remove(Category ob) {
+    public void remove() {
         SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete( Entries.Categories.TABLE_NAME,
                     Entries.Categories._ID,
-                    new String[]{ ob.getId() });
+                    new String[]{ this.ob.getId() });
         dba.close();
     }
 
-    @Override
     public Cursor findAll() {
         SQLiteDatabase dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Categories.TABLE_NAME,
@@ -74,7 +84,6 @@ public class CategoryGateway extends Gateway<Category> {
         dba.close();
         return cursor;
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
