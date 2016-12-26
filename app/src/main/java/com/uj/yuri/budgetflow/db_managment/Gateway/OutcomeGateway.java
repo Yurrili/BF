@@ -1,8 +1,10 @@
 package com.uj.yuri.budgetflow.db_managment.Gateway;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
@@ -14,8 +16,13 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 
 public class OutcomeGateway extends Gateway<Outcome> {
 
+    public OutcomeGateway(Context context) {
+        super(context);
+    }
+
     @Override
-    public void insert(Outcome ob, SQLiteDatabase dba) {
+    public void insert(Outcome ob) {
+        SQLiteDatabase dba = this.getWritableDatabase();
         String dateTimeStart = ob.getStartTime();
         String dateTimeFinish = ob.getEndTime();
 
@@ -34,7 +41,8 @@ public class OutcomeGateway extends Gateway<Outcome> {
     }
 
     @Override
-    public void update(Outcome ob, SQLiteDatabase dba) {
+    public void update(Outcome ob) {
+        SQLiteDatabase dba = this.getWritableDatabase();
         String dateTimeStart = ob.getStartTime();
         String dateTimeFinish = ob.getEndTime();
 
@@ -56,7 +64,8 @@ public class OutcomeGateway extends Gateway<Outcome> {
     }
 
     @Override
-    public void remove(Outcome ob, SQLiteDatabase dba) {
+    public void remove(Outcome ob) {
+        SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete( Entries.Outcomes.TABLE_NAME,
                     Entries.Outcomes._ID ,
                     new String[]{ ob.getId() });
@@ -64,7 +73,8 @@ public class OutcomeGateway extends Gateway<Outcome> {
     }
 
     @Override
-    public Cursor findAll(SQLiteDatabase dba) {
+    public Cursor findAll() {
+        SQLiteDatabase dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Outcomes.TABLE_NAME,
                                     Entries.Outcomes.selectAllList,
                                     null, null, null, null, null);
@@ -73,7 +83,8 @@ public class OutcomeGateway extends Gateway<Outcome> {
     }
 
     @Override
-    public Cursor find(String id, SQLiteDatabase dba) {
+    public Cursor find(String id) {
+        SQLiteDatabase dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Outcomes.TABLE_NAME,
                                     Entries.Outcomes.selectAllList,
                                     Entries.Outcomes._ID ,
@@ -84,4 +95,14 @@ public class OutcomeGateway extends Gateway<Outcome> {
     }
 
 
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(Entries.SQL_CREATE_ENTRIES_Outcomes);
+        Log.d("DB", "created Outcomes");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + Entries.Outcomes.TABLE_NAME);
+    }
 }

@@ -1,8 +1,11 @@
 package com.uj.yuri.budgetflow.db_managment.Gateway;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
@@ -13,8 +16,13 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Entries;
 
 public class CategoryGateway extends Gateway<Category> {
 
+    public CategoryGateway(Context context) {
+        super(context);
+    }
+
     @Override
-    public void insert(Category ob, SQLiteDatabase dba) {
+    public void insert(Category ob) {
+        SQLiteDatabase dba = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
 
@@ -23,7 +31,8 @@ public class CategoryGateway extends Gateway<Category> {
     }
 
     @Override
-    public void update(Category ob, SQLiteDatabase dba) {
+    public void update(Category ob) {
+        SQLiteDatabase dba = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(Entries.Categories.COLUMN_CATEGORY_NAME, ob.getName());
@@ -36,7 +45,8 @@ public class CategoryGateway extends Gateway<Category> {
     }
 
     @Override
-    public void remove(Category ob, SQLiteDatabase dba) {
+    public void remove(Category ob) {
+        SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete( Entries.Categories.TABLE_NAME,
                     Entries.Categories._ID,
                     new String[]{ ob.getId() });
@@ -44,7 +54,8 @@ public class CategoryGateway extends Gateway<Category> {
     }
 
     @Override
-    public Cursor findAll(SQLiteDatabase dba) {
+    public Cursor findAll() {
+        SQLiteDatabase dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Categories.TABLE_NAME,
                                     Entries.Categories.selectAllList,
                                     null, null, null, null, null);
@@ -53,7 +64,8 @@ public class CategoryGateway extends Gateway<Category> {
     }
 
     @Override
-    public Cursor find(String id, SQLiteDatabase dba) {
+    public Cursor find(String id) {
+        SQLiteDatabase dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Categories.TABLE_NAME,
                                     Entries.Categories.selectAllList,
                                     Entries.Categories._ID ,
@@ -64,4 +76,60 @@ public class CategoryGateway extends Gateway<Category> {
     }
 
 
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(Entries.SQL_CREATE_ENTRIES_Categories);
+        Log.d("DB", "created Categories");
+        putMockedData(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + Entries.Categories.TABLE_NAME);
+    }
+
+    private void putMockedData(SQLiteDatabase db){
+        ContentValues values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Food");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Fun Money");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Personal");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Household Items/Supplies");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Transportation");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Clothing");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Rent");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Household Repairs");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Utilities/Bills");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Medical");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Insurance");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Education");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Savings");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Gifts");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Others");
+        db.insert(Entries.Categories.TABLE_NAME, null, values);
+    }
 }

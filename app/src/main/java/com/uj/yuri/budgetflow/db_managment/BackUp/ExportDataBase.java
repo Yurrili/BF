@@ -3,6 +3,7 @@ package com.uj.yuri.budgetflow.db_managment.BackUp;
 import android.os.Environment;
 
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
+import com.uj.yuri.budgetflow.db_managment.Gateway.Gateway;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,8 +35,8 @@ public class ExportDataBase implements ImportExport {
             if (sd.canWrite())
             {
                 String  currentDBPath= "//data//" + "com.uj.yuri.budgetflow"
-                        + "//databases//" + DateBaseHelperImpl.DATABASE_NAME;
-                String backupDBPath  = "/BackupFolder/"+ DateBaseHelperImpl.DATABASE_NAME;
+                        + "//databases//" + Gateway.DATABASE_NAME;
+                String backupDBPath  = "/BackupFolder/"+ Gateway.DATABASE_NAME;
                 File currentDB = new File(data, currentDBPath);
                 File backupDB = new File(sd, backupDBPath);
 

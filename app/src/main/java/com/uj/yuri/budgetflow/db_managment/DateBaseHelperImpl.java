@@ -29,156 +29,40 @@ import java.util.HashMap;
  * Created by Yuri on 2015-12-28.
  */
 
-public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelper {
+public class DateBaseHelperImpl implements DateBaseHelper  {
 
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "BudgetFlow.db";
-    private static final String TEXT_TYPE = " TEXT";
-    private static final String COMMA_SEP = ",";
-    private static final String INTEGER_TYPE =" INTEGER";
+    private IncomeGateway incomeGateway ;
+    private OutcomeGateway outcomeGateway ;
+    private CategoryGateway categoryGateway ;
+    private SaldoHistoryGateway saldoGateway ;
 
-    private IncomeGateway incomeGateway = new IncomeGateway();
-    private OutcomeGateway outcomeGateway = new OutcomeGateway();
-    private CategoryGateway categoryGateway = new CategoryGateway();
-    private SaldoHistoryGateway saldoGateway = new SaldoHistoryGateway();
-
-    private static final String SQL_CREATE_ENTRIES_Incomes =
-            "CREATE TABLE " + Entries.Incomes.TABLE_NAME + " (" +
-                    Entries.Incomes._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    Entries.Incomes.COLUMN_INCOME_NAME + TEXT_TYPE + COMMA_SEP +
-                    Entries.Incomes.COLUMN_AMOUNT + TEXT_TYPE + COMMA_SEP +
-                    Entries.Incomes.COLUMN_ACTIVE + INTEGER_TYPE + COMMA_SEP +
-                    Entries.Incomes.COLUMN_DATETIME_START + TEXT_TYPE + COMMA_SEP +
-                    Entries.Incomes.COLUMN_DATETIME_FINISH + TEXT_TYPE + COMMA_SEP +
-                    Entries.Incomes.COLUMN_FREQUENCY + TEXT_TYPE + COMMA_SEP +
-                    Entries.Incomes.COLUMN_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
-                    Entries.Incomes.COLUMN_DURATION + INTEGER_TYPE +
-                    " )";
-
-    private static final String SQL_CREATE_ENTRIES_Outcomes =
-            "CREATE TABLE " + Entries.Outcomes.TABLE_NAME + " (" +
-                    Entries.Outcomes._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    Entries.Outcomes.COLUMN_OUTCOME_NAME + TEXT_TYPE + COMMA_SEP +
-                    Entries.Outcomes.COLUMN_AMOUNT + TEXT_TYPE + COMMA_SEP +
-                    Entries.Outcomes.COLUMN_ACTIVE + INTEGER_TYPE + COMMA_SEP +
-                    Entries.Outcomes.COLUMN_DATETIME_START + TEXT_TYPE + COMMA_SEP +
-                    Entries.Outcomes.COLUMN_DATETIME_FINISH + TEXT_TYPE + COMMA_SEP +
-                    Entries.Outcomes.COLUMN_FREQUENCY + TEXT_TYPE + COMMA_SEP +
-                    Entries.Outcomes.COLUMN_CATEGORY_ID + INTEGER_TYPE +
-                    " )";
-
-    private static final String SQL_CREATE_ENTRIES_Categories =
-            "CREATE TABLE " + Entries.Categories.TABLE_NAME + " (" +
-                    Entries.Categories._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    Entries.Categories.COLUMN_CATEGORY_NAME + TEXT_TYPE +
-                    " )";
-
-    private static final String SQL_CREATE_ENTRIES_Hist_Saldo =
-            "CREATE TABLE " + Entries.Hist_Saldo.TABLE_NAME + " (" +
-                    Entries.Hist_Saldo.COLUMN_TIME + TEXT_TYPE + COMMA_SEP +
-                    Entries.Hist_Saldo.COLUMN_AMOUNT + TEXT_TYPE +
-                    " )";
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
     public DateBaseHelperImpl(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
 
-    static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES_Categories);
-        Log.d("DB", "created Categories");
-        db.execSQL(SQL_CREATE_ENTRIES_Incomes);
-        Log.d("DB", "created Incomes");
-        db.execSQL(SQL_CREATE_ENTRIES_Hist_Saldo);
-        Log.d("DB", "created Notifications");
-        db.execSQL(SQL_CREATE_ENTRIES_Outcomes);
-        Log.d("DB", "created Outcomes");
-
-        ContentValues values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Food");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Fun Money");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Personal");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Household Items/Supplies");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Transportation");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Clothing");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Rent");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Household Repairs");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Utilities/Bills");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Medical");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Insurance");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Education");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Savings");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Gifts");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(Entries.Categories.COLUMN_CATEGORY_NAME, "Others");
-        db.insert(Entries.Categories.TABLE_NAME, null, values);
-
-        values = new ContentValues();
-        values.put(Entries.Hist_Saldo.COLUMN_TIME, "Food");
-        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, Utility.getDayBeforeToday());
-        db.insert(Entries.Hist_Saldo.TABLE_NAME, null, values);
+        incomeGateway = new IncomeGateway(context);
+        outcomeGateway = new OutcomeGateway(context);
+        categoryGateway = new CategoryGateway(context);
+        saldoGateway = new SaldoHistoryGateway(context);
 
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + Entries.Categories.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + Entries.Incomes.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + Entries.Outcomes.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + Entries.Hist_Saldo.TABLE_NAME);
-        Log.d("DB", "DATABASES DROPPED");
-
-        onCreate(db);
-    }
-
-    /**
-     * INCOME
-     */
-
-    @Override
     public void insertIncome(Income ob) {
-        incomeGateway.insert(ob, this.getWritableDatabase());
+        incomeGateway.insert(ob);
     }
 
-    @Override
+
     public void updateIncome(Income ob) {
-        incomeGateway.update(ob, this.getWritableDatabase());
+        incomeGateway.update(ob);
     }
 
-    @Override
+
     public void removeIncome(Income ob) {
-        incomeGateway.remove(ob, this.getWritableDatabase());
+        incomeGateway.remove(ob);
     }
 
-    @Override
     public Income selectIncome(String id){
-        Cursor c = incomeGateway.find(id, this.getReadableDatabase());
+        Cursor c = incomeGateway.find(id);
 
         if (c != null) {
             c.moveToFirst();
@@ -197,34 +81,33 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
         return null;
     }
 
-    @Override
     public ArrayList<Double> selectAllIncomesToday() {
-        SQLiteDatabase dba = this.getReadableDatabase();
+        //SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
-
-        String selection = Entries.Incomes.COLUMN_DATETIME_START + " = '"
-                + Utility.getToday() + "'";
-
-        Cursor cc = dba.query(Entries.Incomes.TABLE_NAME,
-                new String[]{Entries.Incomes.COLUMN_AMOUNT, Entries.Incomes.COLUMN_FREQUENCY},
-                selection, null, null, null, null);
-
-        if (cc != null) {
-            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
-                if(cc.getString(1).equals("0"))
-                    list.add(Double.parseDouble(cc.getString(0)));
-            }
-        }
-
-        cc.close();
-        dba.close();
+//
+//        String selection = Entries.Incomes.COLUMN_DATETIME_START + " = '"
+//                + Utility.getToday() + "'";
+//
+//        Cursor cc = dba.query(Entries.Incomes.TABLE_NAME,
+//                new String[]{Entries.Incomes.COLUMN_AMOUNT, Entries.Incomes.COLUMN_FREQUENCY},
+//                selection, null, null, null, null);
+//
+//        if (cc != null) {
+//            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+//                if(cc.getString(1).equals("0"))
+//                    list.add(Double.parseDouble(cc.getString(0)));
+//            }
+//        }
+//
+//        cc.close();
+//        dba.close();
         return list;
     }
 
-    @Override
+
     public ArrayList<Income> selectAllIncomes(){
         ArrayList<Income> list = new ArrayList<>();
-        Cursor c = incomeGateway.findAll(this.getReadableDatabase());
+        Cursor c = incomeGateway.findAll();
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 list.add(new Income(c.getString(0),
@@ -241,14 +124,14 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
         return list;
     }
 
-    @Override
+
     public ArrayList<Income> selectDailyIncomes() {
         ArrayList<Income> list = new ArrayList<>();
 
         try {
             Date date1 = sdf.parse(Utility.getToday());
 
-            Cursor cc = incomeGateway.selectFrequency(Frequency.DAILY, this.getReadableDatabase());
+            Cursor cc = incomeGateway.selectFrequency(Frequency.DAILY);
 
             if (cc != null) {
                 for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
@@ -278,9 +161,8 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
         return list;
     }
 
-    @Override
+
     public ArrayList<Income> selectMontlyIncomes() {
-        SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Income> list = new ArrayList<>();
 
         Date date1 = null;
@@ -290,7 +172,7 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
             e.printStackTrace();
         }
 
-        Cursor cc = incomeGateway.selectFrequency(Frequency.MONTHLY, this.getReadableDatabase());
+        Cursor cc = incomeGateway.selectFrequency(Frequency.MONTHLY);
 
         if (cc != null) {
             for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
@@ -331,24 +213,24 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
      * OUTCOME
      */
 
-    @Override
+
     public void insertOutcome(Outcome ob) {
-        outcomeGateway.insert(ob, this.getWritableDatabase());
+        outcomeGateway.insert(ob);
     }
 
-    @Override
+
     public void updateOutcome(Outcome ob) {
-        outcomeGateway.update(ob, this.getWritableDatabase());
+        outcomeGateway.update(ob);
     }
 
-    @Override
+
     public void removeOutcome(Outcome ob) {
-        outcomeGateway.remove(ob, this.getWritableDatabase());
+        outcomeGateway.remove(ob);
     }
 
-    @Override
+
     public Outcome selectOutcome(String id){
-        Cursor c = outcomeGateway.find(id, this.getReadableDatabase());
+        Cursor c = outcomeGateway.find(id);
 
         if (c != null) {
             c.moveToFirst();
@@ -366,32 +248,32 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
         return null;
     }
 
-    @Override
+
     public ArrayList<Double> selectTodaysOutcomes(String data){
-        SQLiteDatabase dba = this.getReadableDatabase();
+//        SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
-
-        String selection = Entries.Outcomes.COLUMN_DATETIME_START + " = '"
-                + data + "'";
-        Cursor c = dba.query(Entries.Outcomes.TABLE_NAME,
-                new String[] {Entries.Outcomes.COLUMN_AMOUNT},
-                selection, null, null, null, null);
-
-        if (c != null) {
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                list.add(Double.parseDouble(c.getString(0)));
-            }
-        }
-
-        c.close();
-        dba.close();
+//
+//        String selection = Entries.Outcomes.COLUMN_DATETIME_START + " = '"
+//                + data + "'";
+//        Cursor c = dba.query(Entries.Outcomes.TABLE_NAME,
+//                new String[] {Entries.Outcomes.COLUMN_AMOUNT},
+//                selection, null, null, null, null);
+//
+//        if (c != null) {
+//            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+//                list.add(Double.parseDouble(c.getString(0)));
+//            }
+//        }
+//
+//        c.close();
+//        dba.close();
         return list;
     }
 
-    @Override
+
     public ArrayList<Outcome> selectAllOutcomes(){
         ArrayList<Outcome> list = new ArrayList<>();
-        Cursor c = outcomeGateway.findAll(this.getReadableDatabase());
+        Cursor c = outcomeGateway.findAll();
 
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -409,30 +291,30 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
         return list;
     }
 
-    @Override
+
     public ArrayList<Double> selectAllOutcomesToday() {
-        SQLiteDatabase dba = this.getReadableDatabase();
+//        SQLiteDatabase dba = this.getReadableDatabase();
         ArrayList<Double> list = new ArrayList<>();
 
-        String selection = Entries.Outcomes.COLUMN_DATETIME_START + " = '"
-                + Utility.getToday() + "'";
-
-        Cursor cc = dba.query(Entries.Outcomes.TABLE_NAME,
-                new String[]{Entries.Outcomes.COLUMN_AMOUNT, Entries.Outcomes.COLUMN_CATEGORY_ID},
-                selection, null, null, null, null);
-
-        if (cc != null) {
-            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
-                if (    cc.getString(1).equals("0")  ||
-                        cc.getString(1).equals("1")  ||
-                        cc.getString(1).equals("2")  ||
-                        cc.getString(1).equals("14")    )
-                    list.add(Double.parseDouble(cc.getString(0)));
-            }
-        }
-
-        cc.close();
-        dba.close();
+//        String selection = Entries.Outcomes.COLUMN_DATETIME_START + " = '"
+//                + Utility.getToday() + "'";
+//
+//        Cursor cc = dba.query(Entries.Outcomes.TABLE_NAME,
+//                new String[]{Entries.Outcomes.COLUMN_AMOUNT, Entries.Outcomes.COLUMN_CATEGORY_ID},
+//                selection, null, null, null, null);
+//
+//        if (cc != null) {
+//            for (cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+//                if (    cc.getString(1).equals("0")  ||
+//                        cc.getString(1).equals("1")  ||
+//                        cc.getString(1).equals("2")  ||
+//                        cc.getString(1).equals("14")    )
+//                    list.add(Double.parseDouble(cc.getString(0)));
+//            }
+//        }
+//
+//        cc.close();
+//        dba.close();
         return list;
     }
 
@@ -440,24 +322,24 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
      * SALDO
      */
 
-    @Override
+
     public void insertSaldo(String amount) {
-        saldoGateway.insert(new Saldo(Utility.getDayBeforeToday(), amount), this.getWritableDatabase());
+        saldoGateway.insert(new Saldo(Utility.getDayBeforeToday(), amount));
     }
 
-    @Override
+
     public void updateSaldo(String amount) {
-        saldoGateway.update(new Saldo(Utility.getDayBeforeToday(), amount), this.getWritableDatabase());
+        saldoGateway.update(new Saldo(Utility.getDayBeforeToday(), amount));
     }
 
-    @Override
+
     public void removeSaldo(String amount) {
-        saldoGateway.remove(new Saldo(Utility.getDayBeforeToday(), amount), this.getWritableDatabase());
+        saldoGateway.remove(new Saldo(Utility.getDayBeforeToday(), amount));
     }
 
-    @Override
+
     public Saldo selectSaldo(String id) {
-        Cursor c = saldoGateway.find(id, this.getReadableDatabase());
+        Cursor c = saldoGateway.find(id);
         if (c != null) {
             c.moveToFirst();
             Saldo out =  new Saldo( c.getString(0),  c.getString(1));
@@ -467,11 +349,10 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
         return null;
     }
 
-    @Override
+
     public Saldo selectLastSaldo(){
         Saldo gg = new Saldo(Utility.getDayBeforeToday(), 0.0);
-        SQLiteDatabase dba = this.getReadableDatabase();
-        Cursor c = saldoGateway.findLast(this.getReadableDatabase());
+        Cursor c = saldoGateway.findLast();
 
         if (c != null) {
             c.moveToFirst();
@@ -486,27 +367,25 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
      * CATEGORY
      */
 
-    @Override
+
     public void insertCategory(Category ob) {
-        categoryGateway.insert(ob, this.getWritableDatabase());
+        categoryGateway.insert(ob);
     }
 
-    @Override
+
     public void updateCategory(Category ob) {
-        categoryGateway.update(ob, this.getWritableDatabase());
+        categoryGateway.update(ob);
     }
 
-    @Override
+
     public void removeCategory(Category ob) {
-        categoryGateway.remove(ob, this.getWritableDatabase());
+        categoryGateway.remove(ob);
     }
 
-    @Override
     public HashMap<String, Category> selectAllCategories() {
-        SQLiteDatabase dba = this.getReadableDatabase();
         HashMap<String, Category> hash_list = new HashMap<>();
 
-        Cursor c = categoryGateway.findAll(this.getReadableDatabase());
+        Cursor c = categoryGateway.findAll();
 
         int i = 0;
         if (c != null) {
@@ -517,12 +396,7 @@ public class DateBaseHelperImpl extends SQLiteOpenHelper implements DateBaseHelp
             c.close();
         }
 
-        dba.close();
         return hash_list;
     }
-
-
-
-
 
 }
