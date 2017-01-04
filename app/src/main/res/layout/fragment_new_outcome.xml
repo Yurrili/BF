@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:layout_marginEnd="20dp"
     android:layout_marginStart="20dp"
-    tools:context=".new_activity.InOutActivity$PlaceholderFragment">
+    tools:context=".NActivity.InOutActivity$PlaceholderFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

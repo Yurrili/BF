@@ -3,21 +3,19 @@ package com.uj.yuri.budgetflow;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
-import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
-import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
+import com.uj.yuri.budgetflow.DataManagment.ObjectsDO.Category;
+import com.uj.yuri.budgetflow.DataManagment.ObjectsDO.Outcome;
+import com.uj.yuri.budgetflow.MActivity.ListViewAdapter.EntryElement;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Yuri on 2016-01-15.
@@ -124,8 +122,8 @@ public class Utility {
         return false;
     }
 
-    public static void setCategoryBall(Context ctx, ImageView circle_im_cat, Outcome entry,HashMap<String, Category> hashCat){
-        getColorBall(hashCat.get(((Outcome) entry).getCategoryId()).getColor(), circle_im_cat, ctx);
+    public static void setCategoryBall(Context ctx, ImageView circle_im_cat, Outcome entry, Map<Integer, Category> hashCat){
+        getColorBall(hashCat.get(Integer.valueOf(((Outcome) entry).getCategoryId())).getColor(), circle_im_cat, ctx);
     }
 
     public static void getColorBall(String color_id, ImageView circle_im_cat, Context ctx){
@@ -160,10 +158,10 @@ public class Utility {
 
 
 
-    public static Comparator<Entries_list_> comparator_entries = new Comparator<Entries_list_>() {
+    public static Comparator<EntryElement> comparator_entries = new Comparator<EntryElement>() {
 
         @Override
-        public int compare(Entries_list_ o1, Entries_list_ o2) {
+        public int compare(EntryElement o1, EntryElement o2) {
             try {
                 return formatData.parse(o2.getStartTime()).compareTo(formatData.parse(o1.getStartTime()));
             } catch (ParseException e) {

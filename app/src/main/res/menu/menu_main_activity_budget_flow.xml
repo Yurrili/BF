@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".m_activity.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MActivity.MainActivity">
 
     <item android:id="@+id/action_UP" android:title="@string/action_UP"
         android:orderInCategory="100" app:showAsAction="never" />

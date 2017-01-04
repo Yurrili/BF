@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/add_new_expense_income"
+            android:icon="@drawable/ic_circle1"
+            android:title="Add new Expence/Income" />
+    </group>
+
+    <item android:title="Sub items">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/import_db"
+                    android:icon="@drawable/ic_circle1"
+                    android:title="Import Database" />
+                <item
+                    android:id="@+id/export_db"
+                    android:icon="@drawable/ic_circle2"
+                    android:title="Export Database" />
+            </group>
+        </menu>
+    </item>
+</menu>

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme">
         <activity
-            android:name=".m_activity.MainActivity"
+            android:name=".MActivity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,26 +17,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".new_activity.InOutActivity"
+            android:name=".NActivity.InOutActivity"
             android:label="@string/title_activity_new_income_outcome"
             android:theme="@style/MyMaterialTheme"
-            android:parentActivityName=".m_activity.MainActivity" >
+            android:parentActivityName=".MActivity.MainActivity" >
 
         </activity>
 
         <activity
-            android:name=".EditExpense"
+            android:name=".EActivity.EditExpense"
             android:label="@string/title_activity_edit_income_outcome"
             android:theme="@style/MyMaterialTheme"
-            android:parentActivityName=".m_activity.MainActivity" >
+            android:parentActivityName=".MActivity.MainActivity" >
 
         </activity>
 
         <activity
-            android:name=".EditIncomes"
+            android:name=".EActivity.EditIncomes"
             android:label="@string/title_activity_edit_income_outcome"
             android:theme="@style/MyMaterialTheme"
-            android:parentActivityName=".m_activity.MainActivity" >
+            android:parentActivityName=".MActivity.MainActivity" >
 
         </activity>
     </application>
