@@ -20,8 +20,8 @@ public class HeaderFirstL implements Entries_list_{
     }
 
     @Override
-    public String getAmount() {
-        return "";
+    public String getAmountString() {
+        return null;
     }
 
     @Override

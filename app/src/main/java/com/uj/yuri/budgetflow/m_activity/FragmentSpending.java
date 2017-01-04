@@ -15,6 +15,8 @@ import android.widget.ListView;
 
 import com.uj.yuri.budgetflow.EditExpense;
 import com.uj.yuri.budgetflow.EditIncomes;
+import com.uj.yuri.budgetflow.db_managment.IncomeManagment;
+import com.uj.yuri.budgetflow.db_managment.OutcomeManagment;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.new_activity.InOutActivity;
 import com.uj.yuri.budgetflow.R;
@@ -40,16 +42,21 @@ public class FragmentSpending extends Fragment {
     private static ListView list;
     public View myFragmentView;
 
+    private OutcomeManagment outcomeManagment;
+    private IncomeManagment incomeManagment;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        myFragmentView = inflater.inflate(R.layout.fragment_one_main_activity, container, false);
-        db = new DateBaseHelperImpl(getActivity());
+        myFragmentView = inflater.inflate(R.layout.fragment_one_main_activity, container, false);;
         initLay();
+        outcomeManagment = new OutcomeManagment(getContext());
+        incomeManagment = new IncomeManagment(getContext());
         setOnLClicks();
         creatListAdapt();
         ctx = getContext();
+
         return myFragmentView;
     }
 
@@ -68,10 +75,10 @@ public class FragmentSpending extends Fragment {
         });
     }
 
-    private static ArrayList<Entries_list_> createList(){
+    private ArrayList<Entries_list_> createList(){
         ArrayList<Entries_list_> array = new ArrayList<>();
-        array.addAll(db.selectAllOutcomes());
-        array.addAll(db.selectAllIncomes());
+        array.addAll(outcomeManagment.selectAllOutcomes());
+        array.addAll(incomeManagment.selectAllIncomes());
 
         ArrayList<Entries_list_> list = new ArrayList<>();
 
@@ -135,10 +142,10 @@ public class FragmentSpending extends Fragment {
         if (item.getTitle() == "Delete ") {
 
             if (gg_KD.get(currentposition) instanceof Income){
-                db.removeIncome((Income)gg_KD.get(currentposition));
+                incomeManagment.getIncomeGateway().remove((Income)gg_KD.get(currentposition));
                 gg_KD.remove(currentposition);
             } else if (gg_KD.get(currentposition) instanceof Outcome) {
-                db.removeOutcome((Outcome)gg_KD.get(currentposition));
+                outcomeManagment.getOutcomeGateway().remove((Outcome)gg_KD.get(currentposition));
                 gg_KD.remove(currentposition);
             }
 
@@ -164,7 +171,7 @@ public class FragmentSpending extends Fragment {
         return true;
     }
 
-    public static void refrash(){
+    public void refrash(){
         gg_KD = createList();
         adapter = new MyAdapter(ctx, R.layout.itemlists, gg_KD);
         list.setAdapter(adapter);

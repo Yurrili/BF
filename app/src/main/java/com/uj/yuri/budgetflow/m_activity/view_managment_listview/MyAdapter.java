@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
+import com.uj.yuri.budgetflow.db_managment.CategoryManagment;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
@@ -26,7 +27,7 @@ import java.util.List;
 
 public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
-    public DateBaseHelper helper;
+    public CategoryManagment helper;
     private HashMap<String, Category> hashCat;
     private LayoutInflater vi;
     private Entries_list_ entry;
@@ -44,7 +45,7 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
     public MyAdapter(Context context, int resource, List<Entries_list_> items) {
         super(context, resource, items);
-            helper = new DateBaseHelperImpl(getContext());
+            helper = new CategoryManagment(getContext());
             hashCat = helper.selectAllCategories();
     }
 
@@ -186,9 +187,9 @@ public class MyAdapter extends ArrayAdapter<Entries_list_> {
 
     private void setAmount(){
         if( entry.whatAmI())
-            amount.setText(" - " + entry.getAmount() + "  PLN");
+            amount.setText(" - " + entry.getAmountString());
         else
-            amount.setText( entry.getAmount() + "  PLN");
+            amount.setText( entry.getAmountString());
     }
 
 

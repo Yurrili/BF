@@ -37,9 +37,10 @@ public class Category implements Entries_list_{
     }
 
     @Override
-    public String getAmount() {
+    public String getAmountString() {
         return null;
     }
+
 
     @Override
     public String getStartTime() {

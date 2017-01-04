@@ -42,7 +42,7 @@ public class FragmentCategories extends Fragment {
         ctx = getContext();
         expandableListView = (ExpandableListView) myFragmentView.findViewById(R.id.expandableListView);
 
-        expandableListDetail = ExpandableListDataPump.getData(new DateBaseHelperImpl(getActivity()));
+        expandableListDetail = ExpandableListDataPump.getData(getActivity());
         expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(getContext(), expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
@@ -51,7 +51,7 @@ public class FragmentCategories extends Fragment {
     }
 
     public static void refrash(){
-        expandableListDetail = ExpandableListDataPump.getData(new DateBaseHelperImpl(act));
+        expandableListDetail = ExpandableListDataPump.getData(act);
         expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(ctx, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);

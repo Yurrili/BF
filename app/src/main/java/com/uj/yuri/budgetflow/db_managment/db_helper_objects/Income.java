@@ -1,6 +1,10 @@
 package com.uj.yuri.budgetflow.db_managment.db_helper_objects;
 
+import com.uj.yuri.budgetflow.db_managment.Money;
 import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
+
+import java.util.Currency;
+import java.util.Locale;
 
 /**
  * Created by Yuri on 2016-01-03.
@@ -8,7 +12,7 @@ import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
 public class Income implements Entries_list_ {
     protected String id;
     protected String nameOfIncome;
-    protected float amount;
+    protected Money amount;
     protected String startTime;
     protected String endTime;
     protected boolean active;
@@ -19,7 +23,7 @@ public class Income implements Entries_list_ {
     public Income(String id, String nameOfIncome, String amount, String startTime, String endTime, boolean active,  String frequency, String desciption, int duration) {
         this.id = id;
         this.nameOfIncome = nameOfIncome;
-        this.amount = Float.parseFloat(amount);
+        this.amount = new Money(Double.parseDouble(amount), Currency.getInstance(Locale.getDefault()));
         this.startTime = startTime;
         this.endTime = endTime;
         this.active = active;
@@ -32,7 +36,7 @@ public class Income implements Entries_list_ {
     public Income(String nameOfIncome, String amount, String startTime, String endTime, boolean active, int frequency, String desciption, int duration) {
         this.id = "";
         this.nameOfIncome = nameOfIncome;
-        this.amount = Float.parseFloat(amount);
+        this.amount = new Money(Double.parseDouble(amount), Currency.getInstance(Locale.getDefault()));
         this.startTime = startTime;
         this.endTime = endTime;
         this.active = active;
@@ -49,8 +53,13 @@ public class Income implements Entries_list_ {
         return nameOfIncome;
     }
 
-    public String getAmount() {
-        return amount +"";
+    @Override
+    public String getAmountString() {
+        return amount.toFormattedString();
+    }
+
+    public Money getAmount() {
+        return amount;
     }
 
     public String getStartTime() {

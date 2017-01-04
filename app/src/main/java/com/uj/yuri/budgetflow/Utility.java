@@ -157,51 +157,8 @@ public class Utility {
         }
     }
 
-    public static double getOutcomesFromMonth(ArrayList<Outcome> out_list) {
-        ArrayList<Double> o_list = new ArrayList<>();
-        if( out_list.isEmpty()){
-            return 0;
-        }
 
-        for (int i = 0; i < out_list.size(); i++) {
-            if (Utility.chechIfDates(out_list.get(i).getStartTime(), getToday())) {
-                o_list.add(Double.parseDouble(out_list.get(i).getAmount()));
-            }
-        }
 
-        if( o_list.isEmpty()){
-            return 0;
-        }
-
-        double sum_out = 0;
-        for(Double d : o_list)
-            sum_out += d;
-
-        return sum_out;
-    }
-
-    public static double getIncomesFromMonth(ArrayList<Income> out_list) {
-        ArrayList<Double> o_list = new ArrayList<>();
-        if( out_list.isEmpty()){
-            return 0;
-        }
-
-        for (int i = 0; i < out_list.size(); i++) {
-            if (Utility.chechIfDates(out_list.get(i).getStartTime(), getToday())) {
-                o_list.add(Double.parseDouble(out_list.get(i).getAmount()));
-            }
-        }
-
-        if( o_list.isEmpty()){
-            return 0;
-        }
-
-        double sum_out = 0;
-        for(Double d : o_list)
-            sum_out += d;
-
-        return sum_out;
-    }
 
     public static Comparator<Entries_list_> comparator_entries = new Comparator<Entries_list_>() {
 

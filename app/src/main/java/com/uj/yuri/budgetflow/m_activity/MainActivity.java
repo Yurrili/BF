@@ -2,6 +2,7 @@ package com.uj.yuri.budgetflow.m_activity;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 
@@ -20,8 +21,12 @@ import com.uj.yuri.budgetflow.db_managment.BackUp.ExportDataBase;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ImpExpUses;
 import com.uj.yuri.budgetflow.db_managment.BackUp.ImportDataBase;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.Gateway.Gateway;
+import com.uj.yuri.budgetflow.db_managment.IncomeManagment;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,7 +37,7 @@ public class MainActivity extends AppCompatActivity{
     private static final String PREFERENCES_NAME = "myPreferences";
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    DateBaseHelper db;
+    IncomeManagment incomeManagment;
     private ViewPager viewPager;
     private int[] tabIcons = {
             R.drawable.ic_cup,
@@ -46,8 +51,10 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activity_budget_flow);
+        JodaTimeAndroid.init(this);
+        SQLiteDatabase helper = new Gateway(getApplicationContext()).getWritableDatabase();
         preferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        db = new DateBaseHelperImpl(getApplicationContext());
+        incomeManagment = new IncomeManagment(getApplicationContext());
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,15 +87,15 @@ public class MainActivity extends AppCompatActivity{
             preferencesEditor.apply();
 
             //dodaje wszystkie incomesy
-            ArrayList<Income> list_in_d = db.selectDailyIncomes();
-            ArrayList<Income> list_in_m = db.selectMontlyIncomes();
+            ArrayList<Income> list_in_d = incomeManagment.selectDailyIncomes();
+            ArrayList<Income> list_in_m = incomeManagment.selectMontlyIncomes();
 
             for( int i =0; i < list_in_d.size(); i++){
                 Income prepared_one = list_in_d.get(i);
 
-                    db.insertIncome(new Income(prepared_one.getId(),
+                    incomeManagment.getIncomeGateway().insert(new Income(prepared_one.getId(),
                             prepared_one.getName(),
-                            prepared_one.getAmount(),
+                            String.valueOf(prepared_one.getAmount().amount().doubleValue()),
                             getToday(),
                             prepared_one.getEndTime(),
                             true,
@@ -100,9 +107,9 @@ public class MainActivity extends AppCompatActivity{
             for( int i =0; i < list_in_m.size(); i++){
                 Income prepared_one = list_in_m.get(i);
 
-                db.insertIncome(new Income(prepared_one.getId(),
+                incomeManagment.getIncomeGateway().insert(new Income(prepared_one.getId(),
                         prepared_one.getName(),
-                        prepared_one.getAmount(),
+                        String.valueOf(prepared_one.getAmount().amount().doubleValue()),
                         getToday(),
                         prepared_one.getEndTime(),
                         true,
@@ -141,10 +148,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public static void ref(){
-        FragmentSpending.refrash();
-        FragmentCategories.refrash();
-        FragmentMain.refash();
+//        FragmentSpending.refrash();
+//        FragmentCategories.refrash();
+//        FragmentMain.refash();
     }
+
+
 
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);

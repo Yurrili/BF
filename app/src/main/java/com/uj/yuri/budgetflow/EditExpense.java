@@ -18,8 +18,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.uj.yuri.budgetflow.db_managment.CategoryManagment;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.OutcomeManagment;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.new_activity.DatePickers;
@@ -33,7 +35,9 @@ import java.util.HashMap;
 
 public class EditExpense extends AppCompatActivity {
     ArrayList<Category> cat;
-    public DateBaseHelper helper;
+    public OutcomeManagment helperOutcome;
+    public CategoryManagment helperCategory;
+
     public HashMap<String, Category> hashCat;
     private TextInputLayout inputLayoutAmount;
     public static EditText date_place;
@@ -51,8 +55,8 @@ public class EditExpense extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        helper = new DateBaseHelperImpl(getApplicationContext());
-
+        helperOutcome = new OutcomeManagment(getApplicationContext());
+        helperCategory = new CategoryManagment(getApplicationContext());
         initLayout();
         setListeners();
 
@@ -61,14 +65,15 @@ public class EditExpense extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null)
         {
-            DateBaseHelper db = new DateBaseHelperImpl(getApplicationContext());
+            // POTENCIAL BUG
+            helperOutcome = new OutcomeManagment(getApplicationContext());
 
             String out = extras.getString("outcome","");
             if (!out.equals("")) {
                 //Outcomes
-                ele = db.selectOutcome(out);
+                ele = helperOutcome.getOutcomeGateway().find(out);
                 date_place.setText(ele.getStartTime());
-                amount.setText(ele.getAmount());
+                amount.setText(ele.getAmountString());
                 note.setText(ele.getName());
                 //int id_cat = Integer.parseInt(ele.getCategoryId());
                         for( int i = 0; i < cat.size(); i++){
@@ -104,7 +109,7 @@ public class EditExpense extends AppCompatActivity {
 
     private void initLayout(){
 
-        hashCat = helper.selectAllCategories();
+        hashCat = helperCategory.selectAllCategories();
         date_place =  (EditText) findViewById(R.id.date_place);
         spinner = (Spinner) findViewById(R.id.spinner_cat);
         note =  (EditText) findViewById(R.id.note_place);
@@ -156,7 +161,7 @@ public class EditExpense extends AppCompatActivity {
         if (!validateName()) {
             return;
         }
-        helper.updateOutcome(new Outcome(ele.getId(),note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getCategoryFromForm(), 2));
+        helperOutcome.getOutcomeGateway().update(new Outcome(ele.getId(),note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getCategoryFromForm(), 2));
         Bundle extras = getIntent().getExtras();
         extras.remove("outcome");
         NavUtils.navigateUpFromSameTask(this);

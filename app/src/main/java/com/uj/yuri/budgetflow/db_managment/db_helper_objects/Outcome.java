@@ -1,6 +1,10 @@
 package com.uj.yuri.budgetflow.db_managment.db_helper_objects;
 
+import com.uj.yuri.budgetflow.db_managment.Money;
 import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
+
+import java.util.Currency;
+import java.util.Locale;
 
 /**
  * Created by Yuri on 2016-01-03.
@@ -8,7 +12,7 @@ import com.uj.yuri.budgetflow.m_activity.view_managment_listview.Entries_list_;
 public class Outcome implements Entries_list_ {
     protected String id;
     protected String nameOfOutcome;
-    protected String amount;
+    protected Money amount;
     protected String startTime;
     protected String endTime;
     protected boolean active;
@@ -20,7 +24,7 @@ public class Outcome implements Entries_list_ {
     public Outcome(String id, String nameOfOutcome, String amount, String startTime, String endTime, boolean active, String categoryId, int frequency) {
         this.id = id;
         this.nameOfOutcome = nameOfOutcome;
-        this.amount = amount;
+        this.amount = new Money(Double.parseDouble(amount), Currency.getInstance(Locale.getDefault()));
         this.startTime = startTime;
         this.endTime = endTime;
         this.active = active;
@@ -32,7 +36,7 @@ public class Outcome implements Entries_list_ {
     public Outcome(String nameOfOutcome, String amount, String startTime, String endTime, boolean active, String categoryId, int frequency) {
         this.id = "";
         this.nameOfOutcome = nameOfOutcome;
-        this.amount = amount;
+        this.amount = new Money(Double.parseDouble(amount), Currency.getInstance(Locale.getDefault()));
         this.startTime = startTime;
         this.endTime = endTime;
         this.active = active;
@@ -50,7 +54,10 @@ public class Outcome implements Entries_list_ {
         return nameOfOutcome;
     }
 
-    public String getAmount() {
+    public String getAmountString() {
+        return amount.toFormattedString();
+    }
+    public Money getAmount() {
         return amount;
     }
 

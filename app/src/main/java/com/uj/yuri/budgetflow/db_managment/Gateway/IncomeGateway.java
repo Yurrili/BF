@@ -16,7 +16,7 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
  * Created by Yuri on 23.12.2016.
  */
 
-public class IncomeGateway extends Gateway<Income> {
+public class IncomeGateway extends Gateway implements GatewayInterface<Income> {
 
 
     public IncomeGateway(Context context) {
@@ -25,7 +25,7 @@ public class IncomeGateway extends Gateway<Income> {
 
     @Override
     public void insert(Income ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
+        dba = this.getWritableDatabase();
         String dateTimeStart = ob.getStartTime();
         String dateTimeFinish = ob.getEndTime();
 
@@ -38,7 +38,7 @@ public class IncomeGateway extends Gateway<Income> {
         values.put(Entries.Incomes.COLUMN_DATETIME_FINISH, dateTimeFinish);
         values.put(Entries.Incomes.COLUMN_ACTIVE, ob.isActive());
         values.put(Entries.Incomes.COLUMN_FREQUENCY, ob.getFrequency());
-        values.put(Entries.Incomes.COLUMN_AMOUNT, ob.getAmount());
+        values.put(Entries.Incomes.COLUMN_AMOUNT, String.valueOf(ob.getAmount().amount().doubleValue()));
 
         dba.insert(Entries.Incomes.TABLE_NAME, null, values);
         dba.close();
@@ -46,7 +46,7 @@ public class IncomeGateway extends Gateway<Income> {
 
     @Override
     public void update(Income ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
+        dba = this.getWritableDatabase();
         String dateTimeStart = ob.getStartTime();
         String dateTimeFinish = ob.getEndTime();
 
@@ -59,7 +59,7 @@ public class IncomeGateway extends Gateway<Income> {
         values.put(Entries.Incomes.COLUMN_DATETIME_FINISH, dateTimeFinish);
         values.put(Entries.Incomes.COLUMN_ACTIVE, ob.isActive());
         values.put(Entries.Incomes.COLUMN_FREQUENCY, ob.getFrequency());
-        values.put(Entries.Incomes.COLUMN_AMOUNT, ob.getAmount());
+        values.put(Entries.Incomes.COLUMN_AMOUNT, String.valueOf(ob.getAmount().amount().doubleValue()));
 
         dba.update( Entries.Incomes.TABLE_NAME,
                     values,
@@ -70,7 +70,7 @@ public class IncomeGateway extends Gateway<Income> {
 
     @Override
     public void remove(Income ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
+        dba = this.getWritableDatabase();
         dba.delete( Entries.Incomes.TABLE_NAME,
                     Entries.Incomes._ID ,
                     new String[]{ ob.getId() });
@@ -79,28 +79,43 @@ public class IncomeGateway extends Gateway<Income> {
 
     @Override
     public Cursor findAll() {
-        SQLiteDatabase dba = this.getReadableDatabase();
+        dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Incomes.TABLE_NAME,
                                     Entries.Incomes.selectAllList,
                                     null, null, null, null, null);
-        dba.close();
+
         return cursor;
     }
 
     @Override
-    public Cursor find(String id) {
-        SQLiteDatabase dba = this.getReadableDatabase();
-        Cursor cursor = dba.query(  Entries.Incomes.TABLE_NAME,
+    public Income find(String id) {
+        dba = this.getReadableDatabase();
+        Cursor c = dba.query(  Entries.Incomes.TABLE_NAME,
                                     Entries.Incomes.selectAllList,
                                     Entries.Incomes._ID ,
                                     new String[]{ id },
                                     null, null, null);
-        dba.close();
-        return cursor;
+
+
+        if (c != null) {
+            c.moveToFirst();
+            Income inc = new Income(c.getString(0),
+                                    c.getString(1),
+                                    c.getString(2),
+                                    c.getString(3),
+                                    c.getString(4),
+                                    true,
+                                    c.getString(5),
+                                    c.getString(6),
+                                    c.getInt(7));
+            c.close();
+            return inc;
+        }
+        return null;
     }
 
     public Cursor selectFrequency(Frequency frequency) {
-        SQLiteDatabase dba = this.getReadableDatabase();
+        dba = this.getReadableDatabase();
         String selection;
         switch (frequency){
             case MONTHLY:
@@ -119,18 +134,20 @@ public class IncomeGateway extends Gateway<Income> {
                                 Entries.Incomes.selectAllList,
                                 selection, null, null, null, null);
 
-        dba.close();
         return cc;
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(Entries.SQL_CREATE_ENTRIES_Incomes);
-        Log.d("DB", "created Incomes");
+    public Cursor selectDate(String date){
+        dba = this.getReadableDatabase();
+        String selection = Entries.Incomes.COLUMN_DATETIME_START + " = '"
+                + date + "'";
+
+        Cursor cc = dba.query(Entries.Incomes.TABLE_NAME,
+                Entries.Incomes.selectAllList,
+                selection, null, null, null, null);
+
+
+        return cc;
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + Entries.Incomes.TABLE_NAME);
-    }
 }

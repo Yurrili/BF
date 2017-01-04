@@ -22,20 +22,30 @@ import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
+import com.uj.yuri.budgetflow.db_managment.IncomeManagment;
+import com.uj.yuri.budgetflow.db_managment.Money;
+import com.uj.yuri.budgetflow.db_managment.OutcomeManagment;
+import com.uj.yuri.budgetflow.db_managment.SaldoManagment;
+import com.uj.yuri.budgetflow.db_managment.accountantManagment;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Saldo;
 
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Locale;
 
 public class FragmentMain extends Fragment {
     private View myFragmentView;
     private static final String PREFERENCES_NAME = "myPreferences";
     private SharedPreferences preferences;
-    private static DateBaseHelper db;
-    static private Double Max_am;
+    private static SaldoManagment manager;
+    private static accountantManagment managment;
+    private static IncomeManagment incomeManagment;
+    private static OutcomeManagment outcomeManagment;
+    static private Money Max_am;
     static TextView expensive;
     static TextView incomes;
-    static Double saldo;
-    static Double saldo_db_before;
+    static Money saldo;
+    static Money saldo_db_before;
 
     static CircularProgressBar circularProgressBar;
     static TextView sum_to_spend;
@@ -48,10 +58,13 @@ public class FragmentMain extends Fragment {
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_two_main_activity, container, false);
         preferences = getActivity().getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        db = new DateBaseHelperImpl(getActivity());
         ctx = getContext();
+        manager = new SaldoManagment(ctx);
+        managment = new accountantManagment(ctx);
+        incomeManagment = new IncomeManagment(ctx);
+        outcomeManagment = new OutcomeManagment(ctx);
         setLay();
-        saldo_db_before = 0.0;
+        saldo_db_before = new Money(0, Currency.getInstance(Locale.getDefault()));
         CheckIfDates();
         setValuses();
 
@@ -65,30 +78,35 @@ public class FragmentMain extends Fragment {
     }
 
     private void CheckIfDates(){
+        // pROBABLY BUG
         String date = Utility.getDayBeforeDayBeforeToday();
-        Saldo date_saldo = db.selectSaldo(saldo.toString());
+        Saldo date_saldo = manager.selectLastSaldo();
         if ( date.equals(date_saldo.getData())){
-            db.insertSaldo(saldo.toString());
+            manager.getSaldoGateway().insert(new Saldo(Utility.getDayBeforeToday(), saldo));
         }
 
-        saldo_db_before = db.selectLastSaldo().getAmount();
+        saldo_db_before = manager.selectLastSaldo().getAmount();
     }
 
     private void setLay(){
         sum_to_spend = (TextView)myFragmentView.findViewById(R.id.sum_to_spend);
         circularProgressBar = (CircularProgressBar)myFragmentView.findViewById(R.id.yourCircularProgressbar);
-        expensive= (TextView)myFragmentView.findViewById(R.id.month_outcomes);
+        expensive = (TextView)myFragmentView.findViewById(R.id.month_outcomes);
         incomes = (TextView)myFragmentView.findViewById(R.id.month_incomes);
 
     }
 
     private void setValuses(){
-        Max_am = Double.parseDouble(preferences.getString("Max", "20"));
+        Max_am = new Money(Double.parseDouble(preferences.getString("Max", "20")), Currency.getInstance(Locale.getDefault()));
 
-        saldo =  Max_am - getSaldo() + getTodaysIncomes() + saldo_db_before;
-        expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+ Utility.moneyVal);
-        incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+ Utility.moneyVal);
-        sum_to_spend.setText(saldo + Utility.moneyVal);
+        try {
+            saldo =  Max_am.subtract(getSaldo()).add(incomeManagment.getTodaysIncome()).add(saldo_db_before);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        expensive.setText(outcomeManagment.getOutcomesFromMonth().toFormattedString());
+        incomes.setText(incomeManagment.getIncomesFromMonth().toFormattedString());
+        sum_to_spend.setText(saldo.toFormattedString());
     }
 
     private void setOnClicks(){
@@ -111,7 +129,7 @@ public class FragmentMain extends Fragment {
                 inputLayoutMax = (TextInputLayout) dialog.findViewById(R.id.input_max_limit);
 
                 text.setText(getString(R.string.inf_dial1));
-                max.setHint(getString(R.string.inf_dial3) + preferences.getString("Max", "20"));
+                max.setHint(getString(R.string.inf_dial3) + new Money(Double.parseDouble(preferences.getString("Max", "20")), Currency.getInstance(Locale.getDefault())).toFormattedString());
 
 
                 dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -122,13 +140,17 @@ public class FragmentMain extends Fragment {
 
                         if (validateLimit()) {
                             dialog.dismiss();
-                            Max_am = Double.parseDouble(max.getText().toString());
+                            Max_am = new Money(Double.parseDouble(max.getText().toString()), Currency.getInstance(Locale.getDefault()));
                             SharedPreferences.Editor preferencesEditor = preferences.edit();
                             preferencesEditor.putString("Max", Max_am.toString());
 
                             preferencesEditor.apply();
-                            saldo = Max_am - getSaldo() + getTodaysIncomes() + saldo_db_before;
-                            sum_to_spend.setText(saldo + Utility.moneyVal);
+                            try {
+                                saldo = Max_am.subtract(getSaldo()).add(incomeManagment.getTodaysIncome()).add(saldo_db_before);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            sum_to_spend.setText(saldo.toFormattedString());
                             circularProgressBar.setProgressWithAnimation(getProgress(), 2500); // Default duration = 1500ms
                         }
                     }
@@ -158,18 +180,12 @@ public class FragmentMain extends Fragment {
         });
     }
 
-    private static double getSaldo(){
-        ArrayList<Double> l_out = db.selectAllOutcomesToday();
+    private static Money getSaldo() throws Exception {
+        Money sumOut = managment.countSaldo();
 
-        if( l_out.isEmpty()){
-            return 0;
-        }
-        double sum_out = 0;
-        for(Double d : l_out)
-            sum_out += d;
+        Double value = Max_am.subtract(sumOut).add(incomeManagment.getTodaysIncome()).add(saldo_db_before).amount().doubleValue();
 
-
-        if ( Max_am - sum_out + getTodaysIncomes() + saldo_db_before > 0){
+        if (  value> 0){
             sum_to_spend.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
             circularProgressBar.setColor(ContextCompat.getColor(ctx, R.color.greeno));
             circularProgressBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.greeno1));
@@ -178,30 +194,33 @@ public class FragmentMain extends Fragment {
             circularProgressBar.setColor(ContextCompat.getColor(ctx, R.color.redo));
             circularProgressBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.redo1));
         }
-        return sum_out ;
+        return sumOut ;
     }
 
-    private static double getTodaysIncomes(){
-        ArrayList<Double> l_in = db.selectAllIncomesToday();
-        double sum_in = 0;
-        for(Double d : l_in) {
-            sum_in += d;
-        }
-        return sum_in;
-    }
+
 
     private float getProgress(){
-        if (getSaldo() == 0){
-            return 0;
-        }else
-            return (float) (( getSaldo() + getTodaysIncomes() )/Max_am)*100;
+        try {
+            if (getSaldo().amount().doubleValue() == 0){
+                return 0;
+            }else
+                return (float) ((getSaldo().add(incomeManagment.getTodaysIncome())).divideByNumber(Max_am.amount().doubleValue())).amount().floatValue()*100;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public static void refash(){
-        saldo = Max_am - getSaldo() + getTodaysIncomes() + saldo_db_before;
-        expensive.setText(Utility.getOutcomesFromMonth(db.selectAllOutcomes())+ Utility.moneyVal);
-        incomes.setText(Utility.getIncomesFromMonth(db.selectAllIncomes())+ Utility.moneyVal);
-        sum_to_spend.setText(saldo + Utility.moneyVal);
+        try {
+            saldo = Max_am.subtract(getSaldo()).add(incomeManagment.getTodaysIncome()).add(saldo_db_before);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        expensive.setText(outcomeManagment.getOutcomesFromMonth().toFormattedString());
+        incomes.setText(incomeManagment.getIncomesFromMonth().toFormattedString());
+        sum_to_spend.setText(saldo.toFormattedString());
     }
 
 }

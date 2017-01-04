@@ -14,7 +14,7 @@ import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Saldo;
  * Created by Yuri on 23.12.2016.
  */
 
-public class SaldoHistoryGateway extends Gateway<Saldo> {
+public class SaldoHistoryGateway extends Gateway implements GatewayInterface<Saldo> {
 
     public SaldoHistoryGateway(Context context) {
         super(context);
@@ -22,10 +22,10 @@ public class SaldoHistoryGateway extends Gateway<Saldo> {
 
     @Override
     public void insert(Saldo ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
+        dba = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(Entries.Hist_Saldo.COLUMN_TIME,  ob.getData());
-        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, ob.getAmount());
+        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, ob.getAmount().amount().doubleValue());
 
         dba.insert(Entries.Hist_Saldo.TABLE_NAME, null, values);
         dba.close();
@@ -33,10 +33,10 @@ public class SaldoHistoryGateway extends Gateway<Saldo> {
 
     @Override
     public void update(Saldo ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
+        dba = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, ob.getAmount());
+        values.put(Entries.Hist_Saldo.COLUMN_AMOUNT, ob.getAmount().amount().doubleValue());
         values.put(Entries.Hist_Saldo.COLUMN_TIME, ob.getData());
         dba.update( Entries.Hist_Saldo.TABLE_NAME,  values,
                                                     Entries.Hist_Saldo._ID,
@@ -46,7 +46,7 @@ public class SaldoHistoryGateway extends Gateway<Saldo> {
 
     @Override
     public void remove(Saldo ob) {
-        SQLiteDatabase dba = this.getWritableDatabase();
+        dba = this.getWritableDatabase();
         dba.delete( Entries.Hist_Saldo.TABLE_NAME,
                     Entries.Hist_Saldo._ID,
                     new String[]{ ob.getId() });
@@ -55,17 +55,17 @@ public class SaldoHistoryGateway extends Gateway<Saldo> {
 
     @Override
     public Cursor findAll() {
-        SQLiteDatabase dba = this.getReadableDatabase();
+        dba = this.getReadableDatabase();
         Cursor cursor = dba.query(  Entries.Hist_Saldo.TABLE_NAME,
                                     Entries.Hist_Saldo.selectAllList,
                                     null, null, null, null, null);
-        dba.close();
+
         return cursor;
     }
 
     @Override
-    public Cursor find(String id) {
-        SQLiteDatabase dba = this.getReadableDatabase();
+    public Saldo find(String id) {
+        dba = this.getReadableDatabase();
         String selection = Entries.Hist_Saldo._ID + " = '" + id + "'";
 
         Cursor c = dba.query(   Entries.Hist_Saldo.TABLE_NAME,
@@ -73,12 +73,20 @@ public class SaldoHistoryGateway extends Gateway<Saldo> {
                                 Entries.Hist_Saldo.COLUMN_AMOUNT },
                                 selection,
                                 null, null, null, null);
-        dba.close();
-        return c;
+
+
+        if (c != null) {
+            c.moveToFirst();
+            Saldo gg = new Saldo(c.getString(0), c.getString(1));
+            c.close();
+            return gg;
+        }
+
+        return null;
     }
 
     public Cursor findLast(){
-        SQLiteDatabase dba = this.getReadableDatabase();
+        dba = this.getReadableDatabase();
         String selection = Entries.Hist_Saldo.COLUMN_TIME + " = '"+ Utility.getDayBeforeToday() + "'";
 
         Cursor c = dba.query(   Entries.Hist_Saldo.TABLE_NAME,
@@ -86,18 +94,7 @@ public class SaldoHistoryGateway extends Gateway<Saldo> {
                                                 Entries.Hist_Saldo.COLUMN_AMOUNT },
                                                 selection,
                                                 null, null, null, null);
-        dba.close();
         return c;
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(Entries.SQL_CREATE_ENTRIES_Hist_Saldo);
-        Log.d("DB", "created Saldo");
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + Entries.Hist_Saldo.TABLE_NAME);
-    }
 }

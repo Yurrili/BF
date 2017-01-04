@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.IncomeManagment;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.new_activity.DatePickers;
 import com.uj.yuri.budgetflow.new_activity.SettingIncomesToDB;
@@ -44,7 +45,7 @@ public class EditIncomes extends AppCompatActivity {
     public RadioButton radio_btn2;
     public RadioButton radio_btn3;
     private TextInputLayout inputLayoutAmount;
-    public DateBaseHelper helper;
+    public IncomeManagment helper;
     public CheckBox infinity;
     public Button btn;
     private EditText note ;
@@ -58,7 +59,7 @@ public class EditIncomes extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        helper = new DateBaseHelperImpl(getApplicationContext());
+        helper = new IncomeManagment(getApplicationContext());
 
         setLays();
         setListeners();
@@ -68,16 +69,16 @@ public class EditIncomes extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null)
         {
-            DateBaseHelper db = new DateBaseHelperImpl(getApplicationContext());
+            helper = new IncomeManagment(getApplicationContext());
 
             String out = extras.getString("income","");
             if (!out.equals("")) {
                 //Outcomes
-                ele = db.selectIncome(out);
+                ele = helper.getIncomeGateway().find(out);
                 date_place1.setText(ele.getStartTime());
 
                 date_placeTo1.setText(ele.getEndTime());
-                amount.setText(ele.getAmount());
+                amount.setText(ele.getAmount().toFormattedString());
                 note.setText(ele.getName());
                 if( ele.getFrequency() == 1 || ele.getFrequency() == 4){
                     radio_btn1.setChecked(true);
@@ -228,14 +229,12 @@ public class EditIncomes extends AppCompatActivity {
         Date past = new Date(Integer.parseInt(date_split[2]), Integer.parseInt(date_split[1])-1, Integer.parseInt(date_split[0]));
         Date today = new Date(dd.get(Calendar.YEAR), dd.get(Calendar.MONTH),dd.get(Calendar.DAY_OF_MONTH));
 
-        SettingIncomesToDB inter = new SettingIncomesToDB(helper);
-
         if( radio_btn1.isChecked()){
-            inter.DailySetUp(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
+            helper.DailySetUp(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
         } else if (radio_btn2.isChecked()) {
-           inter.MontlySetUp(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
+            helper.MontlySetUp(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
         } else {
-            helper.updateIncome(new Income(ele.getId(), note.getText().toString(), amount.getText().toString(), date_place1.getText().toString(), date_placeTo1.getText().toString(), true, getFreq() + "", "", 2));
+            helper.getIncomeGateway().update(new Income(ele.getId(), note.getText().toString(), amount.getText().toString(), date_place1.getText().toString(), date_placeTo1.getText().toString(), true, getFreq() + "", "", 2));
         }
 
         NavUtils.navigateUpFromSameTask(this);

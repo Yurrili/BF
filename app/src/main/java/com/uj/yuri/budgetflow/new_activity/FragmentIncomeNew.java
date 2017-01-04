@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.IncomeManagment;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Income;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
 
@@ -55,7 +56,6 @@ public class FragmentIncomeNew extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.helper = new DateBaseHelperImpl(getActivity());
         myFragmentView = inflater.inflate(R.layout.fragment_new_income, container, false);
         setLays();
         setListeners();
@@ -197,14 +197,15 @@ public class FragmentIncomeNew extends Fragment {
         Date past = new Date(Integer.parseInt(date_split[2]), Integer.parseInt(date_split[1])-1, Integer.parseInt(date_split[0]));
         Date today = new Date(dd.get(Calendar.YEAR), dd.get(Calendar.MONTH),dd.get(Calendar.DAY_OF_MONTH));
 
-        SettingIncomesToDB inter = new SettingIncomesToDB(helper);
+        IncomeManagment inter = new IncomeManagment(getContext());
 
         if( radio_btn1.isChecked()){
             inter.DailySet(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
         } else if (radio_btn2.isChecked()) {
             inter.MontlySet(date_split, dd, past, today, infinity, createPreparedOneNotInf(), createPreparedOneInf());
         } else {
-            helper.insertIncome(new Income(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_placeTo.getText().toString(), true, getFreq(), "", 2));
+            System.err.println(date_place.getText().toString());
+            inter.getIncomeGateway().insert(new Income(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_placeTo.getText().toString(), true, getFreq(), "", 2));
         }
 
         NavUtils.navigateUpFromSameTask(getActivity());

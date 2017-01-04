@@ -2,7 +2,11 @@ package com.uj.yuri.budgetflow.m_activity.expandable_list_view;
 
 
 
+import android.content.Context;
+
+import com.uj.yuri.budgetflow.db_managment.CategoryManagment;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.OutcomeManagment;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
@@ -19,11 +23,11 @@ import java.util.Map;
 
 public class ExpandableListDataPump {
 
-    public static HashMap<Map.Entry<Category, String>, List<Outcome>> getData(DateBaseHelper db) {
+    public static HashMap<Map.Entry<Category, String>, List<Outcome>> getData(Context ctx) {
 
         HashMap<Map.Entry<Category, String>, List<Outcome>> expandableListDetail = new HashMap<>();
-        HashMap<String, Category> cat_hash = db.selectAllCategories();
-        ArrayList<Outcome> out_list =  db.selectAllOutcomes();
+        HashMap<String, Category> cat_hash = new CategoryManagment(ctx).selectAllCategories();
+        ArrayList<Outcome> out_list =  new OutcomeManagment(ctx).selectAllOutcomes();
 
         expandableListDetail = creatingEmptyThing (cat_hash, expandableListDetail );
         expandableListDetail = creatingListOf(expandableListDetail, out_list);
@@ -82,7 +86,7 @@ public class ExpandableListDataPump {
             } else {
                 double sum_out = 0;
                 for(Outcome d : value)
-                    sum_out += Double.parseDouble(d.getAmount());
+                    sum_out += d.getAmount().amount().doubleValue();
                 key.setValue(sum_out+"");
             }
         }

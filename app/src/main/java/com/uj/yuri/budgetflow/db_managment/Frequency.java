@@ -5,7 +5,19 @@ package com.uj.yuri.budgetflow.db_managment;
  */
 
 public enum Frequency {
-    DAILY,
-    MONTHLY,
-    YEARLY
+    SINGLE(0),
+    DAILY(1),
+    MONTHLY(2),
+    YEARLY(3);
+
+    private final int value;
+
+    Frequency(int value){
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
 }

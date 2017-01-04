@@ -22,7 +22,9 @@ import android.widget.Spinner;
 
 import com.uj.yuri.budgetflow.R;
 import com.uj.yuri.budgetflow.Utility;
+import com.uj.yuri.budgetflow.db_managment.CategoryManagment;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelper;
+import com.uj.yuri.budgetflow.db_managment.OutcomeManagment;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Category;
 import com.uj.yuri.budgetflow.db_managment.db_helper_objects.Outcome;
 import com.uj.yuri.budgetflow.db_managment.DateBaseHelperImpl;
@@ -35,7 +37,8 @@ import java.util.HashMap;
 public class FragmentOutcomeNew extends Fragment {
     private View myFragmentView;
 
-    public DateBaseHelper helper;
+    public OutcomeManagment outcomeManagment;
+    public CategoryManagment categoryManagment;
     private HashMap<String, Category> hashCat;
     private TextInputLayout inputLayoutAmount;
     public static EditText date_place;
@@ -52,7 +55,8 @@ public class FragmentOutcomeNew extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_new_outcome, container, false);
-        helper = new DateBaseHelperImpl(getActivity());
+        categoryManagment = new CategoryManagment(getActivity());
+        outcomeManagment = new OutcomeManagment(getActivity());
 
         initLayout();
         setListeners();
@@ -66,7 +70,7 @@ public class FragmentOutcomeNew extends Fragment {
 
     private void initLayout(){
 
-        hashCat = helper.selectAllCategories();
+        hashCat = categoryManagment.selectAllCategories();
         date_place =  (EditText) myFragmentView.findViewById(R.id.date_place);
         spinner = (Spinner) myFragmentView.findViewById(R.id.spinner_cat);
         note =  (EditText) myFragmentView.findViewById(R.id.note_place);
@@ -131,7 +135,8 @@ public class FragmentOutcomeNew extends Fragment {
         if (!validateName()) {
             return;
         }
-        helper.insertOutcome(new Outcome(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getCategoryFromForm(), 2));
+        System.err.println(date_place.getText().toString());
+        outcomeManagment.getOutcomeGateway().insert(new Outcome(note.getText().toString(), amount.getText().toString(), date_place.getText().toString(), date_place.getText().toString(), true, getCategoryFromForm(), 2));
 
         NavUtils.navigateUpFromSameTask(getActivity());
     }
